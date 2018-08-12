@@ -234,10 +234,10 @@ namespace sim {
 
             if constexpr (storage_bits >= T::storage_bits) {
                 base_type rv = value_in_place() | static_cast<base_type>(slice.value_in_place());
-                return hw_slice<base_type, max_bit - min_bit, min_bit>{rv};
+                return hw_slice<base_type, new_width, min_bit>{rv};
             } else {
                 typename T::base_type rv = slice.value_in_place() | static_cast<base_type>(value_in_place());
-                return hw_slice<typename T::base_type, max_bit - min_bit, min_bit>{rv};
+                return hw_slice<typename T::base_type, new_width, min_bit>{rv};
             }
         }
 
