@@ -330,27 +330,33 @@ namespace sim {
                            << std::dec;
         }
 
-        bool operator==(hw_register const &other) const {
+        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
+        bool operator==(T const &other) const {
             return value == other.value;
         }
 
-        bool operator!=(hw_register const &other) const {
+        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
+        bool operator!=(T const &other) const {
             return value != other.value;
         }
 
-        bool operator<(hw_register const &other) const {
+        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
+        bool operator<(T const &other) const {
             return value < other.value;
         }
 
-        bool operator>(hw_register const &other) const {
+        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
+        bool operator>(T const &other) const {
             return value > other.value;
         }
 
-        bool operator<=(hw_register const &other) const {
+        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
+        bool operator<=(T const &other) const {
             return value <= other.value;
         }
 
-        bool operator>=(hw_register const &other) const {
+        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
+        bool operator>=(T const &other) const {
             return value >= other.value;
         }
 
