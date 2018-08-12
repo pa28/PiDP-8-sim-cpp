@@ -282,8 +282,23 @@ namespace sim {
         template<typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
         explicit hw_register(T const &other) : value{static_cast<base_type>(other() & mask)} {}
 
+        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
+        hw_register &operator=(T const &other) {
+            static_assert(not store_policy::check_storage_size || ((T::storage_bits) <= storage_bits),
+                          "Slice too wide for register storage.");
+            static_assert(T::base_type_bits <= base_type_bits, "Slice too wide for register base type.");
+            value = static_cast<base_type>(other.value);
+            return *this;
+        }
+
         template<typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
         explicit hw_register(T init_value) : value{static_cast<base_type>(init_value & mask)} {}
+
+        template<typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+        hw_register &operator=(T v) {
+            value = static_cast<base_type>(v & mask);
+            return *this;
+        }
 
         base_type operator()() const {
             return value;
@@ -313,17 +328,6 @@ namespace sim {
                            << std::setfill(output_policy::fill)
                            << value
                            << std::dec;
-        }
-
-        template<typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
-        hw_register &operator=(T v) { value = static_cast<base_type>(v); }
-
-        template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
-        hw_register &operator=(T const &other) {
-            static_assert(not store_policy::check_storage_size || ((T::storage_bits) <= storage_bits),
-                          "Slice too wide for register storage.");
-            static_assert(T::base_type_bits <= base_type_bits, "Slice too wide for register base type.");
-            return *this;
         }
 
         bool operator==(hw_register const &other) const {
