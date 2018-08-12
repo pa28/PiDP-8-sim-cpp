@@ -98,7 +98,7 @@ namespace pdp8 {
     void CPU::deposit(base_type data) {
         ma << pc[cpu_word];
         mb = data;
-        core[ma] = mb;
+        core[ma] << mb[mem_word];
         pc << ++pc[cpu_word];
     }
 
@@ -144,7 +144,7 @@ namespace pdp8 {
                     case JMS:
                         field_register << field_buffer[sf_if];
                         ma << field_register[sf_if](mem_field);
-                        core[ma] = pc;
+                        core[ma] << pc[mem_word];
                         pc << ++ma[mem_word];
                         interrupt_deferred = false;
                         break;
@@ -184,7 +184,7 @@ namespace pdp8 {
                     field_register << sf_if.clear() << sf_df.clear();
                     interrupt_enable = false;
                     ma << mem_field.clear() << mem_word.clear();
-                    core[ma] = pc;
+                    core[ma] << pc[mem_word];
                     pc = 1;
                 }
 
