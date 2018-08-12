@@ -284,7 +284,7 @@ namespace sim {
 
         template <typename T, typename = typename std::enable_if_t<is_hw_register_v<T>>>
         hw_register &operator=(T const &other) {
-            static_assert(not store_policy::check_storage_size || ((T::storage_bits) <= storage_bits),
+            static_assert(not store_policy::check_storage_size || (T::storage_bits <= storage_bits),
                           "Slice too wide for register storage.");
             static_assert(T::base_type_bits <= base_type_bits, "Slice too wide for register base type.");
             value = static_cast<base_type>(other.value);
