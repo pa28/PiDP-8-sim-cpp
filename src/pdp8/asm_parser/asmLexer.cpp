@@ -1,50 +1,50 @@
 
-// Generated from asm.g4 by ANTLR 4.7
+// Generated from Asm.g4 by ANTLR 4.7
 
 
-#include "asmLexer.h"
+#include "AsmLexer.h"
 
 
 using namespace antlr4;
 
 
-asmLexer::asmLexer(CharStream *input) : Lexer(input) {
+AsmLexer::AsmLexer(CharStream *input) : Lexer(input) {
   _interpreter = new atn::LexerATNSimulator(this, _atn, _decisionToDFA, _sharedContextCache);
 }
 
-asmLexer::~asmLexer() {
+AsmLexer::~AsmLexer() {
   delete _interpreter;
 }
 
-std::string asmLexer::getGrammarFileName() const {
-  return "asm.g4";
+std::string AsmLexer::getGrammarFileName() const {
+  return "Asm.g4";
 }
 
-const std::vector<std::string>& asmLexer::getRuleNames() const {
+const std::vector<std::string>& AsmLexer::getRuleNames() const {
   return _ruleNames;
 }
 
-const std::vector<std::string>& asmLexer::getChannelNames() const {
+const std::vector<std::string>& AsmLexer::getChannelNames() const {
   return _channelNames;
 }
 
-const std::vector<std::string>& asmLexer::getModeNames() const {
+const std::vector<std::string>& AsmLexer::getModeNames() const {
   return _modeNames;
 }
 
-const std::vector<std::string>& asmLexer::getTokenNames() const {
+const std::vector<std::string>& AsmLexer::getTokenNames() const {
   return _tokenNames;
 }
 
-dfa::Vocabulary& asmLexer::getVocabulary() const {
+dfa::Vocabulary& AsmLexer::getVocabulary() const {
   return _vocabulary;
 }
 
-const std::vector<uint16_t> asmLexer::getSerializedATN() const {
+const std::vector<uint16_t> AsmLexer::getSerializedATN() const {
   return _serializedATN;
 }
 
-const atn::ATN& asmLexer::getATN() const {
+const atn::ATN& AsmLexer::getATN() const {
   return _atn;
 }
 
@@ -52,41 +52,41 @@ const atn::ATN& asmLexer::getATN() const {
 
 
 // Static vars and initialization.
-std::vector<dfa::DFA> asmLexer::_decisionToDFA;
-atn::PredictionContextCache asmLexer::_sharedContextCache;
+std::vector<dfa::DFA> AsmLexer::_decisionToDFA;
+atn::PredictionContextCache AsmLexer::_sharedContextCache;
 
 // We own the ATN which in turn owns the ATN states.
-atn::ATN asmLexer::_atn;
-std::vector<uint16_t> asmLexer::_serializedATN;
+atn::ATN AsmLexer::_atn;
+std::vector<uint16_t> AsmLexer::_serializedATN;
 
-std::vector<std::string> asmLexer::_ruleNames = {
+std::vector<std::string> AsmLexer::_ruleNames = {
   u8"T__0", u8"T__1", u8"T__2", u8"T__3", u8"T__4", u8"T__5", u8"A", u8"B", 
   u8"C", u8"D", u8"E", u8"F", u8"G", u8"H", u8"I", u8"J", u8"K", u8"L", 
   u8"M", u8"N", u8"O", u8"P", u8"Q", u8"R", u8"S", u8"T", u8"U", u8"V", 
   u8"W", u8"X", u8"Y", u8"Z", u8"Octal", u8"Decimal", u8"ID", u8"WS"
 };
 
-std::vector<std::string> asmLexer::_channelNames = {
+std::vector<std::string> AsmLexer::_channelNames = {
   "DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 };
 
-std::vector<std::string> asmLexer::_modeNames = {
+std::vector<std::string> AsmLexer::_modeNames = {
   u8"DEFAULT_MODE"
 };
 
-std::vector<std::string> asmLexer::_literalNames = {
+std::vector<std::string> AsmLexer::_literalNames = {
   "", u8"'.'", u8"'!'", u8"'@'", u8"';'", u8"'\n'", u8"'\r'"
 };
 
-std::vector<std::string> asmLexer::_symbolicNames = {
+std::vector<std::string> AsmLexer::_symbolicNames = {
   "", "", "", "", "", "", "", u8"Octal", u8"Decimal", u8"ID", u8"WS"
 };
 
-dfa::Vocabulary asmLexer::_vocabulary(_literalNames, _symbolicNames);
+dfa::Vocabulary AsmLexer::_vocabulary(_literalNames, _symbolicNames);
 
-std::vector<std::string> asmLexer::_tokenNames;
+std::vector<std::string> AsmLexer::_tokenNames;
 
-asmLexer::Initializer::Initializer() {
+AsmLexer::Initializer::Initializer() {
   // This code could be in a static initializer lambda, but VS doesn't allow access to private class members from there.
 	for (size_t i = 0; i < _symbolicNames.size(); ++i) {
 		std::string name = _vocabulary.getLiteralName(i);
@@ -231,4 +231,4 @@ asmLexer::Initializer::Initializer() {
   }
 }
 
-asmLexer::Initializer asmLexer::_init;
+AsmLexer::Initializer AsmLexer::_init;

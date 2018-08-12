@@ -1,5 +1,5 @@
 
-// Generated from asm.g4 by ANTLR 4.7
+// Generated from Asm.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,15 +9,15 @@
 
 
 
-class  asmLexer : public antlr4::Lexer {
+class  AsmLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, Octal = 7, 
     Decimal = 8, ID = 9, WS = 10
   };
 
-  asmLexer(antlr4::CharStream *input);
-  ~asmLexer();
+  AsmLexer(antlr4::CharStream *input);
+  ~AsmLexer();
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;
