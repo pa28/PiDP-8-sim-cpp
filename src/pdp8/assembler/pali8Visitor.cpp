@@ -129,10 +129,10 @@ antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
         else if (part.type() == typeid(pdp8_asm::MemoryInstructionFlags))
             switch (std::any_cast<pdp8_asm::MemoryInstructionFlags>(part)) {
             case pdp8_asm::ZERO:
-                instruction.instruction << instruction.zero.clear();
+                instruction.instruction << pdp8_asm::pdp8_instruction::zero.clear();
                 break;
             case pdp8_asm::INDIRECT:
-                instruction.instruction << instruction.indirect.set();
+                instruction.instruction << pdp8_asm::pdp8_instruction::indirect.set();
                 break;
         }
     }
