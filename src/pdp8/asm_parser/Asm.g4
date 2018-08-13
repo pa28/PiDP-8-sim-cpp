@@ -1,8 +1,10 @@
 grammar Asm;
 
 code
-    : statement ( statement * )
+    : statements EOF
     ;
+
+statements : statement + ;
 
 statement
     : symbol ? instruction ( eol + )
@@ -28,13 +30,20 @@ mem_ins
     ;
 
 mem_op
-    : A N D
-    | T A D
-    | I S Z
-    | D C A
-    | J M S
-    | J M P
+    : mem_and
+    | mem_tad
+    | mem_isz
+    | mem_dca
+    | mem_jms
+    | mem_jmp
     ;
+
+mem_and : AND ;
+mem_tad : TAD ;
+mem_isz : ISZ ;
+mem_dca : DCA ;
+mem_jms : JMS ;
+mem_jmp : JMP ;
 
 zero : '!' ;
 ind : '@' ;
@@ -45,27 +54,72 @@ address
     ;
 
 opr_ins
-    : opr_op1 +
-    | opr_op2 +
-    | opr_op3 +
+    : opr_op1
+    | opr_op2
+    | opr_op3
     ;
 
-opr_op1
-    : N O P | I A C | R A L | R T L | R A R | R T R | B S W | C M L | C M A | C I A | C L L | S T L | C L A | S T A
+opr_op1 : opr_op1_ins + ;
+
+opr_op1_ins
+    : nop | iac | ral | rtl | rar | rtr | bsw | cml | cma | cia | cll | stl | cla | sta
     ;
 
-opr_op2
-    : H L T | O S R | S K P | S N L | S Z L | S Z A | S N A | S M A | S P A | C L A
+nop : NOP ;
+iac : IAC ;
+ral : RSL ;
+rtl : RTL ;
+rar : RAR ;
+rtr : RTR ;
+bsw : BSW ;
+cml : CML ;
+cma : CMA ;
+cia : CIA ;
+cll : CLL ;
+stl : STL ;
+cla : CLA ;
+sta : STA ;
+
+opr_op2 : opr_op2_ins + ;
+
+opr_op2_ins
+    : hlt | osr | skp | snl | szl | sza | sna | sma | spa | cla
     ;
 
-opr_op3
-    : C M A | M Q A | M Q L | S W P
+hlt : HLT ;
+osr : OSR ;
+skp : SKP ;
+snl : SNL ;
+szl : SZL ;
+sza : SZA ;
+sna : SNA ;
+sma : SMA ;
+spa : SPA ;
+
+opr_op3 : opr_op3_ins +;
+
+opr_op3_ins
+    : cam | mqa | mql | swp
     ;
+
+cam : CAM ;
+mqa : MQA ;
+mql : MQL ;
+swp : SWP ;
 
 iot_ins
-    : I O T
-    | I O N | S K O N | I O F | S R Q | G T F | R T F | S G T | C A F
+    : iot
+    | ion | skon | iof | srq | gtf | rtf | caf
     ;
+
+iot : IOT ;
+ion : ION ;
+skon : SKON ;
+iof : IOF ;
+srq : SRQ ;
+gtf : GTF ;
+rtf : RTF ;
+caf : CAF ;
 
 eol
     : ';'
@@ -73,32 +127,52 @@ eol
     | '\r' '\n'
     ;
 
-fragment A:('a'|'A');
-fragment B:('b'|'B');
-fragment C:('c'|'C');
-fragment D:('d'|'D');
-fragment E:('e'|'E');
-fragment F:('f'|'F');
-fragment G:('g'|'G');
-fragment H:('h'|'H');
-fragment I:('i'|'I');
-fragment J:('j'|'J');
-fragment K:('k'|'K');
-fragment L:('l'|'L');
-fragment M:('m'|'M');
-fragment N:('n'|'N');
-fragment O:('o'|'O');
-fragment P:('p'|'P');
-fragment Q:('q'|'Q');
-fragment R:('r'|'R');
-fragment S:('s'|'S');
-fragment T:('t'|'T');
-fragment U:('u'|'U');
-fragment V:('v'|'V');
-fragment W:('w'|'W');
-fragment X:('x'|'X');
-fragment Y:('y'|'Y');
-fragment Z:('z'|'Z');
+
+AND : [Aa][Nn][Dd] ;
+TAD : [Tt][Aa][Dd] ;
+ISZ : [Ii][Ss][Zz] ;
+DCA : [Dd][Cc][Aa] ;
+JMS : [Jj][Mm][Ss] ;
+JMP : [Jj][Mm][Pp] ;
+
+NOP : [Nn][Oo][Pp] ;
+IAC : [Ii][Aa][Cc] ;
+RSL : [Rr][Ss][Ll] ;
+RTL : [Rr][Tt][Ll] ;
+RAR : [Rr][Aa][Rr] ;
+RTR : [Rr][Tt][Rr] ;
+BSW : [Bb][Ss][Ww] ;
+CML : [Cc][Mm][Ll] ;
+CMA : [Cc][Mm][Aa] ;
+CIA : [Cc][Ii][Aa] ;
+CLL : [Cc][Ll][Ll] ;
+STL : [Ss][Tt][Ll] ;
+CLA : [Cc][Ll][Aa] ;
+STA : [Ss][Tt][Aa] ;
+
+HLT : [Hh][Ll][Tt] ;
+OSR : [Oo][Ss][Rr] ;
+SKP : [Ss][Kk][Pp] ;
+SNL : [Ss][Nn][Ll] ;
+SZL : [Ss][Zz][Ll] ;
+SZA : [Ss][Zz][Aa] ;
+SNA : [Ss][Nn][Aa] ;
+SMA : [Ss][Mm][Aa] ;
+SPA : [Ss][Pp][Aa] ;
+
+CAM : [Cc][Aa][Mm] ;
+MQA : [Mm][Qq][Aa] ;
+MQL : [Mm][Qq][Ll] ;
+SWP : [Ss][Ww][Pp] ;
+
+IOT : [Ii][Oo][Tt] ;
+ION : [Ii][Oo][Nn] ;
+SKON : [Ss][Kk][Oo][Nn] ;
+IOF : [Ii][Oo][Ff] ;
+SRQ : [Ss][Rr][Qq] ;
+GTF : [Gg][Tt][Ff] ;
+RTF : [Rr][Tt][Ff] ;
+CAF : [Cc][Aa][Ff] ;
 
 Octal : '0' [0-7]+ ;
 
