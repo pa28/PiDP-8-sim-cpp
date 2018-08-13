@@ -21,9 +21,11 @@ antlrcpp::Any pali8Visitor::visitCode(AsmParser::CodeContext *ctx) {
 }
 
 antlrcpp::Any pali8Visitor::visitSymbol(AsmParser::SymbolContext *ctx) {
-    auto results = visitAllChildren(ctx);
-
-    return returnVector(results);
+    if (ctx->ID()) {
+        auto symbol = ctx->getText();
+        return symbol;
+    }
+    return antlrcpp::Any();
 }
 
 antlrcpp::Any pali8Visitor::visitStatements(AsmParser::StatementsContext *ctx) {
@@ -34,6 +36,14 @@ antlrcpp::Any pali8Visitor::visitStatements(AsmParser::StatementsContext *ctx) {
 
 antlrcpp::Any pali8Visitor::visitStatement(AsmParser::StatementContext *ctx) {
     auto results = visitAllChildren(ctx);
+
+    for (auto const &part : results) {
+        if (part.type() == typeid(std::string)) {
+            // ToDo: Add symbol to symbol table.
+        } else if (part.type() == typeid(pdp8_asm::pdp8_instruction)) {
+            return part;
+        }
+    }
 
     return returnVector(results);
 }
