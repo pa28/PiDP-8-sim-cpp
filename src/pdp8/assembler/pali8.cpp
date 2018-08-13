@@ -10,7 +10,7 @@
 #include "pali8Visitor.h"
 
 int main(int argc, char **argv) {
-    std::stringstream strm{"rar cia;\ncia;tad 010;"};
+    std::stringstream strm{"rar cia;cia;tad !@ 010;"};
 
     antlr4::ANTLRInputStream input(strm);
     AsmLexer lexer(&input);

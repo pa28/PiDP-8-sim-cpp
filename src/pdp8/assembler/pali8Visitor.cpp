@@ -107,12 +107,70 @@ antlrcpp::Any pali8Visitor::visitOpr_op1(AsmParser::Opr_op1Context *ctx) {
     return pdp8_asm::pdp8_instruction(ret_code);
 }
 
+antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
+    auto results = visitAllChildren(ctx);
+
+    pdp8_asm::pdp8_instruction instruction{};
+    for (auto const &part : results) {
+        if (part.type() == typeid(pdp8_asm::pdp8_instruction))
+            instruction = std::any_cast<pdp8_asm::pdp8_instruction>(part);
+        else if (part.type() == typeid(unsigned long))
+            instruction.set_address(std::any_cast<unsigned long>(part));
+        else if (part.type() == typeid(pdp8_asm::MemoryInstructionFlags))
+            switch (std::any_cast<pdp8_asm::MemoryInstructionFlags>(part)) {
+            case pdp8_asm::ZERO:
+                instruction.instruction << instruction.zero.clear();
+                break;
+            case pdp8_asm::INDIRECT:
+                instruction.instruction << instruction.indirect.set();
+                break;
+        }
+    }
+    return instruction;
+}
+
+antlrcpp::Any pali8Visitor::visitAddress(AsmParser::AddressContext *ctx) {
+    auto text = ctx->getText();
+    char *end = nullptr;
+    if (ctx->Decimal()) {
+        return std::strtoul(text.c_str(), &end, 10);
+    } else if (ctx->Octal()) {
+        return std::strtoul(text.c_str(), &end, 8);
+    }
+
+    return antlrcpp::Any();
+}
+
 antlrcpp::Any pali8Visitor::visitMem_op(AsmParser::Mem_opContext *ctx) {
     auto results = visitAllChildren(ctx);
 
-    return returnVector(results);
-}
+    int ret_code = 0;
+    for (auto const &op : results) {
+        if (op.type() == typeid(pdp8_asm::MemoryInstruction)) {
+            auto opt_enum = std::any_cast<pdp8_asm::MemoryInstruction >(op);
+            // Set the ZERO flag to be cleared by specification of zero page addressing.
+            switch (opt_enum) {
+                case pdp8_asm::AND:
+                    ret_code |= 00200;
+                    break;
+                case pdp8_asm::TAD:
+                    ret_code |= 01200;
+                    break;
+                case pdp8_asm::ISZ:
+                    ret_code |= 02200;
+                    break;
+                case pdp8_asm::DCA:
+                    ret_code |= 03200;
+                    break;
+                case pdp8_asm::JMS:
+                    ret_code |= 04200;
+                    break;
+                case pdp8_asm::JMP:
+                    ret_code |= 05200;
+                    break;
+            }
+        }
+    }
 
-antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
-    return AsmBaseVisitor::visitMem_ins(ctx);
+    return pdp8_asm::pdp8_instruction(ret_code);
 }

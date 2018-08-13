@@ -13,6 +13,10 @@ namespace pdp8_asm {
         AND, TAD, ISZ, DCA, JMS, JMP
     };
 
+    enum MemoryInstructionFlags {
+        ZERO, INDIRECT
+    };
+
     enum OperateGroup1 {
         NOP, IAC, RAL, RTL, RAR, RTR, BSW, CML, CMA, CIA, CLL, STL, CLA, STA,
     };
@@ -36,7 +40,15 @@ namespace pdp8_asm {
         template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
         explicit pdp8_instruction(T ins) : instruction(ins) {}
 
+        template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+        pdp8_instruction &set_address(T addr) {
+            instruction << address(addr);
+        }
+
         sim::hw_register<12,sim::register_output_policy<8>> instruction;
+        static constexpr sim::hw_slice_spec<7,0> address{};
+        static constexpr sim::hw_slice_spec<1,8> indirect{};
+        static constexpr sim::hw_slice_spec<1,7> zero{};
     };
 
 } // namespace pdp8_asm

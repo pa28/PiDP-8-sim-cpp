@@ -37,11 +37,21 @@ public:
 
     antlrcpp::Any visitMem_op(AsmParser::Mem_opContext *ctx) override;
 
+    antlrcpp::Any visitAddress(AsmParser::AddressContext *ctx) override;
+
     antlrcpp::Any visitOpr_ins(AsmParser::Opr_insContext *ctx) override;
 
     antlrcpp::Any visitOpr_op1(AsmParser::Opr_op1Context *ctx) override;
 
     antlrcpp::Any visitMem_ins(AsmParser::Mem_insContext *ctx) override;
+
+    antlrcpp::Any visitZero(AsmParser::ZeroContext *ctx) override {
+        return pdp8_asm::ZERO;
+    }
+
+    antlrcpp::Any visitInd(AsmParser::IndContext *ctx) override {
+        return pdp8_asm::INDIRECT;
+    }
 
     antlrcpp::Any visitMem_and(AsmParser::Mem_andContext *ctx) override {
         return pdp8_asm::AND;
