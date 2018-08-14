@@ -4,3 +4,4 @@ include_directories( ${PROJECT_SOURCE_DIR}/src/sim_r ${PROJECT_SOURCE_DIR}/src/p
 
 add_executable(hw_registers ${hw_registers_SOURCE})
 target_link_libraries(hw_registers GTest::GTest GTest::Main)
+add_test(hw_registers hw_registers)
