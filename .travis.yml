@@ -20,5 +20,6 @@ script:
 ############################################################################
 - mkdir cmake-build-debug
 - cd cmake-build-debug
-- CXX=/usr/bin/g++-7 CC=/usr/bingcc-7 cmake -DCMAKE_BUILD_TYPE=Debug ..
-- cmake
+- cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 -DCMAKE_C_COMPILER=/usr/bin/gcc-7 -DCMAKE_BUILD_TYPE=Debug ..
+- make
+- ctest
