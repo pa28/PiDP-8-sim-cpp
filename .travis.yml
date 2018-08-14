@@ -15,9 +15,9 @@ script:
 # Build main and tests
 ############################################################################
 - pwd
-- ls /usr/src
-- ls /usr/src/googletest
-- cd /usr/src/googletest
+- ls -l /usr/src
+- ls -l /usr/src/gtest
+- cd /usr/src/gtest
 - sudo mkdir build
 - cd build
 - sudo cmake ..
