@@ -14,8 +14,19 @@ script:
 ############################################################################
 # Build main and tests
 ############################################################################
-- mkdir -p build
+- pwd
+- cd /usr/src/googletest/googletest
+- sudo mkdir build
 - cd build
-- cmake ${CMAKE_OPTIONS} -DCMAKE_BUILD_TYPE=Debug ..
-- make
-- ctest
+- sudo cmake ..
+- sudo make
+- sudo cp libgtest* /usr/lib/
+- cd ..
+- sudo rm -rf build
+- cd
+- pwd
+#- mkdir -p build
+#- cd build
+#- cmake ${CMAKE_OPTIONS} -DCMAKE_BUILD_TYPE=Debug ..
+#- make
+#- ctest
