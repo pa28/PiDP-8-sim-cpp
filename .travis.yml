@@ -15,7 +15,9 @@ script:
 # Build main and tests
 ############################################################################
 - pwd
-- cd /usr/src/googletest/googletest
+- ls /usr/src
+- ls /usr/src/googletest
+- cd /usr/src/googletest
 - sudo mkdir build
 - cd build
 - sudo cmake ..
@@ -23,7 +25,7 @@ script:
 - sudo cp libgtest* /usr/lib/
 - cd ..
 - sudo rm -rf build
-- cd
+- cd $TRAVIS_BUILD_DIR
 - pwd
 #- mkdir -p build
 #- cd build
