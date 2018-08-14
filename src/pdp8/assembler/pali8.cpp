@@ -14,7 +14,7 @@ using namespace sim;
 using namespace pdp8_asm;
 
 int main(int argc, char **argv) {
-    std::stringstream strm{". 0200;start rar cia;cia;tad !@ 010;"};
+    std::stringstream strm{". 0200;start rar cia;cia;. 0400;tad !@ 010;"};
 
     antlr4::ANTLRInputStream input(strm);
     AsmLexer lexer(&input);
