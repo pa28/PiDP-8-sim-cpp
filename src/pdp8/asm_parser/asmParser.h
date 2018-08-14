@@ -23,20 +23,20 @@ public:
   };
 
   enum {
-    RuleCode = 0, RuleStatements = 1, RuleStatement = 2, RuleSymbol = 3, 
-    RuleInstruction = 4, RuleCtl_ins = 5, RuleStart = 6, RuleMem_ins = 7, 
-    RuleMem_op = 8, RuleMem_and = 9, RuleMem_tad = 10, RuleMem_isz = 11, 
-    RuleMem_dca = 12, RuleMem_jms = 13, RuleMem_jmp = 14, RuleZero = 15, 
-    RuleInd = 16, RuleAddress = 17, RuleOpr_ins = 18, RuleOpr_op1 = 19, 
-    RuleOpr_op1_ins = 20, RuleNop = 21, RuleIac = 22, RuleRal = 23, RuleRtl = 24, 
-    RuleRar = 25, RuleRtr = 26, RuleBsw = 27, RuleCml = 28, RuleCma = 29, 
-    RuleCia = 30, RuleCll = 31, RuleStl = 32, RuleCla = 33, RuleSta = 34, 
-    RuleOpr_op2 = 35, RuleOpr_op2_ins = 36, RuleHlt = 37, RuleOsr = 38, 
-    RuleSkp = 39, RuleSnl = 40, RuleSzl = 41, RuleSza = 42, RuleSna = 43, 
-    RuleSma = 44, RuleSpa = 45, RuleOpr_op3 = 46, RuleOpr_op3_ins = 47, 
-    RuleCam = 48, RuleMqa = 49, RuleMql = 50, RuleSwp = 51, RuleIot_ins = 52, 
-    RuleIot = 53, RuleIon = 54, RuleSkon = 55, RuleIof = 56, RuleSrq = 57, 
-    RuleGtf = 58, RuleRtf = 59, RuleCaf = 60, RuleEol = 61
+    RuleCode = 0, RuleStatements = 1, RuleStatement = 2, RulePragma = 3, 
+    RuleInstruction = 4, RuleSymbol = 5, RuleCpu_ins = 6, RuleCtl_ins = 7, 
+    RuleStart = 8, RuleMem_ins = 9, RuleMem_op = 10, RuleMem_and = 11, RuleMem_tad = 12, 
+    RuleMem_isz = 13, RuleMem_dca = 14, RuleMem_jms = 15, RuleMem_jmp = 16, 
+    RuleZero = 17, RuleInd = 18, RuleAddress = 19, RuleOpr_ins = 20, RuleOpr_op1 = 21, 
+    RuleOpr_op1_ins = 22, RuleNop = 23, RuleIac = 24, RuleRal = 25, RuleRtl = 26, 
+    RuleRar = 27, RuleRtr = 28, RuleBsw = 29, RuleCml = 30, RuleCma = 31, 
+    RuleCia = 32, RuleCll = 33, RuleStl = 34, RuleCla = 35, RuleSta = 36, 
+    RuleOpr_op2 = 37, RuleOpr_op2_ins = 38, RuleHlt = 39, RuleOsr = 40, 
+    RuleSkp = 41, RuleSnl = 42, RuleSzl = 43, RuleSza = 44, RuleSna = 45, 
+    RuleSma = 46, RuleSpa = 47, RuleOpr_op3 = 48, RuleOpr_op3_ins = 49, 
+    RuleCam = 50, RuleMqa = 51, RuleMql = 52, RuleSwp = 53, RuleIot_ins = 54, 
+    RuleIot = 55, RuleIon = 56, RuleSkon = 57, RuleIof = 58, RuleSrq = 59, 
+    RuleGtf = 60, RuleRtf = 61, RuleCaf = 62, RuleEol = 63
   };
 
   AsmParser(antlr4::TokenStream *input);
@@ -52,8 +52,10 @@ public:
   class CodeContext;
   class StatementsContext;
   class StatementContext;
-  class SymbolContext;
+  class PragmaContext;
   class InstructionContext;
+  class SymbolContext;
+  class Cpu_insContext;
   class Ctl_insContext;
   class StartContext;
   class Mem_insContext;
@@ -149,6 +151,22 @@ public:
     StatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     InstructionContext *instruction();
+    PragmaContext *pragma();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  StatementContext* statement();
+
+  class  PragmaContext : public antlr4::ParserRuleContext {
+  public:
+    PragmaContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    Ctl_insContext *ctl_ins();
     SymbolContext *symbol();
     std::vector<EolContext *> eol();
     EolContext* eol(size_t i);
@@ -160,7 +178,25 @@ public:
    
   };
 
-  StatementContext* statement();
+  PragmaContext* pragma();
+
+  class  InstructionContext : public antlr4::ParserRuleContext {
+  public:
+    InstructionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    Cpu_insContext *cpu_ins();
+    SymbolContext *symbol();
+    std::vector<EolContext *> eol();
+    EolContext* eol(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  InstructionContext* instruction();
 
   class  SymbolContext : public antlr4::ParserRuleContext {
   public:
@@ -177,14 +213,13 @@ public:
 
   SymbolContext* symbol();
 
-  class  InstructionContext : public antlr4::ParserRuleContext {
+  class  Cpu_insContext : public antlr4::ParserRuleContext {
   public:
-    InstructionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    Cpu_insContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     Mem_insContext *mem_ins();
     Opr_insContext *opr_ins();
     Iot_insContext *iot_ins();
-    Ctl_insContext *ctl_ins();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -193,7 +228,7 @@ public:
    
   };
 
-  InstructionContext* instruction();
+  Cpu_insContext* cpu_ins();
 
   class  Ctl_insContext : public antlr4::ParserRuleContext {
   public:
@@ -215,6 +250,7 @@ public:
     StartContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     AddressContext *address();
+    SymbolContext *symbol();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -231,6 +267,7 @@ public:
     virtual size_t getRuleIndex() const override;
     Mem_opContext *mem_op();
     AddressContext *address();
+    SymbolContext *symbol();
     ZeroContext *zero();
     IndContext *ind();
 

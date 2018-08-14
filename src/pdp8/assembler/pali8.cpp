@@ -9,8 +9,12 @@
 #include "AsmParser.h"
 #include "pali8Visitor.h"
 
+using namespace std;
+using namespace sim;
+using namespace pdp8_asm;
+
 int main(int argc, char **argv) {
-    std::stringstream strm{"start rar cia;cia;tad !@ 010;"};
+    std::stringstream strm{". 0200;start rar cia;cia;tad !@ 010;"};
 
     antlr4::ANTLRInputStream input(strm);
     AsmLexer lexer(&input);
@@ -19,11 +23,27 @@ int main(int argc, char **argv) {
 
     auto tree = parser.code();
     pali8Visitor visitor;
+
     auto code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(tree));
+
+    ++visitor.assembler_pass;
+    visitor.program_counter.memory_addr = 0;
+
+    code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(tree));
+
+    for (auto const &symbol : visitor.symbol_table) {
+        cout << symbol.first << ' ' << symbol.second.memory_addr << endl;
+    }
+
+    pdp8_address pc{};
+
     for (auto const &code : code_list) {
-        if (code.type() == typeid(pdp8_asm::pdp8_instruction) ) {
-            auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
-            instruction.instruction.print_on(std::cout) << std::endl;
+        if (code.type() == typeid(pdp8_instruction)) {
+            auto instruction = std::any_cast<pdp8_instruction>(code);
+            cout << pc.memory_addr << "   " << instruction.instruction << endl;
+            ++pc;
+        } else if (code.type() == typeid(pdp8_address)) {
+            pc = std::any_cast<pdp8_address>(code);
         }
     }
 

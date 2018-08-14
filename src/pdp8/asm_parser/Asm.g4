@@ -7,26 +7,34 @@ code
 statements : statement + ;
 
 statement
-    : symbol ? instruction ( eol + )
+    : instruction
+    | pragma
+    ;
+
+pragma
+    : symbol ? ctl_ins (eol + )
+    ;
+
+instruction
+    : symbol ? cpu_ins ( eol + )
     ;
 
 symbol : ID ;
 
-instruction
+cpu_ins
     : mem_ins
     | opr_ins
     | iot_ins
-    | ctl_ins
     ;
 
 ctl_ins
     : start
     ;
 
-start : '.' address ;
+start : '.' ( address | symbol );
 
 mem_ins
-    : mem_op zero ? ind ? address
+    : mem_op zero ? ind ? ( address | symbol )
     ;
 
 mem_op

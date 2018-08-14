@@ -25,9 +25,13 @@ public:
 
     virtual antlrcpp::Any visitStatement(AsmParser::StatementContext *context) = 0;
 
-    virtual antlrcpp::Any visitSymbol(AsmParser::SymbolContext *context) = 0;
+    virtual antlrcpp::Any visitPragma(AsmParser::PragmaContext *context) = 0;
 
     virtual antlrcpp::Any visitInstruction(AsmParser::InstructionContext *context) = 0;
+
+    virtual antlrcpp::Any visitSymbol(AsmParser::SymbolContext *context) = 0;
+
+    virtual antlrcpp::Any visitCpu_ins(AsmParser::Cpu_insContext *context) = 0;
 
     virtual antlrcpp::Any visitCtl_ins(AsmParser::Ctl_insContext *context) = 0;
 

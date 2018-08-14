@@ -23,11 +23,17 @@ public:
   virtual void enterStatement(AsmParser::StatementContext *ctx) = 0;
   virtual void exitStatement(AsmParser::StatementContext *ctx) = 0;
 
-  virtual void enterSymbol(AsmParser::SymbolContext *ctx) = 0;
-  virtual void exitSymbol(AsmParser::SymbolContext *ctx) = 0;
+  virtual void enterPragma(AsmParser::PragmaContext *ctx) = 0;
+  virtual void exitPragma(AsmParser::PragmaContext *ctx) = 0;
 
   virtual void enterInstruction(AsmParser::InstructionContext *ctx) = 0;
   virtual void exitInstruction(AsmParser::InstructionContext *ctx) = 0;
+
+  virtual void enterSymbol(AsmParser::SymbolContext *ctx) = 0;
+  virtual void exitSymbol(AsmParser::SymbolContext *ctx) = 0;
+
+  virtual void enterCpu_ins(AsmParser::Cpu_insContext *ctx) = 0;
+  virtual void exitCpu_ins(AsmParser::Cpu_insContext *ctx) = 0;
 
   virtual void enterCtl_ins(AsmParser::Ctl_insContext *ctx) = 0;
   virtual void exitCtl_ins(AsmParser::Ctl_insContext *ctx) = 0;

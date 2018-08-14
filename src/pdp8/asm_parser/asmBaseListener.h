@@ -25,11 +25,17 @@ public:
   virtual void enterStatement(AsmParser::StatementContext * /*ctx*/) override { }
   virtual void exitStatement(AsmParser::StatementContext * /*ctx*/) override { }
 
-  virtual void enterSymbol(AsmParser::SymbolContext * /*ctx*/) override { }
-  virtual void exitSymbol(AsmParser::SymbolContext * /*ctx*/) override { }
+  virtual void enterPragma(AsmParser::PragmaContext * /*ctx*/) override { }
+  virtual void exitPragma(AsmParser::PragmaContext * /*ctx*/) override { }
 
   virtual void enterInstruction(AsmParser::InstructionContext * /*ctx*/) override { }
   virtual void exitInstruction(AsmParser::InstructionContext * /*ctx*/) override { }
+
+  virtual void enterSymbol(AsmParser::SymbolContext * /*ctx*/) override { }
+  virtual void exitSymbol(AsmParser::SymbolContext * /*ctx*/) override { }
+
+  virtual void enterCpu_ins(AsmParser::Cpu_insContext * /*ctx*/) override { }
+  virtual void exitCpu_ins(AsmParser::Cpu_insContext * /*ctx*/) override { }
 
   virtual void enterCtl_ins(AsmParser::Ctl_insContext * /*ctx*/) override { }
   virtual void exitCtl_ins(AsmParser::Ctl_insContext * /*ctx*/) override { }

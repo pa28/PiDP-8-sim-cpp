@@ -33,6 +33,20 @@ namespace pdp8_asm {
         IOT, ION, SKON, IOF, SRQ, GTF, RTF, CAF
     };
 
+    class pdp8_address {
+    public:
+        pdp8_address() = default;
+
+        pdp8_address &operator++() {
+            memory_addr = memory_addr() + 1;
+        }
+
+        sim::hw_register<15, sim::register_output_policy<8>> memory_addr;
+        static constexpr sim::hw_slice_spec<7, 0> address{};
+        static constexpr sim::hw_slice_spec<5, 7> page{};
+        static constexpr sim::hw_slice_spec<3, 12> field{};
+    };
+
     class pdp8_instruction {
     public:
         pdp8_instruction() = default;

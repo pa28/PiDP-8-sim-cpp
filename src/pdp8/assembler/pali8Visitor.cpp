@@ -37,19 +37,27 @@ antlrcpp::Any pali8Visitor::visitStatements(AsmParser::StatementsContext *ctx) {
 antlrcpp::Any pali8Visitor::visitStatement(AsmParser::StatementContext *ctx) {
     auto results = visitAllChildren(ctx);
 
-    for (auto const &part : results) {
-        if (part.type() == typeid(std::string)) {
-            // ToDo: Add symbol to symbol table.
-        } else if (part.type() == typeid(pdp8_asm::pdp8_instruction)) {
-            return part;
-        }
-    }
+    return returnVector(results);
+}
+
+
+antlrcpp::Any pali8Visitor::visitPragma(AsmParser::PragmaContext *ctx) {
+    auto results = visitAllChildren(ctx);
 
     return returnVector(results);
 }
 
 antlrcpp::Any pali8Visitor::visitInstruction(AsmParser::InstructionContext *ctx) {
     auto results = visitAllChildren(ctx);
+
+    for (auto const &part : results) {
+        if (part.type() == typeid(std::string)) {
+            set_symbol(std::any_cast<std::string>(part), program_counter);
+        } else if (part.type() == typeid(pdp8_asm::pdp8_instruction)) {
+            ++program_counter;
+            return part;
+        }
+    }
 
     return returnVector(results);
 }
@@ -183,4 +191,19 @@ antlrcpp::Any pali8Visitor::visitMem_op(AsmParser::Mem_opContext *ctx) {
     }
 
     return pdp8_asm::pdp8_instruction(ret_code);
+}
+
+antlrcpp::Any pali8Visitor::visitStart(AsmParser::StartContext *ctx) {
+    auto results = visitAllChildren(ctx);
+
+    auto start = returnVector(results);
+
+    if (start.type() == typeid(unsigned long)) {
+        program_counter.memory_addr = std::any_cast<unsigned long>(start);
+        return pdp8_asm::pdp8_address{program_counter};
+    } else {
+        // ToDo: process symbol.
+    }
+
+    return antlrcpp::Any();
 }

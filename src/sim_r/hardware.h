@@ -372,6 +372,11 @@ namespace sim {
     struct is_hw_register<hw_register<bits, out_pol, store_pol>> : std::true_type {
     };
 
+    template<int W, typename O, typename S>
+    std::ostream &operator<<(std::ostream &ostream, hw_register<W, O, S> const &reg) {
+        return reg.print_on(ostream);
+    }
+
 } // namespace sim
 
 #endif //CPU_SIM_HARDWARE_H

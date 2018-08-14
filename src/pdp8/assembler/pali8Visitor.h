@@ -5,13 +5,29 @@
 #ifndef CPU_SIM_PALI8VISITOR_H
 #define CPU_SIM_PALI8VISITOR_H
 
+#include <map>
 #include <vector>
 #include "AsmBaseVisitor.h"
 #include "pdp8_instruction.h"
 
 class pali8Visitor : public AsmBaseVisitor {
 public:
+    pali8Visitor() : AsmBaseVisitor{}, symbol_table{}, program_counter{}, assembler_pass{0} {}
+
+    size_t assembler_pass;
+
     antlrcpp::Any returnVector(std::vector<std::any> vector);
+
+    pdp8_asm::pdp8_address program_counter;
+
+    std::map<std::string, pdp8_asm::pdp8_address> symbol_table;
+
+    void set_symbol(const std::string &name, pdp8_asm::pdp8_address addr) {
+        if (symbol_table.find(name) == symbol_table.end())
+            symbol_table.emplace(name, pdp8_asm::pdp8_address{addr});
+        else
+            symbol_table[name] = addr;
+    }
 
     template <class C>
     std::vector<std::any> visitAllChildren(C *ctx) {
@@ -33,6 +49,8 @@ public:
 
     antlrcpp::Any visitInstruction(AsmParser::InstructionContext *ctx) override;
 
+    antlrcpp::Any visitPragma(AsmParser::PragmaContext *ctx) override;
+
     antlrcpp::Any visitSymbol(AsmParser::SymbolContext *ctx) override;
 
     antlrcpp::Any visitMem_op(AsmParser::Mem_opContext *ctx) override;
@@ -44,6 +62,8 @@ public:
     antlrcpp::Any visitOpr_op1(AsmParser::Opr_op1Context *ctx) override;
 
     antlrcpp::Any visitMem_ins(AsmParser::Mem_insContext *ctx) override;
+
+    antlrcpp::Any visitStart(AsmParser::StartContext *ctx) override;
 
     antlrcpp::Any visitZero(AsmParser::ZeroContext *ctx) override {
         return pdp8_asm::ZERO;
