@@ -9,11 +9,15 @@ you are brave and have lots of time.
 
 ### Antlr4 and Antlr4 C++ Runtime for C++17 Google Test
 
-  sudo apt-get install pkg-config uuid-dev libgtest-dev
+```
+sudo apt-get install pkg-config uuid-dev libgtest-dev
+```
+  
 
 Get antlr 4.7 complete JAR:
-
-  curl -O https://www.antlr.org/download/antlr-4.7-complete.jar
+```
+curl -O https://www.antlr.org/download/antlr-4.7-complete.jar
+```
 
 and move it to a standard location. I used `/usr/local/lib` but you can use
 a different location and update the `CMakeLists.txt` file.
