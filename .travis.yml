@@ -1,5 +1,6 @@
 language: cpp
 compiler: gcc
+sudo: false
 dist: trusty
 
 before_install:
@@ -7,28 +8,21 @@ before_install:
 - sudo apt-get update -qq
 
 install:
-- sudo apt-get install -qq g++-7 pkg-config uuid-dev libgtest-dev
+- sudo apt-get install -qq g++-6 pkg-config uuid-dev libgtest-dev
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-7 pkg-config uuid-dev libgtest-dev cmake
 
 script:
 ############################################################################
 # Build main and tests
 ############################################################################
-- pwd
-- ls -l /usr/src
-- ls -l /usr/src/gtest
-- cd /usr/src/gtest
-- sudo mkdir build
-- cd build
-- sudo cmake ..
-- sudo make
-- sudo cp libgtest* /usr/lib/
-- cd ..
-- sudo rm -rf build
-- cd $TRAVIS_BUILD_DIR
-- pwd
-#- mkdir -p build
-#- cd build
-#- cmake ${CMAKE_OPTIONS} -DCMAKE_BUILD_TYPE=Debug ..
-#- make
-#- ctest
+- mkdir cmake-build-debug
+- cd cmake-build-debug
+- CXX=/usr/bin/g++-6 CC=/usr/bingcc-6 cmake -DCMAKE_BUILD_TYPE=Debug ..
+- cmake

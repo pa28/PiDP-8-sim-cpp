@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.9)
 project(cpu_sim)
 enable_testing()
 
+include(gtest.cmake)
+
 set(CMAKE_CXX_STANDARD 17)
 
 find_package (Threads)
-
-find_package(GTest REQUIRED)
 
 #add_executable(foo foo.cc)te
 #target_link_libraries(foo GTest::GTest GTest::Main)
