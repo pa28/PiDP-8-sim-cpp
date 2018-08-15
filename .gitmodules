@@ -1,6 +1,7 @@
 [submodule "gtest"]
 	path = gtest
 	url = https://github.com/google/googletest.git
+
 [submodule "antlr4"]
 	path = antlr4
 	url = https://github.com/pa28/antlr4.git
