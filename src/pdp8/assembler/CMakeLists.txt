@@ -1,5 +1,5 @@
-include_directories( /usr/local/include/antlr4-runtime ${PROJECT_SOURCE_DIR}/src/sim_r ${PROJECT_SOURCE_DIR}/src/pdp8
-        ${PROJECT_SOURCE_DIR}/src/pdp8/asm_parser ${GTEST_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/src/sim_r ${PROJECT_SOURCE_DIR}/src/pdp8
+        ${PROJECT_SOURCE_DIR}/src/pdp8/asm_parser ${PROJECT_SOURCE_DIR}/src/pdp8/assembler)
 
 set(pali8_SOURCE
         ../asm_parser/AsmBaseListener.h ../asm_parser/AsmBaseListener.cpp
