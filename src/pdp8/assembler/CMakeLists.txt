@@ -11,6 +11,6 @@ set(pali8_SOURCE
         pali8Visitor.h pali8Visitor.cpp
         )
 
-#add_executable(pali8 pali8.cpp ${pali8_SOURCE})
-##add_dependencies(pali8 antlr_parser)
-#target_link_libraries(pali8 /usr/local/lib/libantlr4-runtime.a)
+add_executable(pali8 pali8.cpp ${pali8_SOURCE})
+#add_dependencies(pali8 antlr_parser)
+target_link_libraries(pali8 antlr4_static)

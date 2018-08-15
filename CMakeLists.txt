@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
-project(cpu_sim)
+project(cpu_sim CXX)
 enable_testing()
 
-include(gtest.cmake)
-
 set(CMAKE_CXX_STANDARD 17)
+
+include(antlr4.cmake)
+include(gtest.cmake)
 
 find_package (Threads)
 

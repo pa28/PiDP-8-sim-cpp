@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <strstream>
+#include <sstream>
 #include "antlr4-runtime.h"
 #include "AsmLexer.h"
 #include "AsmParser.h"

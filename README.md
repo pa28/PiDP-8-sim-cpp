@@ -10,7 +10,7 @@ you are brave and have lots of time.
 ### Antlr4 and Antlr4 C++ Runtime for C++17 Google Test
 
 ```
-sudo apt-get install pkg-config uuid-dev libgtest-dev
+sudo apt-get install pkg-config uuid-dev
 ```
   
 
