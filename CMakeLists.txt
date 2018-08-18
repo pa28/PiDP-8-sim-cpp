@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.9)
 project(cpu_sim CXX)
 enable_testing()
 
+set(COMPILER_WARNING_FLAGS -Wreturn-type)
 set(CMAKE_CXX_STANDARD 17)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_WARNING_FLAGS}")
 
 include(antlr4.cmake)
 include(gtest.cmake)

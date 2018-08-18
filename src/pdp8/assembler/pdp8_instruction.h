@@ -39,6 +39,7 @@ namespace pdp8_asm {
 
         pdp8_address &operator++() {
             memory_addr = memory_addr() + 1;
+            return *this;
         }
 
         sim::hw_register<15, sim::register_output_policy<8>> memory_addr;
@@ -57,6 +58,7 @@ namespace pdp8_asm {
         template <typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
         pdp8_instruction &set_address(T addr) {
             instruction << address(addr);
+            return *this;
         }
 
         sim::hw_register<12,sim::register_output_policy<8>> instruction;
