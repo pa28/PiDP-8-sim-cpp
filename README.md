@@ -21,13 +21,3 @@ curl -O https://www.antlr.org/download/antlr-4.7-complete.jar
 
 and move it to a standard location. I used `/usr/local/lib` but you can use
 a different location and update the `CMakeLists.txt` file.
-
-For now you will have to use my forked branch of the antlr4 repository to get
-and compile the C++ runtime with C++17 support. Antlr4 C++ runtime 
-currently only supports C++11.
-
-  https://github.com/pa28/antlr4/tree/c++17-support
-
-Make sure you check out the `c++17-support` branch. The C++ runtime is in `runtime/cpp`. Follow the instructions in the readme to
-build it. Don't build the demo. If you want to see the demo, use the `master` branch.
-
