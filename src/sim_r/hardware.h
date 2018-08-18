@@ -320,6 +320,7 @@ namespace sim {
                           "Slice too wide for register storage.");
             static_assert((T::width + T::offset) <= base_type_bits, "Slice too wide for register base type.");
             value = (value & ~static_cast<base_type>(T::mask)) | (slice.value_in_place());
+            return *this;
         }
 
         std::ostream &print_on(std::ostream &ostream) const {
