@@ -1,4 +1,4 @@
-# PiDP-8 Simulator in C++17 [![Build Status](https://travis-ci.org/pa28/PiDP-8-sim-cpp.svg?branch=master)](https://travis-ci.org/pa28/PiDP-8-sim-cpp)
+# PiDP-8 Simulator in C++17
 
 Definitely not ready for prime-time, this project is under heavy development
 and may change or stop working without notice. Not much is working at the
