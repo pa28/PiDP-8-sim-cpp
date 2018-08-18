@@ -1,0 +1,19 @@
+language: cpp
+compiler: gcc
+sudo: false
+dist: trusty
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-7 pkg-config uuid-dev cmake
+
+script:
+############################################################################
+# Build main and tests
+############################################################################
+- cmake --version
+- mkdir cmake-build-debug && cd cmake-build-debug && cmake -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 -DCMAKE_C_COMPILER=/usr/bin/gcc-7 -DCMAKE_BUILD_TYPE=Debug .. && make && ctest
+
