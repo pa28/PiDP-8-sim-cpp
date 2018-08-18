@@ -11,7 +11,7 @@ include(assembler.cmake)
 find_package (Threads)
 
 add_subdirectory(src/unit_tests)
-#add_subdirectory(src/pdp8/asm_parser)
+add_subdirectory(src/pdp8/asm_parser)
 
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/src/sim_r

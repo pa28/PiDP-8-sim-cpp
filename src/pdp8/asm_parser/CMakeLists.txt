@@ -9,4 +9,4 @@ add_custom_command(OUTPUT AsmParser.cpp AsmParser.h AsmVisitor.cpp AsmVisitor.h 
         COMMENT "Generate antlr4 parser."
         )
 
-#add_custom_target(antlr_parser DEPENDS AsmBaseVisitor.cpp AsmBaseVisitor.h)
+add_custom_target(antlr_parser DEPENDS AsmBaseVisitor.cpp AsmBaseVisitor.h)

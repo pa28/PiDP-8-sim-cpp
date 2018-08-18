@@ -27,19 +27,19 @@ public:
     return visitChildren(ctx);
   }
 
-    virtual antlrcpp::Any visitPragma(AsmParser::PragmaContext *ctx) override {
-      return visitChildren(ctx);
-    }
+  virtual antlrcpp::Any visitPragma(AsmParser::PragmaContext *ctx) override {
+    return visitChildren(ctx);
+  }
 
-    virtual antlrcpp::Any visitInstruction(AsmParser::InstructionContext *ctx) override {
-      return visitChildren(ctx);
-    }
+  virtual antlrcpp::Any visitInstruction(AsmParser::InstructionContext *ctx) override {
+    return visitChildren(ctx);
+  }
 
   virtual antlrcpp::Any visitSymbol(AsmParser::SymbolContext *ctx) override {
     return visitChildren(ctx);
   }
 
-    virtual antlrcpp::Any visitCpu_ins(AsmParser::Cpu_insContext *ctx) override {
+  virtual antlrcpp::Any visitCpu_ins(AsmParser::Cpu_insContext *ctx) override {
     return visitChildren(ctx);
   }
 
