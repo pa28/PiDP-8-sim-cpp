@@ -1,0 +1,5 @@
+#! /bin/bash
+mkdir cmake-build-pi
+cd cmake-build-pi
+export LD_LIBRARY_PATH=/usr/local/gcc-8.1.0/lib/:${LD_LIBRARY_PATH}
+cmake -DCMAKE_CXX_COMPILER=/usr/local/gcc-8.1.0/bin/g++-8.1.0 -DCMAKE_BUILD_TYPE=Release .. && make -j 2
