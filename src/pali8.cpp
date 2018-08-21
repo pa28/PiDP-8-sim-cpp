@@ -16,8 +16,6 @@ using namespace pdp8_asm;
 int main(int argc, char **argv) {
     std::stringstream strm{". 0200;start rar cia;cia;. 0400;tad !@ 010;"};
 
-    // ToDo: find out what is being linked in here not satisfied by the cross compiler. Probable causes are
-    // the pkg-config and uuid-dev libraries.
     antlr4::ANTLRInputStream input(strm);
     AsmLexer lexer(&input);
     antlr4::CommonTokenStream tokens(&lexer);
