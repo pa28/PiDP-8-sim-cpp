@@ -28,7 +28,6 @@ fi
 
 showinfo "Running tests ..."
 make -j8 cpu_sim_coverage
-ctest
 if [ $? -ne 0 ]; then
     error "Error: there are failed tests!"
     exit 4
