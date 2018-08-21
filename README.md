@@ -29,7 +29,7 @@ a different location and update the `CMakeLists.txt` file.
 
 You will need a modern build environment. First you will need a C++
 compiler conformant with C++17. I recommend `gcc-8.1.0`. Follow the
-instructions found at [https://solarianprogrammer.com/2017/12/08/raspberry-pi-raspbian-install-gcc-compile-cpp-17-programs/]()
+instructions found at [Raspberry Pi - Install GCC 8 and compile C++17 programs](https://solarianprogrammer.com/2017/12/08/raspberry-pi-raspbian-install-gcc-compile-cpp-17-programs/)
 
 Then you will need an up-to-date version of `cmake`. I suggest you follow
-the instructions at [https://cmake.org/install]() and get version 3.12.0
+the instructions at [Installing CMake](https://cmake.org/install) and get version 3.12.0
