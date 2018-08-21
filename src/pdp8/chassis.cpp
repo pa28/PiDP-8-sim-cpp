@@ -13,7 +13,7 @@ namespace pdp8 {
         chs->run_thread();
     }
 
-    chassis::chassis() : cpu{}, devices{}, bus{}, chassisThread{}, run_flag{true} {
+    chassis::chassis() : cpu{}, devices{}, bus{}, run_flag{true}, chassisThread{} {
     }
 
     void chassis::run_thread() {

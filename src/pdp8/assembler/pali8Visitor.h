@@ -12,7 +12,7 @@
 
 class pali8Visitor : public AsmBaseVisitor {
 public:
-    pali8Visitor() : AsmBaseVisitor{}, symbol_table{}, program_counter{}, assembler_pass{0} {}
+    pali8Visitor() : AsmBaseVisitor{}, assembler_pass{0}, program_counter{}, symbol_table{} {}
 
     size_t assembler_pass;
 

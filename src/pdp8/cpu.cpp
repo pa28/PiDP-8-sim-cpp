@@ -231,7 +231,6 @@ namespace pdp8 {
             }
         } else if ((bits & 01) == 0) { // Group 2
             bool skip = false;
-            auto grp2 = bits & 0170;
             switch (bits & 0170) {
                 case 0010: // SKP
                     skip = true;

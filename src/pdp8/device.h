@@ -12,8 +12,8 @@ namespace pdp8 {
 
     class device_bus {
     public:
-        device_bus() : int_enable{0}, int_req{0}, dev_done{0}, stop_inst{0}, skip{false}, device_flag{},
-                       device_mask{} {}
+        device_bus() : int_enable{0}, int_req{0}, dev_done{0}, stop_inst{0}, device_flag{},
+                       device_mask{}, skip{false} {}
 
         void reset() {
             int_enable = int_req = dev_done = stop_inst = device_flag = 0;

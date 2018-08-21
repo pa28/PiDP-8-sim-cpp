@@ -188,7 +188,6 @@ namespace sim {
 
         template<typename V, typename = typename std::enable_if_t<std::is_integral_v<V>>>
         explicit hw_slice(V init_value) {
-            auto m = mask;
             value = static_cast<base_type>(init_value & mask);
         }
 

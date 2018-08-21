@@ -14,16 +14,17 @@ namespace pdp8 {
     public:
         using clock_register_t = register_t;
 
-        DK8EA() : clk_flags{0}
-                , clk_buf0{0U}
-                , clk_buf1{0U}
-                , clk_ctr0{0}
-                , clk_ctr1{0}
-                , hwrng{-1}
-                , seed{0}
-                , generator{}
-                , distribution{}
-        {}
+        DK8EA() : hwrng{-1},
+                  seed{0},
+                  clk_mode{DK8EA_Mode_P},
+                  clk_rand{DK8EA_HWRNG},
+                  clk_buf0{0U},
+                  clk_buf1{0U},
+                  clk_flags{0},
+                  clk_ctr0{0},
+                  clk_ctr1{0},
+                  distribution{},
+                  generator{} {}
 
         void initialize(device_bus &bus);
 
@@ -36,7 +37,8 @@ namespace pdp8 {
         base_type dispatch(device_bus &bus, base_type command, base_type data);
 
         std::string name() const { return std::string{"clk"}; }
-        std::string long_name() const { return std::string{"DK8-EAp"};}
+
+        std::string long_name() const { return std::string{"DK8-EAp"}; }
 
         enum DK8EA_Flags {
             CLK_INT_FUNDAMENTAL = 0001,
@@ -59,8 +61,8 @@ namespace pdp8 {
         inline static std::string hwrngPath = "/dev/random";      /* the path name of the hardware random number generator */
         uint32_t seed;                                            /* random seed */
 
-        int32_t clk_mode = DK8EA_Mode_P;
-        int32_t clk_rand = DK8EA_HWRNG;
+        int32_t clk_mode;
+        int32_t clk_rand;
 
     protected:
         uint32_t clk_buf0, clk_buf1;

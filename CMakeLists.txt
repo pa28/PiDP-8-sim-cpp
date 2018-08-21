@@ -14,7 +14,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     setup_target_for_coverage(${PROJECT_NAME}_coverage hw_registers coverage)
 endif()
 
-set(COMPILER_WARNING_FLAGS "-Wreturn-type -Wall -pedantic -pthread -g -O0 -fprofile-arcs -ftest-coverage")
+set(COMPILER_WARNING_FLAGS "-Wreturn-type -Wall -Werror -pedantic -pthread -g -O0 -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMPILER_WARNING_FLAGS}")
