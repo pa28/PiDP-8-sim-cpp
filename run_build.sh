@@ -27,6 +27,7 @@ if [ $? -ne 0 ]; then
 fi
 
 showinfo "Running tests ..."
+chmod u+x run_all_unit_tests
 make -j8 cpu_sim_coverage
 if [ $? -ne 0 ]; then
     error "Error: there are failed tests!"
