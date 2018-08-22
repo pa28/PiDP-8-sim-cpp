@@ -68,12 +68,59 @@ antlrcpp::Any pali8Visitor::visitOpr_ins(AsmParser::Opr_insContext *ctx) {
     return returnVector(results);
 }
 
+
+antlrcpp::Any pali8Visitor::visitIot_ins(AsmParser::Iot_insContext *ctx) {
+    auto results = visitAllChildren(ctx);
+
+    int ret_code = 0;
+    for (auto const &op : results) {
+        if (op.type() == typeid(pdp8_asm::InputOutputTransfer)) {
+            auto opt_enum = std::any_cast<pdp8_asm::InputOutputTransfer>(op);
+            switch (opt_enum) {
+                case pdp8_asm::IOT:
+                    ret_code |= 06000;
+                    break;
+                case pdp8_asm::ION:
+                    ret_code |= 06001;
+                    break;
+                case pdp8_asm::SKON:
+                    ret_code |= 06000;
+                    break;
+                case pdp8_asm::IOF:
+                    ret_code |= 06002;
+                    break;
+                case pdp8_asm::SRQ:
+                    ret_code |= 06003;
+                    break;
+                case pdp8_asm::GTF:
+                    ret_code |= 06004;
+                    break;
+                case pdp8_asm::RTF:
+                    ret_code |= 06005;
+                    break;
+                case pdp8_asm::SGT:
+                    ret_code |= 06006;
+                    break;
+                case pdp8_asm::CAF:
+                    ret_code |= 06007;
+                    break;
+            }
+        }
+    }
+
+    return pdp8_asm::pdp8_instruction(ret_code);
+}
+
 antlrcpp::Any pali8Visitor::visitOpr_op1(AsmParser::Opr_op1Context *ctx) {
     auto results = visitAllChildren(ctx);
 
     int ret_code = 0;
     for (auto const &op : results) {
-        if (op.type() == typeid(pdp8_asm::OperateGroup1)) {
+        if (op.type() == typeid(pdp8_asm::OperateCommon)) {
+            auto opt_enum = std::any_cast<pdp8_asm::OperateCommon>(op);
+            if (opt_enum == pdp8_asm::CLA)
+                ret_code |= 07200;
+        } else if (op.type() == typeid(pdp8_asm::OperateGroup1)) {
             auto opt_enum = std::any_cast<pdp8_asm::OperateGroup1>(op);
             switch (opt_enum) {
                 case pdp8_asm::NOP:
@@ -112,11 +159,81 @@ antlrcpp::Any pali8Visitor::visitOpr_op1(AsmParser::Opr_op1Context *ctx) {
                 case pdp8_asm::STL:
                     ret_code |= 07120;
                     break;
-                case pdp8_asm::CLA:
-                    ret_code |= 07200;
-                    break;
                 case pdp8_asm::STA:
                     ret_code |= 07240;
+                    break;
+            }
+        }
+    }
+
+    return pdp8_asm::pdp8_instruction(ret_code);
+}
+
+antlrcpp::Any pali8Visitor::visitOpr_op2(AsmParser::Opr_op2Context *ctx) {
+    auto results = visitAllChildren(ctx);
+
+    int ret_code = 0;
+    for (auto const &op : results) {
+        if (op.type() == typeid(pdp8_asm::OperateCommon)) {
+            auto opt_enum = std::any_cast<pdp8_asm::OperateCommon>(op);
+            if (opt_enum == pdp8_asm::CLA)
+                ret_code |= 07600;
+        } else if (op.type() == typeid(pdp8_asm::OperateGroup2)) {
+            auto opt_enum = std::any_cast<pdp8_asm::OperateGroup2>(op);
+            switch (opt_enum) {
+                case pdp8_asm::HLT:
+                    ret_code |= 07402;
+                    break;
+                case pdp8_asm::OSR:
+                    ret_code |= 07404;
+                    break;
+                case pdp8_asm::SKP:
+                    ret_code |= 07410;
+                    break;
+                case pdp8_asm::SNL:
+                    ret_code |= 07420;
+                    break;
+                case pdp8_asm::SZL:
+                    ret_code |= 07430;
+                    break;
+                case pdp8_asm::SZA:
+                    ret_code |= 07440;
+                    break;
+                case pdp8_asm::SNA:
+                    ret_code |= 07450;
+                    break;
+                case pdp8_asm::SMA:
+                    ret_code |= 07500;
+                    break;
+                case pdp8_asm::SPA:
+                    ret_code |= 07510;
+                    break;
+            }
+        }
+    }
+
+    return pdp8_asm::pdp8_instruction(ret_code);
+}
+
+antlrcpp::Any pali8Visitor::visitOpr_op3(AsmParser::Opr_op3Context *ctx) {
+    auto results = visitAllChildren(ctx);
+
+    int ret_code = 0;
+    for (auto const &op : results) {
+        if (op.type() == typeid(pdp8_asm::OperateGroup3)) {
+            auto opt_enum = std::any_cast<pdp8_asm::OperateGroup3>(op);
+            switch (opt_enum) {
+                case pdp8_asm::CAM:
+                    ret_code |= 07621;
+                    break;
+                case pdp8_asm::MQA:
+                    ret_code |= 07501;
+                    break;
+                case pdp8_asm::MQL:
+                    ret_code |= 07421;
+                    break;
+                case pdp8_asm::SWP:
+                    ret_code |= 07521;
                     break;
             }
         }

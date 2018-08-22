@@ -202,6 +202,10 @@ public:
   virtual void enterRtf(AsmParser::RtfContext * /*ctx*/) override { }
   virtual void exitRtf(AsmParser::RtfContext * /*ctx*/) override { }
 
+    virtual void enterSgt(AsmParser::SgtContext * /*ctx*/) override {}
+
+    virtual void exitSgt(AsmParser::SgtContext * /*ctx*/) override {}
+
   virtual void enterCaf(AsmParser::CafContext * /*ctx*/) override { }
   virtual void exitCaf(AsmParser::CafContext * /*ctx*/) override { }
 

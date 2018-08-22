@@ -200,6 +200,10 @@ public:
   virtual void enterRtf(AsmParser::RtfContext *ctx) = 0;
   virtual void exitRtf(AsmParser::RtfContext *ctx) = 0;
 
+    virtual void enterSgt(AsmParser::SgtContext *ctx) = 0;
+
+    virtual void exitSgt(AsmParser::SgtContext *ctx) = 0;
+
   virtual void enterCaf(AsmParser::CafContext *ctx) = 0;
   virtual void exitCaf(AsmParser::CafContext *ctx) = 0;
 

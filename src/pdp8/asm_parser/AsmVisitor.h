@@ -143,6 +143,8 @@ public:
 
     virtual antlrcpp::Any visitRtf(AsmParser::RtfContext *context) = 0;
 
+    virtual antlrcpp::Any visitSgt(AsmParser::SgtContext *context) = 0;
+
     virtual antlrcpp::Any visitCaf(AsmParser::CafContext *context) = 0;
 
     virtual antlrcpp::Any visitEol(AsmParser::EolContext *context) = 0;

@@ -17,12 +17,16 @@ namespace pdp8_asm {
         ZERO, INDIRECT
     };
 
-    enum OperateGroup1 {
-        NOP, IAC, RAL, RTL, RAR, RTR, BSW, CML, CMA, CIA, CLL, STL, CLA, STA,
+    enum OperateCommon {
+        CLA
     };
 
-    enum OperatorGroup2 {
-        HLT, OSR, SKP, SNL, SZL, SZA, SNA, SMA, SPA, CLA2
+    enum OperateGroup1 {
+        NOP, IAC, RAL, RTL, RAR, RTR, BSW, CML, CMA, CIA, CLL, STL, STA,
+    };
+
+    enum OperateGroup2 {
+        HLT, OSR, SKP, SNL, SZL, SZA, SNA, SMA, SPA
     };
 
     enum OperateGroup3 {
@@ -30,7 +34,7 @@ namespace pdp8_asm {
     };
 
     enum InputOutputTransfer {
-        IOT, ION, SKON, IOF, SRQ, GTF, RTF, CAF
+        IOT, ION, SKON, IOF, SRQ, GTF, RTF, SGT, CAF
     };
 
     class pdp8_address {

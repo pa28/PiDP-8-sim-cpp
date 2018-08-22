@@ -13,13 +13,13 @@ class  AsmLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, AND = 7, 
-    TAD = 8, ISZ = 9, DCA = 10, JMS = 11, JMP = 12, NOP = 13, IAC = 14, 
-    RSL = 15, RTL = 16, RAR = 17, RTR = 18, BSW = 19, CML = 20, CMA = 21, 
+    TAD = 8, ISZ = 9, DCA = 10, JMS = 11, JMP = 12, NOP = 13, IAC = 14,
+      RAL = 15, RTL = 16, RAR = 17, RTR = 18, BSW = 19, CML = 20, CMA = 21,
     CIA = 22, CLL = 23, STL = 24, CLA = 25, STA = 26, HLT = 27, OSR = 28, 
     SKP = 29, SNL = 30, SZL = 31, SZA = 32, SNA = 33, SMA = 34, SPA = 35, 
-    CAM = 36, MQA = 37, MQL = 38, SWP = 39, IOT = 40, ION = 41, SKON = 42, 
-    IOF = 43, SRQ = 44, GTF = 45, RTF = 46, CAF = 47, Octal = 48, Decimal = 49, 
-    ID = 50, WS = 51
+    CAM = 36, MQA = 37, MQL = 38, SWP = 39, IOT = 40, ION = 41, SKON = 42,
+      IOF = 43, SRQ = 44, GTF = 45, RTF = 46, SGT = 47, CAF = 48, Octal = 49,
+      Decimal = 50, ID = 51, WS = 52
   };
 
   AsmLexer(antlr4::CharStream *input);

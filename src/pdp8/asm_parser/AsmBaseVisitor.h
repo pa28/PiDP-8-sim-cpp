@@ -263,6 +263,10 @@ public:
     return visitChildren(ctx);
   }
 
+    virtual antlrcpp::Any visitSgt(AsmParser::SgtContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
   virtual antlrcpp::Any visitCaf(AsmParser::CafContext *ctx) override {
     return visitChildren(ctx);
   }

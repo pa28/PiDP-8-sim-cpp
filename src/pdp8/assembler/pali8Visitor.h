@@ -61,6 +61,12 @@ public:
 
     antlrcpp::Any visitOpr_op1(AsmParser::Opr_op1Context *ctx) override;
 
+    antlrcpp::Any visitOpr_op2(AsmParser::Opr_op2Context *ctx) override;
+
+    antlrcpp::Any visitOpr_op3(AsmParser::Opr_op3Context *ctx) override;
+
+    antlrcpp::Any visitIot_ins(AsmParser::Iot_insContext *ctx) override;
+
     antlrcpp::Any visitMem_ins(AsmParser::Mem_insContext *ctx) override;
 
     antlrcpp::Any visitStart(AsmParser::StartContext *ctx) override;
@@ -231,6 +237,10 @@ public:
 
     antlrcpp::Any visitRtf(AsmParser::RtfContext *ctx) override {
         return pdp8_asm::RTF;
+    }
+
+    antlrcpp::Any visitSgt(AsmParser::SgtContext *ctx) override {
+        return pdp8_asm::SGT;
     }
 
     antlrcpp::Any visitCaf(AsmParser::CafContext *ctx) override {

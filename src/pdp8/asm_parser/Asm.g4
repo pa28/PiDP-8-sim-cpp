@@ -75,7 +75,7 @@ opr_op1_ins
 
 nop : NOP ;
 iac : IAC ;
-ral : RSL ;
+ral : RAL ;
 rtl : RTL ;
 rar : RAR ;
 rtr : RTR ;
@@ -117,7 +117,7 @@ swp : SWP ;
 
 iot_ins
     : iot
-    | ion | skon | iof | srq | gtf | rtf | caf
+    | ion | skon | iof | srq | gtf | rtf | sgt | caf
     ;
 
 iot : IOT ;
@@ -127,6 +127,7 @@ iof : IOF ;
 srq : SRQ ;
 gtf : GTF ;
 rtf : RTF ;
+sgt : SGT ;
 caf : CAF ;
 
 eol
@@ -171,7 +172,7 @@ JMP : J M P ;
 
 NOP : N O P ;
 IAC : I A C ;
-RSL : R S L ;
+RAL : R A L ;
 RTL : R T L ;
 RAR : R A R ;
 RTR : R T R ;
@@ -206,6 +207,7 @@ IOF : I O F;
 SRQ : S R Q;
 GTF : G T F;
 RTF : R T F;
+SGT : S G T;
 CAF : C A F;
 
 Octal : '0' [0-7]+ ;
