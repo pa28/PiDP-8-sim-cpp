@@ -209,6 +209,14 @@ public:
   virtual void enterCaf(AsmParser::CafContext * /*ctx*/) override { }
   virtual void exitCaf(AsmParser::CafContext * /*ctx*/) override { }
 
+    virtual void enterDef_const(AsmParser::Def_constContext * /*ctx*/) override {}
+
+    virtual void exitDef_const(AsmParser::Def_constContext * /*ctx*/) override {}
+
+    virtual void enterDw(AsmParser::DwContext * /*ctx*/) override {}
+
+    virtual void exitDw(AsmParser::DwContext * /*ctx*/) override {}
+
   virtual void enterEol(AsmParser::EolContext * /*ctx*/) override { }
   virtual void exitEol(AsmParser::EolContext * /*ctx*/) override { }
 

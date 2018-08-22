@@ -12,14 +12,14 @@
 class  AsmParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, AND = 7, 
-    TAD = 8, ISZ = 9, DCA = 10, JMS = 11, JMP = 12, NOP = 13, IAC = 14,
-      RAL = 15, RTL = 16, RAR = 17, RTR = 18, BSW = 19, CML = 20, CMA = 21,
-    CIA = 22, CLL = 23, STL = 24, CLA = 25, STA = 26, HLT = 27, OSR = 28, 
-    SKP = 29, SNL = 30, SZL = 31, SZA = 32, SNA = 33, SMA = 34, SPA = 35, 
-    CAM = 36, MQA = 37, MQL = 38, SWP = 39, IOT = 40, ION = 41, SKON = 42,
-      IOF = 43, SRQ = 44, GTF = 45, RTF = 46, SGT = 47, CAF = 48, Octal = 49,
-      Decimal = 50, ID = 51, WS = 52
+      T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, DW = 7,
+      AND = 8, TAD = 9, ISZ = 10, DCA = 11, JMS = 12, JMP = 13, NOP = 14,
+      IAC = 15, RAL = 16, RTL = 17, RAR = 18, RTR = 19, BSW = 20, CML = 21,
+      CMA = 22, CIA = 23, CLL = 24, STL = 25, CLA = 26, STA = 27, HLT = 28,
+      OSR = 29, SKP = 30, SNL = 31, SZL = 32, SZA = 33, SNA = 34, SMA = 35,
+      SPA = 36, CAM = 37, MQA = 38, MQL = 39, SWP = 40, IOT = 41, ION = 42,
+      SKON = 43, IOF = 44, SRQ = 45, GTF = 46, RTF = 47, SGT = 48, CAF = 49,
+      Octal = 50, Decimal = 51, ID = 52, WS = 53
   };
 
   enum {
@@ -34,9 +34,10 @@ public:
     RuleOpr_op2 = 37, RuleOpr_op2_ins = 38, RuleHlt = 39, RuleOsr = 40, 
     RuleSkp = 41, RuleSnl = 42, RuleSzl = 43, RuleSza = 44, RuleSna = 45, 
     RuleSma = 46, RuleSpa = 47, RuleOpr_op3 = 48, RuleOpr_op3_ins = 49, 
-    RuleCam = 50, RuleMqa = 51, RuleMql = 52, RuleSwp = 53, RuleIot_ins = 54, 
-    RuleIot = 55, RuleIon = 56, RuleSkon = 57, RuleIof = 58, RuleSrq = 59,
-      RuleGtf = 60, RuleRtf = 61, RuleSgt = 62, RuleCaf = 63, RuleEol = 64
+    RuleCam = 50, RuleMqa = 51, RuleMql = 52, RuleSwp = 53, RuleIot_ins = 54,
+      RuleIot = 55, RuleIon = 56, RuleSkon = 57, RuleIof = 58, RuleSrq = 59,
+      RuleGtf = 60, RuleRtf = 61, RuleSgt = 62, RuleCaf = 63, RuleDef_const = 64,
+      RuleDw = 65, RuleEol = 66
   };
 
   AsmParser(antlr4::TokenStream *input);
@@ -114,6 +115,10 @@ public:
 
     class SgtContext;
   class CafContext;
+
+    class Def_constContext;
+
+    class DwContext;
   class EolContext; 
 
   class  CodeContext : public antlr4::ParserRuleContext {
@@ -223,6 +228,8 @@ public:
     Opr_insContext *opr_ins();
     Iot_insContext *iot_ins();
 
+      Def_constContext *def_const();
+
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 
@@ -237,6 +244,8 @@ public:
     Ctl_insContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     StartContext *start();
+
+      SymbolContext *symbol();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -1138,6 +1147,44 @@ public:
   };
 
   CafContext* caf();
+
+    class Def_constContext : public antlr4::ParserRuleContext {
+    public:
+        Def_constContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        DwContext *dw();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    Def_constContext *def_const();
+
+    class DwContext : public antlr4::ParserRuleContext {
+    public:
+        DwContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *DW();
+
+        AddressContext *address();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    DwContext *dw();
 
   class  EolContext : public antlr4::ParserRuleContext {
   public:

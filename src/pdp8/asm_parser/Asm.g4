@@ -25,10 +25,11 @@ cpu_ins
     : mem_ins
     | opr_ins
     | iot_ins
+    | def_const
     ;
 
 ctl_ins
-    : start
+    : symbol ? start
     ;
 
 start : '.' ( address | symbol );
@@ -130,6 +131,14 @@ rtf : RTF ;
 sgt : SGT ;
 caf : CAF ;
 
+def_const
+    : dw
+    ;
+
+dw
+    : DW address
+    ;
+
 eol
     : ';'
     | '\n'
@@ -162,6 +171,8 @@ fragment W: [Ww];
 fragment X: [Xx];
 fragment Y: [Yy];
 fragment Z: [Zz];
+
+DW  : D W ;
 
 AND : A N D ;
 TAD : T A D ;

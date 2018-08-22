@@ -271,6 +271,14 @@ public:
     return visitChildren(ctx);
   }
 
+    virtual antlrcpp::Any visitDef_const(AsmParser::Def_constContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
+    virtual antlrcpp::Any visitDw(AsmParser::DwContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
   virtual antlrcpp::Any visitEol(AsmParser::EolContext *ctx) override {
     return visitChildren(ctx);
   }

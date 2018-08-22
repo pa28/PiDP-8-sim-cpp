@@ -207,6 +207,14 @@ public:
   virtual void enterCaf(AsmParser::CafContext *ctx) = 0;
   virtual void exitCaf(AsmParser::CafContext *ctx) = 0;
 
+    virtual void enterDef_const(AsmParser::Def_constContext *ctx) = 0;
+
+    virtual void exitDef_const(AsmParser::Def_constContext *ctx) = 0;
+
+    virtual void enterDw(AsmParser::DwContext *ctx) = 0;
+
+    virtual void exitDw(AsmParser::DwContext *ctx) = 0;
+
   virtual void enterEol(AsmParser::EolContext *ctx) = 0;
   virtual void exitEol(AsmParser::EolContext *ctx) = 0;
 

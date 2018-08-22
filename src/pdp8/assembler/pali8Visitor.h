@@ -71,6 +71,8 @@ public:
 
     antlrcpp::Any visitStart(AsmParser::StartContext *ctx) override;
 
+    antlrcpp::Any visitDef_const(AsmParser::Def_constContext *ctx) override;
+
     antlrcpp::Any visitZero(AsmParser::ZeroContext *ctx) override {
         return pdp8_asm::ZERO;
     }

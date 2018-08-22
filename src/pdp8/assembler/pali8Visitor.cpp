@@ -44,9 +44,11 @@ antlrcpp::Any pali8Visitor::visitStatement(AsmParser::StatementContext *ctx) {
 antlrcpp::Any pali8Visitor::visitPragma(AsmParser::PragmaContext *ctx) {
     auto results = visitAllChildren(ctx);
 
-    if (results.front().type() == typeid(std::string)) {
-        set_symbol(std::any_cast<std::string>(results.front()), program_counter);
-        results.erase(results.begin());
+    if (not results.empty()) {
+        if (results.front().type() == typeid(std::string)) {
+            set_symbol(std::any_cast<std::string>(results.front()), program_counter);
+            results.erase(results.begin());
+        }
     }
 
     return returnVector(results);
@@ -318,14 +320,25 @@ antlrcpp::Any pali8Visitor::visitMem_op(AsmParser::Mem_opContext *ctx) {
 antlrcpp::Any pali8Visitor::visitStart(AsmParser::StartContext *ctx) {
     auto results = visitAllChildren(ctx);
 
-    auto start = returnVector(results);
-
-    if (start.type() == typeid(unsigned long)) {
-        program_counter.memory_addr = std::any_cast<unsigned long>(start);
-        return pdp8_asm::pdp8_address{program_counter};
-    } else {
-        // ToDo: process symbol.
+    if (not results.empty()) {
+        if (results.front().type() == typeid(unsigned long)) {
+            program_counter.memory_addr = std::any_cast<unsigned long>(results.front());
+            return pdp8_asm::pdp8_address{program_counter};
+        } else if (results.front().type() == typeid(std::string)) {
+            program_counter = symbol_table.at(std::any_cast<std::string>(results.front()));
+            return pdp8_asm::pdp8_address{program_counter};
+        }
     }
 
     return antlrcpp::Any();
+}
+
+antlrcpp::Any pali8Visitor::visitDef_const(AsmParser::Def_constContext *ctx) {
+    auto results = visitAllChildren(ctx);
+
+    if (results.front().type() == typeid(unsigned long)) {
+        return std::any(pdp8_asm::pdp8_instruction{std::any_cast<unsigned long>(results.front())});
+    }
+
+    return returnVector(results);
 }

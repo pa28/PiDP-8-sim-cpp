@@ -147,6 +147,10 @@ public:
 
     virtual antlrcpp::Any visitCaf(AsmParser::CafContext *context) = 0;
 
+    virtual antlrcpp::Any visitDef_const(AsmParser::Def_constContext *context) = 0;
+
+    virtual antlrcpp::Any visitDw(AsmParser::DwContext *context) = 0;
+
     virtual antlrcpp::Any visitEol(AsmParser::EolContext *context) = 0;
 
 
