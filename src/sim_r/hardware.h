@@ -210,7 +210,7 @@ namespace sim {
             if constexpr (is_hw_slice_v<S>)
                 return operator()() == s();
             else
-                return value == s;
+                return value == (base_type) s;
         }
 
         template<typename S, typename = typename std::enable_if_t<std::is_integral_v<S> || is_hw_slice_v<S>>>
@@ -218,7 +218,7 @@ namespace sim {
             if constexpr (is_hw_slice_v<S>)
                 return operator()() != s();
             else
-                return value != s;
+                return value != (base_type) s;
         }
 
         template<typename T, typename = typename std::enable_if_t<is_hw_slice_v<T>>>
