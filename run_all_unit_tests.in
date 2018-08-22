@@ -1,0 +1,4 @@
+#! /bin/bash
+
+@CMAKE_BINARY_DIR@/bin/hw_registers
+@CMAKE_BINARY_DIR@/bin/asm_cpu_tests

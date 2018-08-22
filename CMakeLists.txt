@@ -9,9 +9,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # In CMakeModules I include code coverage for c++
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
 
+configure_file(run_all_unit_tests.in run_all_unit_tests)
+
 if(CMAKE_COMPILER_IS_GNUCXX)
     include(CodeCoverage)
-    setup_target_for_coverage(${PROJECT_NAME}_coverage asm_cpu_tests coverage)
+    setup_target_for_coverage(${PROJECT_NAME}_coverage ${CMAKE_BINARY_DIR}/run_all_unit_tests coverage)
 endif()
 
 set(COMPILER_WARNING_FLAGS "-Wreturn-type -Wall -Werror -pedantic -pthread -g -O0 -fprofile-arcs -ftest-coverage")
