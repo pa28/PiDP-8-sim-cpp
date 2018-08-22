@@ -81,7 +81,7 @@ namespace pdp8 {
         if (mb[page])
             ma << ma[page](mem_page) << mb[addr](mem_addr);
         else
-            ma << mb[addr];
+            ma << mem_page.clear() << mb[addr];
     }
 
     void CPU::defer() {
