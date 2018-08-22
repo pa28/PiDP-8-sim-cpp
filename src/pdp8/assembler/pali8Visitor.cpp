@@ -44,6 +44,11 @@ antlrcpp::Any pali8Visitor::visitStatement(AsmParser::StatementContext *ctx) {
 antlrcpp::Any pali8Visitor::visitPragma(AsmParser::PragmaContext *ctx) {
     auto results = visitAllChildren(ctx);
 
+    if (results.front().type() == typeid(std::string)) {
+        set_symbol(std::any_cast<std::string>(results.front()), program_counter);
+        results.erase(results.begin());
+    }
+
     return returnVector(results);
 }
 
