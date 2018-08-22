@@ -82,8 +82,7 @@ INSTANTIATE_TEST_CASE_P(MemoryInstructions, asmTestFixture,
                                 instruction_state{"jmp 010;", 05210},
                                 instruction_state{"jmp @ 010;", 05610},
                                 instruction_state{"jmp !@ 010;", 05410}
-                        )
-);
+                        ),);
 
 INSTANTIATE_TEST_CASE_P(OperateInstructions, asmTestFixture,
                         testing::Values(
@@ -119,7 +118,7 @@ INSTANTIATE_TEST_CASE_P(OperateInstructions, asmTestFixture,
                                 instruction_state{"mqa;", 07501},
                                 instruction_state{"mql;", 07421},
                                 instruction_state{"swp;", 07521}
-                        ));
+                        ),);
 
 INSTANTIATE_TEST_CASE_P(InputOutputInstructions, asmTestFixture,
                         testing::Values(
@@ -132,7 +131,7 @@ INSTANTIATE_TEST_CASE_P(InputOutputInstructions, asmTestFixture,
                                 instruction_state{"rtf;", 06005},
                                 instruction_state{"sgt;", 06006},
                                 instruction_state{"caf;", 06007}
-                        ));
+                        ),);
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
