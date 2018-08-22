@@ -157,6 +157,7 @@ TEST(Register, Operations_Mixed) {
 
 TEST(Register, Slice_Size) {
     least_register_t<12> reg12_a{01234};
+    least_register_t<12> reg12_b{};
 
     // -------------------------------------
     // |11|10| 9| 8| 7| 6| 5| 4| 3| 2| 1| 0|
@@ -180,10 +181,45 @@ TEST(Register, Slice_Size) {
 
     reg12_a << (reg12_a[b0](b1) | reg12_a[b1](b0));
     EXPECT_EQ(01234, reg12_a());
+
+    reg12_b << reg12_a[n1](n1);
+    EXPECT_EQ(00030, reg12_b());
+
+    reg12_b = 0;
+    EXPECT_EQ(0, reg12_b());
+
+    auto sla0 = reg12_a[n0];
+    auto sla1 = reg12_a[n1];
+    auto slab = reg12_a[b0];
+
+    reg12_b = 07;
+
+    auto slb0 = reg12_b[n0];
+    auto slb1 = reg12_b[n1];
+
+    EXPECT_TRUE(sla0);
+    EXPECT_FALSE(slb1);
+    EXPECT_EQ(5, ++sla0);
+    EXPECT_EQ(4, --sla0);
+    EXPECT_EQ(0, ++slb0);
+    EXPECT_EQ(7, --slb0);
+    EXPECT_EQ(sla0, sla0);
+    EXPECT_NE(sla1, sla0);
+    EXPECT_NE(7, sla0);
+    EXPECT_EQ(sla0, sla0 & slb0);
+    EXPECT_EQ(slb0, sla0 | slb0);
+    EXPECT_EQ(sla0, slb0 & slab);
+    EXPECT_NE(slb0, slab | slb0);
+    EXPECT_FALSE(~slb0);
+    EXPECT_EQ(3, (sla0 + slb0)());
+
+    reg12_a = reg12_b;
+    EXPECT_EQ(07, reg12_a());
 }
 
 TEST(Register, Slice_Speed) {
     fast_register_t<12> reg12_a{01234};
+    fast_register_t<12> reg12_b{};
 
     // -------------------------------------
     // |11|10| 9| 8| 7| 6| 5| 4| 3| 2| 1| 0|
@@ -207,6 +243,40 @@ TEST(Register, Slice_Speed) {
 
     reg12_a << (reg12_a[b0](b1) | reg12_a[b1](b0));
     EXPECT_EQ(01234, reg12_a());
+
+    reg12_b << reg12_a[n1](n1);
+    EXPECT_EQ(00030, reg12_b());
+
+    reg12_b = 0;
+    EXPECT_EQ(0, reg12_b());
+
+    auto sla0 = reg12_a[n0];
+    auto sla1 = reg12_a[n1];
+    auto slab = reg12_a[b0];
+
+    reg12_b = 07;
+
+    auto slb0 = reg12_b[n0];
+    auto slb1 = reg12_b[n1];
+
+    EXPECT_TRUE(sla0);
+    EXPECT_FALSE(slb1);
+    EXPECT_EQ(5, ++sla0);
+    EXPECT_EQ(4, --sla0);
+    EXPECT_EQ(0, ++slb0);
+    EXPECT_EQ(7, --slb0);
+    EXPECT_EQ(sla0, sla0);
+    EXPECT_NE(sla1, sla0);
+    EXPECT_NE(7, sla0);
+    EXPECT_EQ(sla0, sla0 & slb0);
+    EXPECT_EQ(slb0, sla0 | slb0);
+    EXPECT_EQ(sla0, slb0 & slab);
+    EXPECT_NE(slb0, slab | slb0);
+    EXPECT_FALSE(~slb0);
+    EXPECT_EQ(3, (sla0 + slb0)());
+
+    reg12_a = reg12_b;
+    EXPECT_EQ(07, reg12_a());
 }
 
 int main(int argc, char **argv) {

@@ -148,17 +148,9 @@ namespace sim {
             if constexpr (offset_dest == offset_source) {
                 return value;
             } else if (offset_dest < offset_source) {
-//                auto s = offset_source;
-//                auto d = offset_dest;
-//                auto w = width;
-//                auto sh = shift;
                 typedef typename required_base_type<required_base_size<width + shift>()>::base_type rtype;
                 return static_cast<rtype>(value) >> (shift);
             } else {
-//                auto s = offset_source;
-//                auto d = offset_dest;
-//                auto w = width;
-//                auto sh = shift;
                 typedef typename required_base_type<required_base_size<width + shift>()>::base_type rtype;
                 return static_cast<rtype>(value) << (shift);
             }
@@ -213,16 +205,20 @@ namespace sim {
             return *this;
         }
 
-        bool operator==(base_type v) const {
-            return value == v;
+        template<typename S, typename = typename std::enable_if_t<std::is_integral_v<S> || is_hw_slice_v<S>>>
+        bool operator==(S const &s) const {
+            if constexpr (is_hw_slice_v<S>)
+                return operator()() == s();
+            else
+                return value == s;
         }
 
-        bool operator!=(base_type v) const {
-            return value != v;
-        }
-
-        hw_slice operator|(hw_slice<base_type, width, offset> const &other) const {
-            return hw_slice<base_type, width, offset>{value | other.value};
+        template<typename S, typename = typename std::enable_if_t<std::is_integral_v<S> || is_hw_slice_v<S>>>
+        bool operator!=(S const &s) const {
+            if constexpr (is_hw_slice_v<S>)
+                return operator()() != s();
+            else
+                return value != s;
         }
 
         template<typename T, typename = typename std::enable_if_t<is_hw_slice_v<T>>>
@@ -240,8 +236,19 @@ namespace sim {
             }
         }
 
-        hw_slice operator&(hw_slice<base_type, width, offset> const &slice) const {
-            return hw_slice<base_type, width, offset>{value & slice.value};
+        template<typename T, typename = typename std::enable_if_t<is_hw_slice_v<T>>>
+        auto operator&(T const &slice) const {
+            constexpr size_t max_bit = std::max(width + offset, T::width + T::offset);
+            constexpr size_t min_bit = std::min(offset, T::offset);
+            constexpr size_t new_width = max_bit - min_bit;
+
+            if constexpr (storage_bits >= T::storage_bits) {
+                base_type rv = value_in_place() & static_cast<base_type>(slice.value_in_place());
+                return hw_slice<base_type, new_width, min_bit>{rv};
+            } else {
+                typename T::base_type rv = slice.value_in_place() & static_cast<base_type>(value_in_place());
+                return hw_slice<typename T::base_type, new_width, min_bit>{rv};
+            }
         }
 
         hw_slice operator+(hw_slice<base_type, width, offset> const &slice) const {
@@ -262,6 +269,12 @@ namespace sim {
     protected:
         base_type value;
     };
+
+    template<typename V, typename S, typename = typename std::enable_if_t<std::is_integral_v<V> && is_hw_slice_v<S>>>
+    bool operator==(V const &v, S const &s) { return s.operator==(v); }
+
+    template<typename V, typename S, typename = typename std::enable_if_t<std::is_integral_v<V> && is_hw_slice_v<S>>>
+    bool operator!=(V const &v, S const &s) { return s.operator!=(v); }
 
     template<typename _storage, size_t _width, size_t _offset>
     struct is_hw_slice<hw_slice<_storage, _width, _offset>> : std::true_type {
