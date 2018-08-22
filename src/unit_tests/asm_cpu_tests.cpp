@@ -31,7 +31,7 @@ public:
     }
 };
 
-TEST_P(asmTestFixture, OpCodes) {
+TEST_P(asmTestFixture, OpCodes) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
 
     pdp8_asm::ParserProcessor<AsmParser::CodeContext, AsmLexer, AsmParser> asmProcessor;
@@ -62,7 +62,7 @@ TEST_P(asmTestFixture, OpCodes) {
     EXPECT_EQ(param.op_code, std::any_cast<pdp8_asm::pdp8_instruction>(code_list.front()).instruction());
 }
 
-INSTANTIATE_TEST_CASE_P(MemoryInstructions, asmTestFixture,
+INSTANTIATE_TEST_CASE_P(MemoryInstructions, asmTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
                                 instruction_state{"and 010;", 00210},
                                 instruction_state{"and @ 010;", 00610},
@@ -84,7 +84,7 @@ INSTANTIATE_TEST_CASE_P(MemoryInstructions, asmTestFixture,
                                 instruction_state{"jmp !@ 010;", 05410}
                         ),);
 
-INSTANTIATE_TEST_CASE_P(OperateInstructions, asmTestFixture,
+INSTANTIATE_TEST_CASE_P(OperateInstructions, asmTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
                                 instruction_state{"nop;", 07000},
                                 instruction_state{"iac;", 07001},
@@ -120,7 +120,7 @@ INSTANTIATE_TEST_CASE_P(OperateInstructions, asmTestFixture,
                                 instruction_state{"swp;", 07521}
                         ),);
 
-INSTANTIATE_TEST_CASE_P(InputOutputInstructions, asmTestFixture,
+INSTANTIATE_TEST_CASE_P(InputOutputInstructions, asmTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
                                 instruction_state{"iot;", 06000},
                                 instruction_state{"ion;", 06001},
