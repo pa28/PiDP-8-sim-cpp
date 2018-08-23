@@ -254,7 +254,12 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpu, InstructionTestFixture, // NOLINT(
                                 instruction_state{"tad !@ 010; .010; dw 0207; .0210; dw 01234; ", 01234, 0201, 0,
                                                   ".010; dw 0210;"},
                                 instruction_state{"isz  010; .0210; dw 07777; ", 0, 0202, 0, ".0210; dw 0;"},
-                                instruction_state{"isz  010; .0210; dw 01234; ", 0, 0201, 0, ".0210; dw 01235;"}
+                                instruction_state{"isz  010; .0210; dw 01234; ", 0, 0201, 0, ".0210; dw 01235;"},
+                                instruction_state{"dca  010; ", 0, 0201, 01234, ".0210; dw 01234;"},
+                                instruction_state{"dca ! 010; ", 0, 0201, 01234, ".010; dw 01234;"},
+                                instruction_state{"dca @ 010; .0210; dw 0211;", 0, 0201, 01234, ".0211; dw 01234;"},
+                                instruction_state{"dca !@ 010; .010; dw 0207;", 0, 0201, 01234,
+                                                  ".0210; dw 01234; .010; dw 0210;"}
                         ),);
 
 int main(int argc, char **argv) {
