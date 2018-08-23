@@ -17,52 +17,68 @@
 #include "chassis.h"
 #include "cpu.h"
 
+template<class Param>
+class cpuTestFixture : public ::testing::TestWithParam<Param> {
+public:
+
+    cpuTestFixture() {
+        chassis = pdp8::chassis::make_chassis();
+    }
+
+    void SetUp() override {
+        chassis->initialize();
+    }
+
+    static void SetUpTestCase() {
+    }
+
+    static void TearDownTestCase() {
+    }
+
+    std::vector<std::any> assembler(std::stringstream &strm) {
+        pdp8_asm::ParserProcessor<AsmParser::CodeContext, AsmLexer, AsmParser> asmProcessor;
+
+        pali8Visitor visitor;
+
+        auto parserRuleFunction =
+                [](pdp8_asm::ParserRule<AsmParser::CodeContext, AsmLexer, AsmParser> &rule) -> auto {
+                    return rule.parser->code();
+                };
+
+        auto parserVisitorFunction =
+                [&visitor](pdp8_asm::ParserRule<AsmParser::CodeContext, AsmLexer, AsmParser> &rule) -> auto {
+                    return visitor.visitCode(rule.rule);
+                };
+
+        auto anyResult = asmProcessor.process(strm, parserRuleFunction, parserVisitorFunction);
+
+        auto code_list = std::any_cast<std::vector<std::any>>(anyResult);
+
+        ++visitor.assembler_pass;
+        visitor.program_counter.memory_addr = 0;
+
+        code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(asmProcessor.parserRule.rule));
+
+        return code_list;
+    }
+
+    std::shared_ptr<pdp8::chassis> chassis;
+};
+
 struct instruction_test {
     std::string instruction;
     u_int16_t op_code;
 };
 
-class asmTestFixture : public ::testing::TestWithParam<instruction_test> {
-public:
-
-    asmTestFixture() = default;
-
-    static void SetUpTestCase() {
-        // Test setup code
-    }
-
-    static void TearDownTestCase() {
-        // Test tear down code
-    }
+class asmTestFixture : public cpuTestFixture<instruction_test> {
 };
 
 TEST_P(asmTestFixture, OpCodes) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
 
-    pdp8_asm::ParserProcessor<AsmParser::CodeContext, AsmLexer, AsmParser> asmProcessor;
-
-    pali8Visitor visitor;
-
     std::stringstream strm{param.instruction};
 
-    auto parserRuleFunction =
-            [](pdp8_asm::ParserRule<AsmParser::CodeContext, AsmLexer, AsmParser> &rule) -> auto {
-                return rule.parser->code();
-            };
-
-    auto parserVisitorFunction =
-            [&visitor](pdp8_asm::ParserRule<AsmParser::CodeContext, AsmLexer, AsmParser> &rule) -> auto {
-                return visitor.visitCode(rule.rule);
-            };
-
-    auto anyResult = asmProcessor.process(strm, parserRuleFunction, parserVisitorFunction);
-
-    auto code_list = std::any_cast<std::vector<std::any>>(anyResult);
-
-    ++visitor.assembler_pass;
-    visitor.program_counter.memory_addr = 0;
-
-    code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(asmProcessor.parserRule.rule));
+    auto code_list = assembler(strm);
 
     EXPECT_EQ(param.op_code, std::any_cast<pdp8_asm::pdp8_instruction>(code_list.front()).instruction());
 }
@@ -138,27 +154,6 @@ INSTANTIATE_TEST_CASE_P(InputOutputInstructions, asmTestFixture, // NOLINT(cert-
                                 instruction_test{"caf;", 06007}
                         ),);
 
-template<class Param>
-class cpuTestFixture : public ::testing::TestWithParam<Param> {
-public:
-
-    cpuTestFixture() {
-        chassis = pdp8::chassis::make_chassis();
-    }
-
-    void SetUp() override {
-        chassis->initialize();
-    }
-
-    static void SetUpTestCase() {
-    }
-
-    static void TearDownTestCase() {
-    }
-
-    std::shared_ptr<pdp8::chassis> chassis;
-};
-
 struct instruction_state {
     instruction_state(std::string code, int acl, int pc, int acl_start, std::string memory)
             : code{std::move(code)}, memory{std::move(memory)}, acl{acl}, pc{pc},
@@ -174,32 +169,11 @@ class InstructionTestFixture : public cpuTestFixture<instruction_state> {
 TEST_P(InstructionTestFixture, SingleInstructionCpu) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
 
-    pdp8_asm::ParserProcessor<AsmParser::CodeContext, AsmLexer, AsmParser> asmProcessor;
-
-    pali8Visitor visitor;
-
     std::stringstream strm{};
 
     strm << "start .0200; " << param.code << ".start;";
 
-    auto parserRuleFunction =
-            [](pdp8_asm::ParserRule<AsmParser::CodeContext, AsmLexer, AsmParser> &rule) -> auto {
-                return rule.parser->code();
-            };
-
-    auto parserVisitorFunction =
-            [&visitor](pdp8_asm::ParserRule<AsmParser::CodeContext, AsmLexer, AsmParser> &rule) -> auto {
-                return visitor.visitCode(rule.rule);
-            };
-
-    auto anyResult = asmProcessor.process(strm, parserRuleFunction, parserVisitorFunction);
-
-    auto code_list = std::any_cast<std::vector<std::any>>(anyResult);
-
-    ++visitor.assembler_pass;
-    visitor.program_counter.memory_addr = 0;
-
-    code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(asmProcessor.parserRule.rule));
+    auto code_list = assembler(strm);
 
     for (auto code : code_list) {
         if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
@@ -217,17 +191,9 @@ TEST_P(InstructionTestFixture, SingleInstructionCpu) { // NOLINT(cert-err58-cpp)
     EXPECT_EQ(param.pc[chassis->cpu->mem_word], chassis->cpu->pc[chassis->cpu->mem_word]);
 
     if (not param.memory.empty()) {
-        visitor.clear();
         strm.str(param.memory);
 
-        anyResult = asmProcessor.process(strm, parserRuleFunction, parserVisitorFunction);
-
-        code_list = std::any_cast<std::vector<std::any>>(anyResult);
-
-        ++visitor.assembler_pass;
-        visitor.program_counter.memory_addr = 0;
-
-        code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(asmProcessor.parserRule.rule));
+        code_list = assembler(strm);
 
         for (auto code : code_list) {
             if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
