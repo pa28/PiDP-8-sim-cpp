@@ -304,6 +304,52 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpuOpr3, InstructionTestFixture, // NOL
                         ),);
 */
 
+struct iot_test_data {
+    std::string code;
+    int cpu_cycles;
+    bool int_f_b, int_f_e, int_req;
+    uint16_t pc;
+};
+
+class IotTestFixture : public cpuTestFixture<iot_test_data> {
+};
+
+TEST_P(IotTestFixture, IotInstructionCpu) { // NOLINT(cert-err58-cpp)
+    auto param = GetParam();
+
+    std::stringstream strm{};
+
+    strm << "start .0200; " << param.code << ".start;";
+
+    auto code_list = assembler(strm);
+
+    for (auto code : code_list) {
+        if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
+            auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
+            chassis->cpu->deposit(instruction.instruction());
+        } else if (code.type() == typeid(pdp8_asm::pdp8_address)) {
+            chassis->cpu->load_address(std::any_cast<pdp8_asm::pdp8_address>(code).memory_addr());
+        }
+    }
+
+    chassis->cpu->interrupt_enable = param.int_f_b;
+    chassis->cpu->interrupt_request = param.int_req;
+    for (int n = 0; n < param.cpu_cycles; ++n)
+        chassis->cpu->instruction_cycle();
+    EXPECT_EQ(param.int_f_e, chassis->cpu->interrupt_enable);
+    EXPECT_EQ(param.pc, chassis->cpu->pc());
+}
+
+INSTANTIATE_TEST_CASE_P(SingleInstructionCpuIOT, IotTestFixture, // NOLINT(cert-err58-cpp)
+                        testing::Values(
+                                iot_test_data{"ion; nop; nop;", 3, false, true, false, 0203},
+                                iot_test_data{"skon;", 1, true, false, false, 0202},
+                                iot_test_data{"skon;", 1, false, false, false, 0201},
+                                iot_test_data{"iof;", 1, true, false, false, 0201},
+                                iot_test_data{"srq;", 1, false, false, false, 0201},
+                                iot_test_data{"srq;", 1, false, false, true, 0202}
+                        ),);
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
