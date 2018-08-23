@@ -102,6 +102,13 @@ namespace pdp8 {
         pc << ++pc[cpu_word];
     }
 
+    base_type CPU::examine() {
+        ma << field_register[sf_if](mem_field) << pc[mem_word](mem_word);
+        mb << core[ma][mem_word];
+        pc << ++pc[cpu_word];
+        return mb();
+    }
+
     void CPU::instruction_cycle() {
         if (not single_step_flag)
             cycle_state = Interrupt;

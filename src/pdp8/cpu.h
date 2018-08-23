@@ -185,6 +185,8 @@ namespace pdp8 {
 
         void deposit(base_type data);
 
+        base_type examine();
+
         void instruction_cycle();
 
         void instruction_step();

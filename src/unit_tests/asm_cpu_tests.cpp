@@ -160,10 +160,11 @@ public:
 };
 
 struct instruction_state {
-    instruction_state(std::string code, int acl, int pc, int acl_start) : code{std::move(code)}, acl{acl}, pc{pc},
-                                                                          acl_start{acl_start} {}
+    instruction_state(std::string code, int acl, int pc, int acl_start, std::string memory)
+            : code{std::move(code)}, memory{std::move(memory)}, acl{acl}, pc{pc},
+              acl_start{acl_start} {}
 
-    std::string code;
+    std::string code, memory;
     pdp8::register_t acl, pc, acl_start;
 };
 
@@ -214,16 +215,46 @@ TEST_P(InstructionTestFixture, SingleInstructionCpu) { // NOLINT(cert-err58-cpp)
 
     EXPECT_EQ(param.acl[chassis->cpu->ac_link], chassis->cpu->acl[chassis->cpu->ac_link]);
     EXPECT_EQ(param.pc[chassis->cpu->mem_word], chassis->cpu->pc[chassis->cpu->mem_word]);
+
+    if (not param.memory.empty()) {
+        visitor.clear();
+        strm.str(param.memory);
+
+        anyResult = asmProcessor.process(strm, parserRuleFunction, parserVisitorFunction);
+
+        code_list = std::any_cast<std::vector<std::any>>(anyResult);
+
+        ++visitor.assembler_pass;
+        visitor.program_counter.memory_addr = 0;
+
+        code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(asmProcessor.parserRule.rule));
+
+        for (auto code : code_list) {
+            if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
+                auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
+                EXPECT_EQ(instruction.instruction(), chassis->cpu->examine());
+            } else if (code.type() == typeid(pdp8_asm::pdp8_address)) {
+                chassis->cpu->load_address(std::any_cast<pdp8_asm::pdp8_address>(code).memory_addr());
+            }
+        }
+    }
 }
 
 INSTANTIATE_TEST_CASE_P(SingleInstructionCpu, InstructionTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                instruction_state{"and @ 0210; .010; dw 01234; .0210; dw 010; ", 01234, 0201, 07777},
-                                instruction_state{"tad @ 0210; .010; dw 01234; .0210; dw 010; ", 01234, 0201, 0},
-                                instruction_state{"and ! 010; .010; dw 01234; ", 01234, 0201, 07777},
-                                instruction_state{"tad ! 010; .010; dw 01234; ", 01234, 0201, 0},
-                                instruction_state{"and  010; .0210; dw 01234; ", 01234, 0201, 07777},
-                                instruction_state{"tad  010; .0210; dw 01234; ", 01234, 0201, 0}
+                                instruction_state{"and @ 0210; .010; dw 01234; .0210; dw 010; ", 01234, 0201, 07777,
+                                                  ""},
+                                instruction_state{"tad @ 0210; .010; dw 01234; .0210; dw 010; ", 01234, 0201, 0, ""},
+                                instruction_state{"and ! 010; .010; dw 01234; ", 01234, 0201, 07777, ""},
+                                instruction_state{"tad ! 010; .010; dw 01234; ", 01234, 0201, 0, ""},
+                                instruction_state{"and  010; .0210; dw 01234; ", 01234, 0201, 07777, ""},
+                                instruction_state{"tad  010; .0210; dw 01234; ", 01234, 0201, 0, ""},
+                                instruction_state{"and !@ 010; .010; dw 0207; .0210; dw 01234; ", 01234, 0201, 07777,
+                                                  ".010; dw 0210;"},
+                                instruction_state{"tad !@ 010; .010; dw 0207; .0210; dw 01234; ", 01234, 0201, 0,
+                                                  ".010; dw 0210;"},
+                                instruction_state{"isz  010; .0210; dw 07777; ", 0, 0202, 0, ".0210; dw 0;"},
+                                instruction_state{"isz  010; .0210; dw 01234; ", 0, 0201, 0, ".0210; dw 01235;"}
                         ),);
 
 int main(int argc, char **argv) {

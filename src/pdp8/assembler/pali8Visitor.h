@@ -29,6 +29,12 @@ public:
             symbol_table[name] = addr;
     }
 
+    void clear() {
+        assembler_pass = 0;
+        program_counter = 0;
+        symbol_table.clear();
+    }
+
     template <class C>
     std::vector<std::any> visitAllChildren(C *ctx) {
         std::vector<std::any> results{};

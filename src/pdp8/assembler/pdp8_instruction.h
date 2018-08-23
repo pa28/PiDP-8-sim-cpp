@@ -46,6 +46,12 @@ namespace pdp8_asm {
             return *this;
         }
 
+        template<typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+        pdp8_address &operator=(T value) {
+            memory_addr = value;
+            return *this;
+        }
+
         sim::hw_register<15, sim::register_output_policy<8>> memory_addr;
         static constexpr sim::hw_slice_spec<7, 0> address{};
         static constexpr sim::hw_slice_spec<5, 7> page{};
