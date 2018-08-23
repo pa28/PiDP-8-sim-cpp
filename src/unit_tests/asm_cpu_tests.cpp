@@ -70,6 +70,26 @@ struct instruction_test {
     u_int16_t op_code;
 };
 
+class asmErrFixture : public cpuTestFixture<instruction_test> {
+};
+
+TEST_P(asmErrFixture, AssemblerErrors) { // NOLINT(cert-err58-cpp)
+    auto param = GetParam();
+
+    std::stringstream strm{param.instruction};
+
+    EXPECT_THROW(assembler(strm), std::exception); // NOLINT(cppcoreguidelines-avoid-goto)
+}
+
+INSTANTIATE_TEST_CASE_P(AssemberErrors, asmErrFixture, // NOLINT(cert-err58-cpp)
+                        testing::Values(
+//                                instruction_test{"junk;", 0}
+                                instruction_test{".0200; tad 0400;", 0},     // Off-page addressing
+                                instruction_test{".0200; tad ! 0210;", 0},   // Off-page 0 addressing
+                                instruction_test{"ral rar;", 07014},         // Microcode not allowed
+                                instruction_test{"rtl rtr;", 07016}          // Microcode not allowed
+                        ),);
+
 class asmTestFixture : public cpuTestFixture<instruction_test> {
 };
 
@@ -123,8 +143,6 @@ INSTANTIATE_TEST_CASE_P(OperateInstructions, asmTestFixture, // NOLINT(cert-err5
                                 instruction_test{"sta;", 07240},
                                 instruction_test{"cla stl;", 07320},
                                 instruction_test{"sta stl;", 07360},
-                                instruction_test{"ral rar;", 07014}, // ToDo: should be an error
-                                instruction_test{"rtl rtr;", 07016}, // ToDo: should be an error
                                 instruction_test{"hlt;", 07402},
                                 instruction_test{"osr;", 07404},
                                 instruction_test{"skp;", 07410},
@@ -213,26 +231,26 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpuMem, InstructionTestFixture, // NOLI
                                 instruction_state{"tad @ 0210; .010; dw 01234; .0210; dw 010; ", 01234, 0201, 0, ""},
                                 instruction_state{"and ! 010; .010; dw 01234; ", 01234, 0201, 07777, ""},
                                 instruction_state{"tad ! 010; .010; dw 01234; ", 01234, 0201, 0, ""},
-                                instruction_state{"and  010; .0210; dw 01234; ", 01234, 0201, 07777, ""},
-                                instruction_state{"tad  010; .0210; dw 01234; ", 01234, 0201, 0, ""},
+                                instruction_state{"and  0210; .0210; dw 01234; ", 01234, 0201, 07777, ""},
+                                instruction_state{"tad  0210; .0210; dw 01234; ", 01234, 0201, 0, ""},
                                 instruction_state{"and !@ 010; .010; dw 0207; .0210; dw 01234; ", 01234, 0201, 07777,
                                                   ".010; dw 0210;"},
                                 instruction_state{"tad !@ 010; .010; dw 0207; .0210; dw 01234; ", 01234, 0201, 0,
                                                   ".010; dw 0210;"},
-                                instruction_state{"isz  010; .0210; dw 07777; ", 0, 0202, 0, ".0210; dw 0;"},
-                                instruction_state{"isz  010; .0210; dw 01234; ", 0, 0201, 0, ".0210; dw 01235;"},
-                                instruction_state{"dca  010; ", 0, 0201, 01234, ".0210; dw 01234;"},
+                                instruction_state{"isz  0210; .0210; dw 07777; ", 0, 0202, 0, ".0210; dw 0;"},
+                                instruction_state{"isz  0210; .0210; dw 01234; ", 0, 0201, 0, ".0210; dw 01235;"},
+                                instruction_state{"dca  0210; ", 0, 0201, 01234, ".0210; dw 01234;"},
                                 instruction_state{"dca ! 010; ", 0, 0201, 01234, ".010; dw 01234;"},
-                                instruction_state{"dca @ 010; .0210; dw 0211;", 0, 0201, 01234, ".0211; dw 01234;"},
+                                instruction_state{"dca @ 0210; .0210; dw 0211;", 0, 0201, 01234, ".0211; dw 01234;"},
                                 instruction_state{"dca !@ 010; .010; dw 0207;", 0, 0201, 01234,
                                                   ".0210; dw 01234; .010; dw 0210;"},
-                                instruction_state{"jmp  010; ", 0, 0210, 0, ""},
+                                instruction_state{"jmp  0210; ", 0, 0210, 0, ""},
                                 instruction_state{"jmp ! 010; ", 0, 0010, 0, ""},
-                                instruction_state{"jmp @ 010; .0210; dw 0310;", 0, 0310, 0, ""},
+                                instruction_state{"jmp @ 0210; .0210; dw 0310;", 0, 0310, 0, ""},
                                 instruction_state{"jmp !@ 010; .010; dw 0207;", 0, 0210, 0, ""},
-                                instruction_state{"jms  010; ", 0, 0211, 0, ".0210; dw 0201;"},
+                                instruction_state{"jms  0210; ", 0, 0211, 0, ".0210; dw 0201;"},
                                 instruction_state{"jms ! 010; ", 0, 0011, 0, ".0010; dw 0201;"},
-                                instruction_state{"jms @ 010; .0210; dw 0310;", 0, 0311, 0, ".0310; dw 0201;"},
+                                instruction_state{"jms @ 0210; .0210; dw 0310;", 0, 0311, 0, ".0310; dw 0201;"},
                                 instruction_state{"jms !@ 010; .010; dw 0207;", 0, 0211, 0,
                                                   ".0210; dw 0201; .010; dw 0210;"}
                         ),);

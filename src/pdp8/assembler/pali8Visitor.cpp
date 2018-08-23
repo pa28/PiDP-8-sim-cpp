@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <stdexcept>
 #include "pali8Visitor.h"
 
 
@@ -173,6 +174,9 @@ antlrcpp::Any pali8Visitor::visitOpr_op1(AsmParser::Opr_op1Context *ctx) {
         }
     }
 
+    if ((ret_code & 07014) == 07014 || (ret_code & 07016) == 07016)
+        throw std::logic_error("Micro-code not allowed.");
+
     return pdp8_asm::pdp8_instruction(ret_code);
 }
 
@@ -253,11 +257,13 @@ antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
     auto results = visitAllChildren(ctx);
 
     pdp8_asm::pdp8_instruction instruction{};
+    pdp8_asm::pdp8_address address{};
+
     for (auto const &part : results) {
         if (part.type() == typeid(pdp8_asm::pdp8_instruction))
             instruction = std::any_cast<pdp8_asm::pdp8_instruction>(part);
         else if (part.type() == typeid(unsigned long))
-            instruction.set_address(std::any_cast<unsigned long>(part));
+            address = std::any_cast<unsigned long>(part);
         else if (part.type() == typeid(pdp8_asm::MemoryInstructionFlags))
             switch (std::any_cast<pdp8_asm::MemoryInstructionFlags>(part)) {
             case pdp8_asm::ZERO:
@@ -268,6 +274,21 @@ antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
                 break;
         }
     }
+
+    if (instruction.instruction[pdp8_asm::pdp8_instruction::zero]) {
+        auto p1 = address.memory_addr[pdp8_asm::pdp8_address::page];
+        auto p2 = program_counter.memory_addr[pdp8_asm::pdp8_address::page];
+        if (p1 != p2) {
+            throw std::out_of_range("off page address"); // ToDo create parser aware error exceptions.
+        }
+    } else {
+        if (address.memory_addr[pdp8_asm::pdp8_address::page]) {
+            throw std::out_of_range("off page zero address"); // ToDo create parser aware error exceptions.
+        }
+    }
+
+    instruction.instruction << address.memory_addr[pdp8_asm::pdp8_address::address];
+
     return instruction;
 }
 
