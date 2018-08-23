@@ -240,7 +240,7 @@ TEST_P(InstructionTestFixture, SingleInstructionCpu) { // NOLINT(cert-err58-cpp)
     }
 }
 
-INSTANTIATE_TEST_CASE_P(SingleInstructionCpu, InstructionTestFixture, // NOLINT(cert-err58-cpp)
+INSTANTIATE_TEST_CASE_P(SingleInstructionCpuMem, InstructionTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
                                 instruction_state{"and @ 0210; .010; dw 01234; .0210; dw 010; ", 01234, 0201, 07777,
                                                   ""},
@@ -270,6 +270,55 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpu, InstructionTestFixture, // NOLINT(
                                 instruction_state{"jms !@ 010; .010; dw 0207;", 0, 0211, 0,
                                                   ".0210; dw 0201; .010; dw 0210;"}
                         ),);
+
+INSTANTIATE_TEST_CASE_P(SingleInstructionCpuOpr1, InstructionTestFixture, // NOLINT(cert-err58-cpp)
+                        testing::Values(
+                                instruction_state{"nop;", 0, 0201, 0, ""},
+                                instruction_state{"iac;", 0, 0201, 07777, ""},
+                                instruction_state{"ral;", 010000, 0201, 04000, ""},
+                                instruction_state{"rtl;", 01, 0201, 04000, ""},
+                                instruction_state{"rar;", 010000, 0201, 01, ""},
+                                instruction_state{"rtr;", 04000, 0201, 01, ""},
+                                instruction_state{"bsw;", 03412, 0201, 01234, ""},
+                                instruction_state{"cml;", 010000, 0201, 0, ""},
+                                instruction_state{"cml;", 0, 0201, 010000, ""},
+                                instruction_state{"cma;", 07777, 0201, 0, ""},
+                                instruction_state{"cma;", 0, 0201, 07777, ""},
+                                instruction_state{"cma;", 06543, 0201, 01234, ""},
+                                instruction_state{"cia;", 0, 0201, 0, ""},
+                                instruction_state{"cia;", 06544, 0201, 01234, ""},
+                                instruction_state{"cll;", 01234, 0201, 011234, ""},
+                                instruction_state{"stl;", 011234, 0201, 01234, ""},
+                                instruction_state{"cla;", 010000, 0201, 011234, ""},
+                                instruction_state{"sta;", 07777, 0201, 01234, ""}
+                        ),);
+
+INSTANTIATE_TEST_CASE_P(SingleInstructionCpuOpr2, InstructionTestFixture, // NOLINT(cert-err58-cpp)
+                        testing::Values(
+                                instruction_state{"hlt;", 01234, 0201, 01234, ""},
+                                // ToDo: OSR
+                                instruction_state{"skp;", 01234, 0202, 01234, ""},
+                                instruction_state{"snl;", 011234, 0202, 011234, ""},
+                                instruction_state{"snl;", 01234, 0201, 01234, ""},
+                                instruction_state{"szl;", 01234, 0202, 01234, ""},
+                                instruction_state{"szl;", 011234, 0201, 011234, ""},
+                                instruction_state{"sza;", 011234, 0201, 011234, ""},
+                                instruction_state{"sza;", 010000, 0202, 010000, ""},
+                                instruction_state{"sna;", 01234, 0202, 01234, ""},
+                                instruction_state{"sna;", 0, 0201, 0, ""},
+                                instruction_state{"sma;", 01234, 0201, 01234, ""},
+                                instruction_state{"sma;", 05234, 0202, 05234, ""},
+                                instruction_state{"spa;", 01234, 0202, 01234, ""},
+                                instruction_state{"spa;", 05234, 0201, 05234, ""},
+                                instruction_state{"cla hlt;", 0, 0201, 01234, ""}
+                        ),);
+
+/*
+INSTANTIATE_TEST_CASE_P(SingleInstructionCpuOpr3, InstructionTestFixture, // NOLINT(cert-err58-cpp)
+                        testing::Values(
+                                // ToDo: Implement group 3 instructions.
+                        ),);
+*/
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
