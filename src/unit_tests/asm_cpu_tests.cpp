@@ -259,7 +259,16 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpu, InstructionTestFixture, // NOLINT(
                                 instruction_state{"dca ! 010; ", 0, 0201, 01234, ".010; dw 01234;"},
                                 instruction_state{"dca @ 010; .0210; dw 0211;", 0, 0201, 01234, ".0211; dw 01234;"},
                                 instruction_state{"dca !@ 010; .010; dw 0207;", 0, 0201, 01234,
-                                                  ".0210; dw 01234; .010; dw 0210;"}
+                                                  ".0210; dw 01234; .010; dw 0210;"},
+                                instruction_state{"jmp  010; ", 0, 0210, 0, ""},
+                                instruction_state{"jmp ! 010; ", 0, 0010, 0, ""},
+                                instruction_state{"jmp @ 010; .0210; dw 0310;", 0, 0310, 0, ""},
+                                instruction_state{"jmp !@ 010; .010; dw 0207;", 0, 0210, 0, ""},
+                                instruction_state{"jms  010; ", 0, 0211, 0, ".0210; dw 0201;"},
+                                instruction_state{"jms ! 010; ", 0, 0011, 0, ".0010; dw 0201;"},
+                                instruction_state{"jms @ 010; .0210; dw 0310;", 0, 0311, 0, ".0310; dw 0201;"},
+                                instruction_state{"jms !@ 010; .010; dw 0207;", 0, 0211, 0,
+                                                  ".0210; dw 0201; .010; dw 0210;"}
                         ),);
 
 int main(int argc, char **argv) {
