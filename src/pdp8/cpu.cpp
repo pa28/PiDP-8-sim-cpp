@@ -70,7 +70,7 @@ namespace pdp8 {
     void CPU::fetch() {
         // memory address is the instruction field - program counter
         if (pc_boundary && pc >= pc_boundary)
-            throw std::logic_error("PC out of bounds.");
+            throw std::logic_error("PC out of bounds."); // LCOV_EXCL_LINE
 
         ma << field_register[sf_if](mem_field) << pc[mem_word](mem_word);
         mb << core[ma][mem_word];
@@ -81,7 +81,7 @@ namespace pdp8 {
         if (mb[page])
             ma << ma[page](mem_page) << mb[addr](mem_addr);
         else
-            ma << mb[addr];
+            ma << mem_page.clear() << mb[addr];
     }
 
     void CPU::defer() {
@@ -100,6 +100,13 @@ namespace pdp8 {
         mb = data;
         core[ma] << mb[mem_word];
         pc << ++pc[cpu_word];
+    }
+
+    base_type CPU::examine() {
+        ma << field_register[sf_if](mem_field) << pc[mem_word](mem_word);
+        mb << core[ma][mem_word];
+        pc << ++pc[cpu_word];
+        return mb();
     }
 
     void CPU::instruction_cycle() {
@@ -173,8 +180,8 @@ namespace pdp8 {
                     case _OPR:
                         execute_opr();
                         break;
-                    default:
-                        throw std::logic_error("op code out of range.");
+                    default: // LCOV_EXCL_LINE
+                        throw std::logic_error("op code out of range."); // LCOV_EXCL_LINE
                 }
                 cycle_state = Pause;
                 break;
@@ -193,8 +200,8 @@ namespace pdp8 {
 
                 cycle_state = Fetch;
                 break;
-            case Pause:
-                break;
+            case Pause: // LCOV_EXCL_LINE
+                break; // LCOV_EXCL_LINE
         }
     }
 
@@ -226,8 +233,8 @@ namespace pdp8 {
                 case 002: // BSW
                     acl = ((acl() >> 6) & 077) | ((acl() & 077) << 6);
                     break;
-                default:
-                    throw std::logic_error("Group 1 OPR error.");
+                default: // LCOV_EXCL_LINE
+                    throw std::logic_error("Group 1 OPR error."); // LCOV_EXCL_LINE
             }
         } else if ((bits & 01) == 0) { // Group 2
             bool skip = false;
@@ -255,8 +262,8 @@ namespace pdp8 {
                     break;
                 case 0000: // Not one of this group.
                     break;
-                default:
-                    throw std::logic_error("Group 2 OPR error.");
+                default: // LCOV_EXCL_LINE
+                    throw std::logic_error("Group 2 OPR error."); // LCOV_EXCL_LINE
             }
             if (skip)
                 pc << ++pc[cpu_word];
@@ -309,7 +316,7 @@ namespace pdp8 {
                         initialize();
                         break;
                     default:
-                        throw std::logic_error("IOT 00 error.");
+                        throw std::logic_error("IOT 00 error."); // LCOV_EXCL_LINE
                 }
                 break;
             case 020:
@@ -322,24 +329,24 @@ namespace pdp8 {
             case 027:            /* memory extension */
                 switch (mb[dev_cmd]()) {
                     case 1: // CDF
-                        field_register << mb[mem_field](sf_df);
+                        field_register << mb[op_field](sf_df);
                         break;
                     case 2: // CIF
-                        field_buffer << mb[mem_field](sf_if);
+                        field_buffer << mb[op_field](sf_if);
                         interrupt_enable = false;
                         break;
                     case 3: // CDF CIF
-                        field_register << mb[mem_field](sf_df);
-                        field_buffer << mb[mem_field](sf_if);
+                        field_register << mb[op_field](sf_df);
+                        field_buffer << mb[op_field](sf_if);
                         interrupt_enable = false;
                         break;
                     case 4: //
-                        switch (mb[dev_cmd]() & 7) {
+                        switch (mb[dev_sel]() & 7) {
                             case 1: // RDF
                                 acl << (acl[op_field] | field_register[sf_df](op_field));
                                 break;
                             case 2: // RIF
-                                acl << op_field(field_register[sf_if]() << 3);
+                                acl << field_register[sf_if](sf_if);
                                 break;
                             case 3: // RIB
                                 acl << (acl[addr] | interrupt_buffer[addr]);
@@ -348,12 +355,12 @@ namespace pdp8 {
                                 field_register << interrupt_buffer[sf_df];
                                 field_buffer << interrupt_buffer[sf_if];
                                 break;
-                            default:
-                                throw std::logic_error("Time share instructions not supported.");
+                            default: // LCOV_EXCL_LINE
+                                throw std::logic_error("Time share instructions not supported."); // LCOV_EXCL_LINE
                         }
                         break;
-                    default:
-                        throw std::logic_error("Ill-formed IOT memory extention.");
+                    default: // LCOV_EXCL_LINE
+                        throw std::logic_error("Ill-formed IOT memory extention."); // LCOV_EXCL_LINE
                 }
                 break;
             default:

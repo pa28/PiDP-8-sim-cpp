@@ -29,6 +29,12 @@ public:
             symbol_table[name] = addr;
     }
 
+    void clear() {
+        assembler_pass = 0;
+        program_counter = 0;
+        symbol_table.clear();
+    }
+
     template <class C>
     std::vector<std::any> visitAllChildren(C *ctx) {
         std::vector<std::any> results{};
@@ -61,9 +67,19 @@ public:
 
     antlrcpp::Any visitOpr_op1(AsmParser::Opr_op1Context *ctx) override;
 
+    antlrcpp::Any visitOpr_op2(AsmParser::Opr_op2Context *ctx) override;
+
+    antlrcpp::Any visitOpr_op3(AsmParser::Opr_op3Context *ctx) override;
+
+    antlrcpp::Any visitIot_ins(AsmParser::Iot_insContext *ctx) override;
+
     antlrcpp::Any visitMem_ins(AsmParser::Mem_insContext *ctx) override;
 
     antlrcpp::Any visitStart(AsmParser::StartContext *ctx) override;
+
+    antlrcpp::Any visitDef_const(AsmParser::Def_constContext *ctx) override;
+
+    antlrcpp::Any visitDk8ea(AsmParser::Dk8eaContext *ctx) override;
 
     antlrcpp::Any visitZero(AsmParser::ZeroContext *ctx) override {
         return pdp8_asm::ZERO;
@@ -233,8 +249,40 @@ public:
         return pdp8_asm::RTF;
     }
 
+    antlrcpp::Any visitSgt(AsmParser::SgtContext *ctx) override {
+        return pdp8_asm::SGT;
+    }
+
     antlrcpp::Any visitCaf(AsmParser::CafContext *ctx) override {
         return pdp8_asm::CAF;
+    }
+
+    virtual antlrcpp::Any visitCdf(AsmParser::CdfContext *ctx) override {
+        return pdp8_asm::CDF;
+    }
+
+    virtual antlrcpp::Any visitCif(AsmParser::CifContext *ctx) override {
+        return pdp8_asm::CIF;
+    }
+
+    virtual antlrcpp::Any visitCidf(AsmParser::CidfContext *ctx) override {
+        return pdp8_asm::CIDF;
+    }
+
+    virtual antlrcpp::Any visitRdf(AsmParser::RdfContext *ctx) override {
+        return pdp8_asm::RDF;
+    }
+
+    virtual antlrcpp::Any visitRif(AsmParser::RifContext *ctx) override {
+        return pdp8_asm::RIF;
+    }
+
+    virtual antlrcpp::Any visitRib(AsmParser::RibContext *ctx) override {
+        return pdp8_asm::RIB;
+    }
+
+    virtual antlrcpp::Any visitRmf(AsmParser::RmfContext *ctx) override {
+        return pdp8_asm::RMF;
     }
 };
 

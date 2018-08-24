@@ -17,12 +17,16 @@ namespace pdp8_asm {
         ZERO, INDIRECT
     };
 
-    enum OperateGroup1 {
-        NOP, IAC, RAL, RTL, RAR, RTR, BSW, CML, CMA, CIA, CLL, STL, CLA, STA,
+    enum OperateCommon {
+        CLA
     };
 
-    enum OperatorGroup2 {
-        HLT, OSR, SKP, SNL, SZL, SZA, SNA, SMA, SPA, CLA2
+    enum OperateGroup1 {
+        NOP, IAC, RAL, RTL, RAR, RTR, BSW, CML, CMA, CIA, CLL, STL, STA,
+    };
+
+    enum OperateGroup2 {
+        HLT, OSR, SKP, SNL, SZL, SZA, SNA, SMA, SPA
     };
 
     enum OperateGroup3 {
@@ -30,7 +34,7 @@ namespace pdp8_asm {
     };
 
     enum InputOutputTransfer {
-        IOT, ION, SKON, IOF, SRQ, GTF, RTF, CAF
+        IOT, ION, SKON, IOF, SRQ, GTF, RTF, SGT, CAF, CDF, CIF, CIDF, RDF, RIF, RIB, RMF
     };
 
     class pdp8_address {
@@ -39,6 +43,12 @@ namespace pdp8_asm {
 
         pdp8_address &operator++() {
             memory_addr = memory_addr() + 1;
+            return *this;
+        }
+
+        template<typename T, typename = typename std::enable_if_t<std::is_integral_v<T>>>
+        pdp8_address &operator=(T value) {
+            memory_addr = value;
             return *this;
         }
 

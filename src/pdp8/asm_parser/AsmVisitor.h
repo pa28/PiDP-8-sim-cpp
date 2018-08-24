@@ -143,7 +143,29 @@ public:
 
     virtual antlrcpp::Any visitRtf(AsmParser::RtfContext *context) = 0;
 
+    virtual antlrcpp::Any visitSgt(AsmParser::SgtContext *context) = 0;
+
     virtual antlrcpp::Any visitCaf(AsmParser::CafContext *context) = 0;
+
+    virtual antlrcpp::Any visitCdf(AsmParser::CdfContext *context) = 0;
+
+    virtual antlrcpp::Any visitCif(AsmParser::CifContext *context) = 0;
+
+    virtual antlrcpp::Any visitCidf(AsmParser::CidfContext *context) = 0;
+
+    virtual antlrcpp::Any visitRdf(AsmParser::RdfContext *context) = 0;
+
+    virtual antlrcpp::Any visitRif(AsmParser::RifContext *context) = 0;
+
+    virtual antlrcpp::Any visitRib(AsmParser::RibContext *context) = 0;
+
+    virtual antlrcpp::Any visitRmf(AsmParser::RmfContext *context) = 0;
+
+    virtual antlrcpp::Any visitDk8ea(AsmParser::Dk8eaContext *context) = 0;
+
+    virtual antlrcpp::Any visitDef_const(AsmParser::Def_constContext *context) = 0;
+
+    virtual antlrcpp::Any visitDw(AsmParser::DwContext *context) = 0;
 
     virtual antlrcpp::Any visitEol(AsmParser::EolContext *context) = 0;
 

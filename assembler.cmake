@@ -8,4 +8,4 @@ file(GLOB ASSEMBLER_SOURCES
         src/pdp8/asm_parser/*.cpp
         )
 
-add_library(assembler ${ASSEMBLER_SOURCES})
+add_library(assembler ${ASSEMBLER_SOURCES} src/pdp8/assembler/ParserProcessor.h)

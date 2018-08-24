@@ -9,10 +9,9 @@ you are brave and have lots of time.
 
 ### Antlr4 and Antlr4 C++ Runtime for C++17 Google Test
 
-```
-sudo apt-get install pkg-config uuid-dev
-```
-  
+Most of the prerequisites are included as submodules of this repository,
+but you will need `pthreads` installed for Google Test and the multi-threaded
+parts of the program.
 
 Since the git repository contains the source code for the parser, you 
 don't need to build it. But if you want to experiment with the
@@ -21,7 +20,6 @@ Asm.g4 into the parser source files. Get if from here:
 ```
 curl -O https://www.antlr.org/download/antlr-4.7-complete.jar
 ```
-
 and move it to a standard location. I used `/usr/local/lib` but you can use
 a different location and update the `CMakeLists.txt` file.
 
@@ -33,3 +31,19 @@ instructions found at [Raspberry Pi - Install GCC 8 and compile C++17 programs](
 
 Then you will need an up-to-date version of `cmake`. I suggest you follow
 the instructions at [Installing CMake](https://cmake.org/install) and get version 3.12.0
+
+## Continuous Integration
+
+I'm not a fan of continuous integration (CI) per-se. But there is one feature of CI
+that I believe is essential for any project that may be used by more than one person;
+that is building from scratch -- and testing -- on a previously unconfigured system.
+This helps prevent problems that arise when the prerequisites are not fully documented.
+For this project I am using [Travis CI](https://travis-ci.org). Travis CI integrates
+nicely with GitHub.
+
+## Code Coverage
+
+I am using a test driven design methodology on this project. This methodology suffers
+without a clear understanding of the code coverage those tests are achieving. For code
+coverage analysis I am using [Codecov.io](https://codecov.io) which also integrates
+nicely with GitHub and Travis CI.

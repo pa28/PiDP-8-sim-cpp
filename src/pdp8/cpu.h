@@ -71,31 +71,39 @@ namespace pdp8 {
 
         Memory core;
 
+        /*
+         * -------------------------------------------------
+         * |15|14|13|12|11|10| 9| 8| 7| 6| 5| 4| 3| 2| 1| 0|
+         * -------------------------------------------------
+         * |  |  |  |  | 0| 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|
+         * -------------------------------------------------
+         */
+
         static constexpr sim::hw_slice_spec<12, 0> cpu_word{};
         static constexpr sim::hw_slice_spec<1, 12> link{};
         static constexpr sim::hw_slice_spec<13, 0> ac_link{};
         static constexpr sim::hw_slice_spec<1, 11> ac_sign{};
-        static constexpr sim::hw_slice_spec<3, pdp8_off_v<12, 2>> op_code{};
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 3>> ia{};
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 4>> page{};
-        static constexpr sim::hw_slice_spec<7, pdp8_off_v<12, 11>> addr{};
-        static constexpr sim::hw_slice_spec<6, pdp8_off_v<12, 8>> dev_sel{};
-        static constexpr sim::hw_slice_spec<3, pdp8_off_v<12, 8>> op_field{};
-        static constexpr sim::hw_slice_spec<3, pdp8_off_v<12, 11>> dev_cmd{};
-        static constexpr sim::hw_slice_spec<9, pdp8_off_v<12, 11>> opr_bits{};
-        static constexpr sim::hw_slice_spec<3, pdp8_off_v<16, 2>> mem_field{};
-        static constexpr sim::hw_slice_spec<5, pdp8_off_v<16, 7>> mem_page{};
-        static constexpr sim::hw_slice_spec<7, pdp8_off_v<16, 15>> mem_addr{};
-        static constexpr sim::hw_slice_spec<12, pdp8_off_v<16, 15>> mem_word{};
+        static constexpr sim::hw_slice_spec<3, 9> op_code{};
+        static constexpr sim::hw_slice_spec<1, 8> ia{};
+        static constexpr sim::hw_slice_spec<1, 7> page{};
+        static constexpr sim::hw_slice_spec<7, 0> addr{};
+        static constexpr sim::hw_slice_spec<6, 3> dev_sel{};
+        static constexpr sim::hw_slice_spec<3, 3> op_field{};
+        static constexpr sim::hw_slice_spec<3, 0> dev_cmd{};
+        static constexpr sim::hw_slice_spec<9, 0> opr_bits{};
+        static constexpr sim::hw_slice_spec<3, 12> mem_field{};
+        static constexpr sim::hw_slice_spec<5, 7> mem_page{};
+        static constexpr sim::hw_slice_spec<7, 0> mem_addr{};
+        static constexpr sim::hw_slice_spec<12, 0> mem_word{};
 
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 0>> sf_link{};
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 1>> sf_gt{};
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 2>> sf_int_req{};
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 3>> sf_no_int{};
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 4>> sf_int_enable{};
-        static constexpr sim::hw_slice_spec<1, pdp8_off_v<12, 5>> sf_uf{};
-        static constexpr sim::hw_slice_spec<3, pdp8_off_v<12, 8>> sf_if{};
-        static constexpr sim::hw_slice_spec<3, pdp8_off_v<12, 11>> sf_df{};
+        static constexpr sim::hw_slice_spec<1, 11> sf_link{};
+        static constexpr sim::hw_slice_spec<1, 10> sf_gt{};
+        static constexpr sim::hw_slice_spec<1, 9> sf_int_req{};
+        static constexpr sim::hw_slice_spec<1, 8> sf_no_int{};
+        static constexpr sim::hw_slice_spec<1, 7> sf_int_enable{};
+        static constexpr sim::hw_slice_spec<1, 6> sf_uf{};
+        static constexpr sim::hw_slice_spec<3, 3> sf_if{};
+        static constexpr sim::hw_slice_spec<3, 0> sf_df{};
 
 
         bool interrupt_enable;
@@ -176,6 +184,8 @@ namespace pdp8 {
         void load_address(base_type address) { pc = address; }
 
         void deposit(base_type data);
+
+        base_type examine();
 
         void instruction_cycle();
 

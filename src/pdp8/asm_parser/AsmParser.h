@@ -12,14 +12,16 @@
 class  AsmParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, AND = 7, 
-    TAD = 8, ISZ = 9, DCA = 10, JMS = 11, JMP = 12, NOP = 13, IAC = 14, 
-    RSL = 15, RTL = 16, RAR = 17, RTR = 18, BSW = 19, CML = 20, CMA = 21, 
-    CIA = 22, CLL = 23, STL = 24, CLA = 25, STA = 26, HLT = 27, OSR = 28, 
-    SKP = 29, SNL = 30, SZL = 31, SZA = 32, SNA = 33, SMA = 34, SPA = 35, 
-    CAM = 36, MQA = 37, MQL = 38, SWP = 39, IOT = 40, ION = 41, SKON = 42, 
-    IOF = 43, SRQ = 44, GTF = 45, RTF = 46, CAF = 47, Octal = 48, Decimal = 49, 
-    ID = 50, WS = 51
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, DW = 7, 
+    AND = 8, TAD = 9, ISZ = 10, DCA = 11, JMS = 12, JMP = 13, NOP = 14, 
+    IAC = 15, RAL = 16, RTL = 17, RAR = 18, RTR = 19, BSW = 20, CML = 21, 
+    CMA = 22, CIA = 23, CLL = 24, STL = 25, CLA = 26, STA = 27, HLT = 28, 
+    OSR = 29, SKP = 30, SNL = 31, SZL = 32, SZA = 33, SNA = 34, SMA = 35, 
+    SPA = 36, CAM = 37, MQA = 38, MQL = 39, SWP = 40, IOT = 41, ION = 42, 
+    SKON = 43, IOF = 44, SRQ = 45, GTF = 46, RTF = 47, SGT = 48, CAF = 49, 
+    CDF = 50, CIF = 51, CIDF = 52, RDF = 53, RIF = 54, RIB = 55, RMF = 56, 
+    CLSF = 57, CLEI = 58, CLDI = 59, CLSK = 60, CLSI = 61, CLSM = 62, RAND = 63, 
+    CLRF = 64, Octal = 65, Decimal = 66, ID = 67, WS = 68
   };
 
   enum {
@@ -36,7 +38,9 @@ public:
     RuleSma = 46, RuleSpa = 47, RuleOpr_op3 = 48, RuleOpr_op3_ins = 49, 
     RuleCam = 50, RuleMqa = 51, RuleMql = 52, RuleSwp = 53, RuleIot_ins = 54, 
     RuleIot = 55, RuleIon = 56, RuleSkon = 57, RuleIof = 58, RuleSrq = 59, 
-    RuleGtf = 60, RuleRtf = 61, RuleCaf = 62, RuleEol = 63
+    RuleGtf = 60, RuleRtf = 61, RuleSgt = 62, RuleCaf = 63, RuleCdf = 64, 
+    RuleCif = 65, RuleCidf = 66, RuleRdf = 67, RuleRif = 68, RuleRib = 69, 
+    RuleRmf = 70, RuleDk8ea = 71, RuleDef_const = 72, RuleDw = 73, RuleEol = 74
   };
 
   AsmParser(antlr4::TokenStream *input);
@@ -111,7 +115,18 @@ public:
   class SrqContext;
   class GtfContext;
   class RtfContext;
+  class SgtContext;
   class CafContext;
+  class CdfContext;
+  class CifContext;
+  class CidfContext;
+  class RdfContext;
+  class RifContext;
+  class RibContext;
+  class RmfContext;
+  class Dk8eaContext;
+  class Def_constContext;
+  class DwContext;
   class EolContext; 
 
   class  CodeContext : public antlr4::ParserRuleContext {
@@ -220,6 +235,7 @@ public:
     Mem_insContext *mem_ins();
     Opr_insContext *opr_ins();
     Iot_insContext *iot_ins();
+    Def_constContext *def_const();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -235,6 +251,7 @@ public:
     Ctl_insContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     StartContext *start();
+    SymbolContext *symbol();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -529,7 +546,7 @@ public:
   public:
     RalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *RSL();
+    antlr4::tree::TerminalNode *RAL();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -985,7 +1002,16 @@ public:
     SrqContext *srq();
     GtfContext *gtf();
     RtfContext *rtf();
+    SgtContext *sgt();
     CafContext *caf();
+    CdfContext *cdf();
+    CifContext *cif();
+    CidfContext *cidf();
+    RdfContext *rdf();
+    RifContext *rif();
+    RibContext *rib();
+    RmfContext *rmf();
+    Dk8eaContext *dk8ea();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -1101,6 +1127,21 @@ public:
 
   RtfContext* rtf();
 
+  class  SgtContext : public antlr4::ParserRuleContext {
+  public:
+    SgtContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *SGT();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  SgtContext* sgt();
+
   class  CafContext : public antlr4::ParserRuleContext {
   public:
     CafContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -1115,6 +1156,164 @@ public:
   };
 
   CafContext* caf();
+
+  class  CdfContext : public antlr4::ParserRuleContext {
+  public:
+    CdfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CDF();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  CdfContext* cdf();
+
+  class  CifContext : public antlr4::ParserRuleContext {
+  public:
+    CifContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CIF();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  CifContext* cif();
+
+  class  CidfContext : public antlr4::ParserRuleContext {
+  public:
+    CidfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CIDF();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  CidfContext* cidf();
+
+  class  RdfContext : public antlr4::ParserRuleContext {
+  public:
+    RdfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *RDF();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  RdfContext* rdf();
+
+  class  RifContext : public antlr4::ParserRuleContext {
+  public:
+    RifContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *RIF();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  RifContext* rif();
+
+  class  RibContext : public antlr4::ParserRuleContext {
+  public:
+    RibContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *RIB();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  RibContext* rib();
+
+  class  RmfContext : public antlr4::ParserRuleContext {
+  public:
+    RmfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *RMF();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  RmfContext* rmf();
+
+  class  Dk8eaContext : public antlr4::ParserRuleContext {
+  public:
+    Dk8eaContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CLSF();
+    antlr4::tree::TerminalNode *CLEI();
+    antlr4::tree::TerminalNode *CLDI();
+    antlr4::tree::TerminalNode *CLSK();
+    antlr4::tree::TerminalNode *CLSI();
+    antlr4::tree::TerminalNode *CLSM();
+    antlr4::tree::TerminalNode *RAND();
+    antlr4::tree::TerminalNode *CLRF();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  Dk8eaContext* dk8ea();
+
+  class  Def_constContext : public antlr4::ParserRuleContext {
+  public:
+    Def_constContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    DwContext *dw();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  Def_constContext* def_const();
+
+  class  DwContext : public antlr4::ParserRuleContext {
+  public:
+    DwContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *DW();
+    AddressContext *address();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  DwContext* dw();
 
   class  EolContext : public antlr4::ParserRuleContext {
   public:

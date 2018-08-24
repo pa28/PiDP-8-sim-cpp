@@ -25,10 +25,11 @@ cpu_ins
     : mem_ins
     | opr_ins
     | iot_ins
+    | def_const
     ;
 
 ctl_ins
-    : start
+    : symbol ? start
     ;
 
 start : '.' ( address | symbol );
@@ -75,7 +76,7 @@ opr_op1_ins
 
 nop : NOP ;
 iac : IAC ;
-ral : RSL ;
+ral : RAL ;
 rtl : RTL ;
 rar : RAR ;
 rtr : RTR ;
@@ -117,7 +118,8 @@ swp : SWP ;
 
 iot_ins
     : iot
-    | ion | skon | iof | srq | gtf | rtf | caf
+    | ion | skon | iof | srq | gtf | rtf | sgt | caf | cdf | cif | cidf | rdf | rif | rib | rmf
+    | dk8ea
     ;
 
 iot : IOT ;
@@ -127,7 +129,25 @@ iof : IOF ;
 srq : SRQ ;
 gtf : GTF ;
 rtf : RTF ;
+sgt : SGT ;
 caf : CAF ;
+cdf : CDF ;
+cif : CIF ;
+cidf : CIDF ;
+rdf : RDF ;
+rif : RIF ;
+rib : RIB ;
+rmf : RMF ;
+
+dk8ea : CLSF | CLEI | CLDI | CLSK | CLSI | CLSM | RAND | CLRF ;
+
+def_const
+    : dw
+    ;
+
+dw
+    : DW address
+    ;
 
 eol
     : ';'
@@ -162,6 +182,8 @@ fragment X: [Xx];
 fragment Y: [Yy];
 fragment Z: [Zz];
 
+DW  : D W ;
+
 AND : A N D ;
 TAD : T A D ;
 ISZ : I S Z ;
@@ -171,7 +193,7 @@ JMP : J M P ;
 
 NOP : N O P ;
 IAC : I A C ;
-RSL : R S L ;
+RAL : R A L ;
 RTL : R T L ;
 RAR : R A R ;
 RTR : R T R ;
@@ -206,7 +228,24 @@ IOF : I O F;
 SRQ : S R Q;
 GTF : G T F;
 RTF : R T F;
+SGT : S G T;
 CAF : C A F;
+CDF : C D F;
+CIF : C I F;
+CIDF : C I D F;
+RDF : R D F;
+RIF : R I F;
+RIB : R I B;
+RMF : R M F;
+
+CLSF : C L S F;
+CLEI : C L E I;
+CLDI : C L D I;
+CLSK : C L S K;
+CLSI : C L S I;
+CLSM : C L S M;
+RAND : R A N D;
+CLRF : C L R F;
 
 Octal : '0' [0-7]+ ;
 

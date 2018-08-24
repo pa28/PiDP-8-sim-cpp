@@ -202,8 +202,41 @@ public:
   virtual void enterRtf(AsmParser::RtfContext * /*ctx*/) override { }
   virtual void exitRtf(AsmParser::RtfContext * /*ctx*/) override { }
 
+  virtual void enterSgt(AsmParser::SgtContext * /*ctx*/) override { }
+  virtual void exitSgt(AsmParser::SgtContext * /*ctx*/) override { }
+
   virtual void enterCaf(AsmParser::CafContext * /*ctx*/) override { }
   virtual void exitCaf(AsmParser::CafContext * /*ctx*/) override { }
+
+  virtual void enterCdf(AsmParser::CdfContext * /*ctx*/) override { }
+  virtual void exitCdf(AsmParser::CdfContext * /*ctx*/) override { }
+
+  virtual void enterCif(AsmParser::CifContext * /*ctx*/) override { }
+  virtual void exitCif(AsmParser::CifContext * /*ctx*/) override { }
+
+  virtual void enterCidf(AsmParser::CidfContext * /*ctx*/) override { }
+  virtual void exitCidf(AsmParser::CidfContext * /*ctx*/) override { }
+
+  virtual void enterRdf(AsmParser::RdfContext * /*ctx*/) override { }
+  virtual void exitRdf(AsmParser::RdfContext * /*ctx*/) override { }
+
+  virtual void enterRif(AsmParser::RifContext * /*ctx*/) override { }
+  virtual void exitRif(AsmParser::RifContext * /*ctx*/) override { }
+
+  virtual void enterRib(AsmParser::RibContext * /*ctx*/) override { }
+  virtual void exitRib(AsmParser::RibContext * /*ctx*/) override { }
+
+  virtual void enterRmf(AsmParser::RmfContext * /*ctx*/) override { }
+  virtual void exitRmf(AsmParser::RmfContext * /*ctx*/) override { }
+
+  virtual void enterDk8ea(AsmParser::Dk8eaContext * /*ctx*/) override { }
+  virtual void exitDk8ea(AsmParser::Dk8eaContext * /*ctx*/) override { }
+
+  virtual void enterDef_const(AsmParser::Def_constContext * /*ctx*/) override { }
+  virtual void exitDef_const(AsmParser::Def_constContext * /*ctx*/) override { }
+
+  virtual void enterDw(AsmParser::DwContext * /*ctx*/) override { }
+  virtual void exitDw(AsmParser::DwContext * /*ctx*/) override { }
 
   virtual void enterEol(AsmParser::EolContext * /*ctx*/) override { }
   virtual void exitEol(AsmParser::EolContext * /*ctx*/) override { }
