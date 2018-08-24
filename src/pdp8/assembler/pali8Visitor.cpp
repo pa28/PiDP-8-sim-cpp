@@ -289,6 +289,8 @@ antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
             instruction = std::any_cast<pdp8_asm::pdp8_instruction>(part);
         else if (part.type() == typeid(unsigned long))
             address = std::any_cast<unsigned long>(part);
+        else if (assembler_pass > 0 && part.type() == typeid(std::string))
+            address = symbol_table.at(std::any_cast<std::string>(part));
         else if (part.type() == typeid(pdp8_asm::MemoryInstructionFlags))
             switch (std::any_cast<pdp8_asm::MemoryInstructionFlags>(part)) {
             case pdp8_asm::ZERO:
@@ -303,7 +305,7 @@ antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
     if (instruction.instruction[pdp8_asm::pdp8_instruction::zero]) {
         auto p1 = address.memory_addr[pdp8_asm::pdp8_address::page];
         auto p2 = program_counter.memory_addr[pdp8_asm::pdp8_address::page];
-        if (p1 != p2) {
+        if (assembler_pass > 0 && p1 != p2) {
             throw std::out_of_range("off page address"); // ToDo create parser aware error exceptions.
         }
     } else {
