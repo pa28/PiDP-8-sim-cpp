@@ -112,6 +112,7 @@ class asmErrFixture : public cpuTestFixture<instruction_test> {
 
 TEST_P(asmErrFixture, AssemblerErrors) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
+    dk8ea_mode_a = param.dk8ea_mode_a;
 
     std::stringstream strm{param.instruction};
 
