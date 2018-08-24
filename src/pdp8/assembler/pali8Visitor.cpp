@@ -293,13 +293,13 @@ antlrcpp::Any pali8Visitor::visitMem_ins(AsmParser::Mem_insContext *ctx) {
             address = symbol_table.at(std::any_cast<std::string>(part));
         else if (part.type() == typeid(pdp8_asm::MemoryInstructionFlags))
             switch (std::any_cast<pdp8_asm::MemoryInstructionFlags>(part)) {
-            case pdp8_asm::ZERO:
-                instruction.instruction << pdp8_asm::pdp8_instruction::zero.clear();
-                break;
-            case pdp8_asm::INDIRECT:
-                instruction.instruction << pdp8_asm::pdp8_instruction::indirect.set();
-                break;
-        }
+                case pdp8_asm::ZERO:
+                    instruction.instruction << pdp8_asm::pdp8_instruction::zero.clear();
+                    break;
+                case pdp8_asm::INDIRECT:
+                    instruction.instruction << pdp8_asm::pdp8_instruction::indirect.set();
+                    break;
+            }
     }
 
     if (instruction.instruction[pdp8_asm::pdp8_instruction::zero]) {
@@ -337,7 +337,7 @@ antlrcpp::Any pali8Visitor::visitMem_op(AsmParser::Mem_opContext *ctx) {
     int ret_code = 0;
     for (auto const &op : results) {
         if (op.type() == typeid(pdp8_asm::MemoryInstruction)) {
-            auto opt_enum = std::any_cast<pdp8_asm::MemoryInstruction >(op);
+            auto opt_enum = std::any_cast<pdp8_asm::MemoryInstruction>(op);
             // Set the ZERO flag to be cleared by specification of zero page addressing.
             switch (opt_enum) {
                 case pdp8_asm::AND:
@@ -394,21 +394,39 @@ antlrcpp::Any pali8Visitor::visitDef_const(AsmParser::Def_constContext *ctx) {
 antlrcpp::Any pali8Visitor::visitDk8ea(AsmParser::Dk8eaContext *ctx) {
     pdp8_asm::pdp8_instruction instruction;
 
-    if (ctx->CLSF())
-        instruction.instruction = 06050;
-    else if (ctx->CLEI())
-        instruction.instruction = 06051;
-    else if (ctx->CLDI())
-        instruction.instruction = 06052;
-    else if (ctx->CLSK())
-        instruction.instruction = 06053;
-    else if (ctx->CLSI())
-        instruction.instruction = 06054;
-    else if (ctx->CLSM())
-        instruction.instruction = 06055;
-    else if (ctx->RAND())
-        instruction.instruction = 06056;
-    else if (ctx->CLRF())
-        instruction.instruction = 06057;
+    switch (dk8ea_mode) {
+        case pdp8::DK8EA::DK8EA_Mode_P:
+            if (ctx->CLSF())
+                instruction.instruction = 06050;
+            else if (ctx->CLEI())
+                instruction.instruction = 06051;
+            else if (ctx->CLDI())
+                instruction.instruction = 06052;
+            else if (ctx->CLSC())
+                instruction.instruction = 06053;
+            else if (ctx->CLSI())
+                instruction.instruction = 06054;
+            else if (ctx->CLSM())
+                instruction.instruction = 06055;
+            else if (ctx->RAND())
+                instruction.instruction = 06056;
+            else if (ctx->CLSK())
+                instruction.instruction = 06057;
+            break;
+        case pdp8::DK8EA::DK8EA_Mode_A:
+            if (ctx->CLEI())
+                instruction.instruction = 06051;
+            else if (ctx->CLDI())
+                instruction.instruction = 06052;
+            else if (ctx->CLSC())
+                instruction.instruction = 06053;
+            else if (ctx->CLLE())
+                instruction.instruction = 06055;
+            else if (ctx->CLCL())
+                instruction.instruction = 06056;
+            else
+                throw std::logic_error("DK8EA instruction not allowed in Mode A.");
+            break;
+    }
     return antlrcpp::Any(instruction);
 }

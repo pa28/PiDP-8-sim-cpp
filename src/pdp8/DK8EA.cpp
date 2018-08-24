@@ -175,7 +175,7 @@ namespace pdp8 {
                         bus.clr_device_enable();
                         return data;
 
-                    case 3:                                             /* CLSK */
+                    case 3:                                             /* CLSC */
                         if (bus.is_device_done()) {                     /* flag set? */
                             bus.clr_device_done();
                             bus.skip = true;
@@ -184,13 +184,13 @@ namespace pdp8 {
                         return data;
 
                     case 4:                                             /* CLSI */
-                        tmp = clk_buf0;
+                        tmp = static_cast<base_type>(clk_buf0);
                         clk_buf0 = data;
                         clk_ctr0 = data;
                         return tmp;
 
                     case 5:                                             /* CLSM */
-                        tmp = clk_buf1;
+                        tmp = static_cast<base_type>(clk_buf1);
                         clk_buf1 = data;
                         clk_ctr1 = data;
                         return tmp;

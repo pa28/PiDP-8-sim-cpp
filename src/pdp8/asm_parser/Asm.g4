@@ -139,7 +139,7 @@ rif : RIF ;
 rib : RIB ;
 rmf : RMF ;
 
-dk8ea : CLSF | CLEI | CLDI | CLSK | CLSI | CLSM | RAND | CLRF ;
+dk8ea : CLSF | CLEI | CLDI | CLSC | CLSI | CLSM | RAND | CLSK | CLLE | CLCL;
 
 def_const
     : dw
@@ -241,11 +241,13 @@ RMF : R M F;
 CLSF : C L S F;
 CLEI : C L E I;
 CLDI : C L D I;
-CLSK : C L S K;
+CLSC : C L S C;
 CLSI : C L S I;
 CLSM : C L S M;
 RAND : R A N D;
-CLRF : C L R F;
+CLSK : C L S K;
+CLLE : C L L E;
+CLCL : C L C L;
 
 Octal : '0' [0-7]+ ;
 

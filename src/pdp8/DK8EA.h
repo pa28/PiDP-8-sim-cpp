@@ -10,6 +10,22 @@
 
 namespace pdp8 {
 
+    /**
+     * DK8EA op codes and suggested mnemonics by mode:
+     * Instruction description            Mode A    Mode P    Op Code
+     * ===========================================================================
+     * Set programmable flags                       CLSF      06050
+     * Enable interrupt                   CLEI      CLEI      06051
+     * Disable interrupt                  CLDI      CLDI      06052
+     * Skip and disable on clock flag     CLSC      CLSC      06053
+     * Set clock counter 0                          CLSI      06054
+     * Set clock counter 1                          CLSM      06055
+     * Clock enable on AC LS bit          CLLE                06055
+     * Put random work in AC                        RAND      06056
+     * Disable interrupt                  CLCL                06056
+     * Skip if device done                CLSK                06057
+     */
+
     class DK8EA {
     public:
         using clock_register_t = register_t;

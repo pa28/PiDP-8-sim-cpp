@@ -41,6 +41,7 @@ public:
         pdp8_asm::ParserProcessor<AsmParser::CodeContext, AsmLexer, AsmParser> asmProcessor;
 
         pali8Visitor visitor;
+        visitor.dk8ea_mode = dk8ea_mode_a ? pdp8::DK8EA::DK8EA_Mode_A : pdp8::DK8EA::DK8EA_Mode_P;
 
         auto parserRuleFunction =
                 [](pdp8_asm::ParserRule<AsmParser::CodeContext, AsmLexer, AsmParser> &rule) -> auto {
@@ -94,11 +95,16 @@ public:
 
     std::shared_ptr<pdp8::chassis> chassis;
     u_int16_t pc_boundary;
+    bool dk8ea_mode_a;
 };
 
 struct instruction_test {
+    instruction_test(std::string ins, u_int16_t op, bool mode = false) : instruction{std::move(ins)}, op_code{op},
+                                                                         dk8ea_mode_a{mode} {}
+
     std::string instruction;
     u_int16_t op_code;
+    bool dk8ea_mode_a;
 };
 
 class asmErrFixture : public cpuTestFixture<instruction_test> {
@@ -126,6 +132,7 @@ class asmTestFixture : public cpuTestFixture<instruction_test> {
 
 TEST_P(asmTestFixture, OpCodes) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
+    dk8ea_mode_a = param.dk8ea_mode_a;
 
     std::stringstream strm{param.instruction};
 
@@ -200,7 +207,23 @@ INSTANTIATE_TEST_CASE_P(InputOutputInstructions, asmTestFixture, // NOLINT(cert-
                                 instruction_test{"gtf;", 06004},
                                 instruction_test{"rtf;", 06005},
                                 instruction_test{"sgt;", 06006},
-                                instruction_test{"caf;", 06007}
+                                instruction_test{"caf;", 06007},
+                                instruction_test{"cdf;", 06201},
+                                instruction_test{"cif;", 06202},
+                                instruction_test{"cidf;", 06203},
+                                instruction_test{"clsf;", 06050},
+                                instruction_test{"clei;", 06051},
+                                instruction_test{"cldi;", 06052},
+                                instruction_test{"clsc;", 06053},
+                                instruction_test{"clsi;", 06054},
+                                instruction_test{"clsm;", 06055},
+                                instruction_test{"rand;", 06056},
+                                instruction_test{"clsk;", 06057},
+                                instruction_test{"clei;", 06051, true},
+                                instruction_test{"cldi;", 06052, true},
+                                instruction_test{"clsc;", 06053, true},
+                                instruction_test{"clle;", 06055, true},
+                                instruction_test{"clcl;", 06056, true}
                         ),);
 
 struct instruction_state {
@@ -462,7 +485,7 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
 INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                ProgramTestData{"rand; loop clsk; jmp loop; hlt;",""}
+                                ProgramTestData{"rand; loop clsc; jmp loop; hlt;", ""}
                         ),);
 
 int main(int argc, char **argv) {

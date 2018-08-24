@@ -19,9 +19,10 @@ public:
     OSR = 29, SKP = 30, SNL = 31, SZL = 32, SZA = 33, SNA = 34, SMA = 35, 
     SPA = 36, CAM = 37, MQA = 38, MQL = 39, SWP = 40, IOT = 41, ION = 42, 
     SKON = 43, IOF = 44, SRQ = 45, GTF = 46, RTF = 47, SGT = 48, CAF = 49, 
-    CDF = 50, CIF = 51, CIDF = 52, RDF = 53, RIF = 54, RIB = 55, RMF = 56, 
-    CLSF = 57, CLEI = 58, CLDI = 59, CLSK = 60, CLSI = 61, CLSM = 62, RAND = 63, 
-    CLRF = 64, Octal = 65, Decimal = 66, ID = 67, WS = 68
+    CDF = 50, CIF = 51, CIDF = 52, RDF = 53, RIF = 54, RIB = 55, RMF = 56,
+      CLSF = 57, CLEI = 58, CLDI = 59, CLSC = 60, CLSI = 61, CLSM = 62, RAND = 63,
+      CLSK = 64, CLLE = 65, CLCL = 66, Octal = 67, Decimal = 68, ID = 69,
+      WS = 70
   };
 
   AsmLexer(antlr4::CharStream *input);

@@ -9,12 +9,17 @@
 #include <vector>
 #include "AsmBaseVisitor.h"
 #include "pdp8_instruction.h"
+#include "DK8EA.h"
 
 class pali8Visitor : public AsmBaseVisitor {
 public:
-    pali8Visitor() : AsmBaseVisitor{}, assembler_pass{0}, program_counter{}, symbol_table{} {}
+    pali8Visitor()
+            : AsmBaseVisitor{}, assembler_pass{0}, dk8ea_mode{pdp8::DK8EA::DK8EA_Mode_P}, program_counter{},
+              symbol_table{} {}
 
     size_t assembler_pass;
+
+    pdp8::DK8EA::DK8EA_Constants dk8ea_mode;
 
     antlrcpp::Any returnVector(std::vector<std::any> vector);
 
