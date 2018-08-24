@@ -70,7 +70,7 @@ namespace pdp8 {
     void CPU::fetch() {
         // memory address is the instruction field - program counter
         if (pc_boundary && pc >= pc_boundary)
-            throw std::logic_error("PC out of bounds.");
+            throw std::logic_error("PC out of bounds."); // LCOV_EXCL_LINE
 
         ma << field_register[sf_if](mem_field) << pc[mem_word](mem_word);
         mb << core[ma][mem_word];
@@ -181,7 +181,7 @@ namespace pdp8 {
                         execute_opr();
                         break;
                     default:
-                        throw std::logic_error("op code out of range.");
+                        throw std::logic_error("op code out of range."); // LCOV_EXCL_LINE
                 }
                 cycle_state = Pause;
                 break;
@@ -201,7 +201,7 @@ namespace pdp8 {
                 cycle_state = Fetch;
                 break;
             case Pause:
-                break;
+                break; // LCOV_EXCL_LINE
         }
     }
 
@@ -234,7 +234,7 @@ namespace pdp8 {
                     acl = ((acl() >> 6) & 077) | ((acl() & 077) << 6);
                     break;
                 default:
-                    throw std::logic_error("Group 1 OPR error.");
+                    throw std::logic_error("Group 1 OPR error."); // LCOV_EXCL_LINE
             }
         } else if ((bits & 01) == 0) { // Group 2
             bool skip = false;
@@ -316,7 +316,7 @@ namespace pdp8 {
                         initialize();
                         break;
                     default:
-                        throw std::logic_error("IOT 00 error.");
+                        throw std::logic_error("IOT 00 error."); // LCOV_EXCL_LINE
                 }
                 break;
             case 020:
@@ -356,15 +356,15 @@ namespace pdp8 {
                                 field_buffer << interrupt_buffer[sf_if];
                                 break;
                             default:
-                                throw std::logic_error("Time share instructions not supported.");
+                                throw std::logic_error("Time share instructions not supported."); // LCOV_EXCL_LINE
                         }
                         break;
                     default:
-                        throw std::logic_error("Ill-formed IOT memory extention.");
+                        throw std::logic_error("Ill-formed IOT memory extention."); // LCOV_EXCL_LINE
                 }
                 break;
             default:
-                acl << cpu_word(the_chassis->dispatch(mb[dev_sel](), mb[dev_cmd](), acl[cpu_word]()));
+                acl << cpu_word(the_chassis->dispatch(mb[dev_sel](), mb[dev_cmd](), acl[cpu_word]())); // LCOV_EXCL_LINE
                 break;
         }
     }

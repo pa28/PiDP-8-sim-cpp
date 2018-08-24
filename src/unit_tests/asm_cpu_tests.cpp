@@ -26,6 +26,7 @@ public:
     }
 
     void SetUp() override {
+        chassis->reset();
         chassis->initialize();
     }
 
