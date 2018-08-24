@@ -34,6 +34,7 @@ namespace sim {
         sim::PerformanceClock sim_time;
 
         bool wait_on_condition() {
+            bool return_value = false;
             if (joinable()) {
                 std::unique_lock<std::mutex> lock(wait_mutex);
                 wait_flag = true;
@@ -43,9 +44,9 @@ namespace sim {
                     wait_condition.wait(lock);
                 sim_time.condition_wait_stop();
                 sim_time.start();
-                return true;
+                return_value = true;
             }
-            return false;
+            return return_value;
         }
 
         void notify_condition() {
