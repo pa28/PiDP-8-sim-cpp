@@ -112,6 +112,27 @@ antlrcpp::Any pali8Visitor::visitIot_ins(AsmParser::Iot_insContext *ctx) {
                 case pdp8_asm::CAF:
                     ret_code |= 06007;
                     break;
+                case pdp8_asm::CDF:
+                    ret_code |= 06201;
+                    break;
+                case pdp8_asm::CIF:
+                    ret_code |= 06202;
+                    break;
+                case pdp8_asm::CIDF:
+                    ret_code |= 06203;
+                    break;
+                case pdp8_asm::RDF:
+                    ret_code |= 06214;
+                    break;
+                case pdp8_asm::RIF:
+                    ret_code |= 06224;
+                    break;
+                case pdp8_asm::RIB:
+                    ret_code |= 06234;
+                    break;
+                case pdp8_asm::RMF:
+                    ret_code |= 06244;
+                    break;
             }
         }
     }

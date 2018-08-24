@@ -271,6 +271,34 @@ public:
     return visitChildren(ctx);
   }
 
+    virtual antlrcpp::Any visitCdf(AsmParser::CdfContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
+    virtual antlrcpp::Any visitCif(AsmParser::CifContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
+    virtual antlrcpp::Any visitCidf(AsmParser::CidfContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
+    virtual antlrcpp::Any visitRdf(AsmParser::RdfContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
+    virtual antlrcpp::Any visitRif(AsmParser::RifContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
+    virtual antlrcpp::Any visitRib(AsmParser::RibContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
+    virtual antlrcpp::Any visitRmf(AsmParser::RmfContext *ctx) override {
+      return visitChildren(ctx);
+    }
+
     virtual antlrcpp::Any visitDef_const(AsmParser::Def_constContext *ctx) override {
       return visitChildren(ctx);
     }

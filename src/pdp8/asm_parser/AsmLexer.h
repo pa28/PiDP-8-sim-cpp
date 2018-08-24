@@ -19,7 +19,8 @@ public:
       OSR = 29, SKP = 30, SNL = 31, SZL = 32, SZA = 33, SNA = 34, SMA = 35,
       SPA = 36, CAM = 37, MQA = 38, MQL = 39, SWP = 40, IOT = 41, ION = 42,
       SKON = 43, IOF = 44, SRQ = 45, GTF = 46, RTF = 47, SGT = 48, CAF = 49,
-      Octal = 50, Decimal = 51, ID = 52, WS = 53
+      CDF = 50, CIF = 51, CIDF = 52, RDF = 53, RIF = 54, RIB = 55, RMF = 56,
+      Octal = 57, Decimal = 58, ID = 59, WS = 60
   };
 
   AsmLexer(antlr4::CharStream *input);

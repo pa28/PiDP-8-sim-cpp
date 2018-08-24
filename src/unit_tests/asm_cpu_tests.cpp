@@ -62,6 +62,17 @@ public:
         return code_list;
     }
 
+    void set_memory(std::vector<std::any> &&code_list) {
+        for (auto code : code_list) {
+            if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
+                auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
+                chassis->cpu->deposit(instruction.instruction());
+            } else if (code.type() == typeid(pdp8_asm::pdp8_address)) {
+                chassis->cpu->load_address(std::any_cast<pdp8_asm::pdp8_address>(code).memory_addr());
+            }
+        }
+    }
+
     std::shared_ptr<pdp8::chassis> chassis;
 };
 
@@ -348,6 +359,64 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpuIOT, IotTestFixture, // NOLINT(cert-
                                 iot_test_data{"iof;", 1, true, false, false, 0201},
                                 iot_test_data{"srq;", 1, false, false, false, 0201},
                                 iot_test_data{"srq;", 1, false, false, true, 0202}
+                        ),);
+
+struct RemainderTestData {
+    bool enable;
+};
+
+class RemainderTestFixture : public cpuTestFixture<RemainderTestData> {
+};
+
+TEST_P(RemainderTestFixture, RemainderTests) { // NOLINT(cert-err58-cpp)
+    auto param = GetParam();
+
+    if (param.enable) {
+        std::stringstream strm;
+
+        strm.str("start .0200; dw 06251; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(05, chassis->cpu->field_register[chassis->cpu->sf_df]());
+
+        strm.str("start .0200; dw 06252; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(05, chassis->cpu->field_buffer[chassis->cpu->sf_if]());
+
+        chassis->cpu->field_register = 0;
+        chassis->cpu->field_buffer = 0;
+        strm.str("start .0200; dw 06253; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(05, chassis->cpu->field_register[chassis->cpu->sf_df]());
+        EXPECT_EQ(05, chassis->cpu->field_buffer[chassis->cpu->sf_if]());
+
+        strm.str("start .0200; rdf; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(05, chassis->cpu->acl[chassis->cpu->op_field]());
+
+        strm.str("start .0200; rif; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(0, chassis->cpu->acl[chassis->cpu->op_field]());
+
+        strm.str("start .0200; rib; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(0, chassis->cpu->acl[chassis->cpu->op_field]());
+
+        strm.str("start .0200; rmf; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(0, chassis->cpu->field_register[chassis->cpu->sf_df]());
+        EXPECT_EQ(0, chassis->cpu->field_buffer[chassis->cpu->sf_if]());
+    }
+}
+
+INSTANTIATE_TEST_CASE_P(RemainderTests, RemainderTestFixture, // NOLINT(cert-err58-cpp)
+                        testing::Values(RemainderTestData{true}
                         ),);
 
 int main(int argc, char **argv) {

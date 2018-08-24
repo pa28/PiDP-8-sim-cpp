@@ -19,7 +19,8 @@ public:
       OSR = 29, SKP = 30, SNL = 31, SZL = 32, SZA = 33, SNA = 34, SMA = 35,
       SPA = 36, CAM = 37, MQA = 38, MQL = 39, SWP = 40, IOT = 41, ION = 42,
       SKON = 43, IOF = 44, SRQ = 45, GTF = 46, RTF = 47, SGT = 48, CAF = 49,
-      Octal = 50, Decimal = 51, ID = 52, WS = 53
+      CDF = 50, CIF = 51, CIDF = 52, RDF = 53, RIF = 54, RIB = 55, RMF = 56,
+      Octal = 57, Decimal = 58, ID = 59, WS = 60
   };
 
   enum {
@@ -33,11 +34,12 @@ public:
     RuleCia = 32, RuleCll = 33, RuleStl = 34, RuleCla = 35, RuleSta = 36, 
     RuleOpr_op2 = 37, RuleOpr_op2_ins = 38, RuleHlt = 39, RuleOsr = 40, 
     RuleSkp = 41, RuleSnl = 42, RuleSzl = 43, RuleSza = 44, RuleSna = 45, 
-    RuleSma = 46, RuleSpa = 47, RuleOpr_op3 = 48, RuleOpr_op3_ins = 49, 
-    RuleCam = 50, RuleMqa = 51, RuleMql = 52, RuleSwp = 53, RuleIot_ins = 54,
+    RuleSma = 46, RuleSpa = 47, RuleOpr_op3 = 48, RuleOpr_op3_ins = 49,
+      RuleCam = 50, RuleMqa = 51, RuleMql = 52, RuleSwp = 53, RuleIot_ins = 54,
       RuleIot = 55, RuleIon = 56, RuleSkon = 57, RuleIof = 58, RuleSrq = 59,
-      RuleGtf = 60, RuleRtf = 61, RuleSgt = 62, RuleCaf = 63, RuleDef_const = 64,
-      RuleDw = 65, RuleEol = 66
+      RuleGtf = 60, RuleRtf = 61, RuleSgt = 62, RuleCaf = 63, RuleCdf = 64,
+      RuleCif = 65, RuleCidf = 66, RuleRdf = 67, RuleRif = 68, RuleRib = 69,
+      RuleRmf = 70, RuleDef_const = 71, RuleDw = 72, RuleEol = 73
   };
 
   AsmParser(antlr4::TokenStream *input);
@@ -115,6 +117,20 @@ public:
 
     class SgtContext;
   class CafContext;
+
+    class CdfContext;
+
+    class CifContext;
+
+    class CidfContext;
+
+    class RdfContext;
+
+    class RifContext;
+
+    class RibContext;
+
+    class RmfContext;
 
     class Def_constContext;
 
@@ -1001,6 +1017,20 @@ public:
       SgtContext *sgt();
     CafContext *caf();
 
+      CdfContext *cdf();
+
+      CifContext *cif();
+
+      CidfContext *cidf();
+
+      RdfContext *rdf();
+
+      RifContext *rif();
+
+      RibContext *rib();
+
+      RmfContext *rmf();
+
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
 
@@ -1147,6 +1177,132 @@ public:
   };
 
   CafContext* caf();
+
+    class CdfContext : public antlr4::ParserRuleContext {
+    public:
+        CdfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *CDF();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    CdfContext *cdf();
+
+    class CifContext : public antlr4::ParserRuleContext {
+    public:
+        CifContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *CIF();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    CifContext *cif();
+
+    class CidfContext : public antlr4::ParserRuleContext {
+    public:
+        CidfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *CIDF();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    CidfContext *cidf();
+
+    class RdfContext : public antlr4::ParserRuleContext {
+    public:
+        RdfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *RDF();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    RdfContext *rdf();
+
+    class RifContext : public antlr4::ParserRuleContext {
+    public:
+        RifContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *RIF();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    RifContext *rif();
+
+    class RibContext : public antlr4::ParserRuleContext {
+    public:
+        RibContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *RIB();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    RibContext *rib();
+
+    class RmfContext : public antlr4::ParserRuleContext {
+    public:
+        RmfContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+
+        virtual size_t getRuleIndex() const override;
+
+        antlr4::tree::TerminalNode *RMF();
+
+        virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+
+        virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+    };
+
+    RmfContext *rmf();
 
     class Def_constContext : public antlr4::ParserRuleContext {
     public:

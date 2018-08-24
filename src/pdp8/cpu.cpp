@@ -329,24 +329,24 @@ namespace pdp8 {
             case 027:            /* memory extension */
                 switch (mb[dev_cmd]()) {
                     case 1: // CDF
-                        field_register << mb[mem_field](sf_df);
+                        field_register << mb[op_field](sf_df);
                         break;
                     case 2: // CIF
-                        field_buffer << mb[mem_field](sf_if);
+                        field_buffer << mb[op_field](sf_if);
                         interrupt_enable = false;
                         break;
                     case 3: // CDF CIF
-                        field_register << mb[mem_field](sf_df);
-                        field_buffer << mb[mem_field](sf_if);
+                        field_register << mb[op_field](sf_df);
+                        field_buffer << mb[op_field](sf_if);
                         interrupt_enable = false;
                         break;
                     case 4: //
-                        switch (mb[dev_cmd]() & 7) {
+                        switch (mb[dev_sel]() & 7) {
                             case 1: // RDF
                                 acl << (acl[op_field] | field_register[sf_df](op_field));
                                 break;
                             case 2: // RIF
-                                acl << op_field(field_register[sf_if]() << 3);
+                                acl << field_register[sf_if](sf_if);
                                 break;
                             case 3: // RIB
                                 acl << (acl[addr] | interrupt_buffer[addr]);

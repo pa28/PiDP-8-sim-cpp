@@ -34,7 +34,7 @@ namespace pdp8_asm {
     };
 
     enum InputOutputTransfer {
-        IOT, ION, SKON, IOF, SRQ, GTF, RTF, SGT, CAF
+        IOT, ION, SKON, IOF, SRQ, GTF, RTF, SGT, CAF, CDF, CIF, CIDF, RDF, RIF, RIB, RMF
     };
 
     class pdp8_address {

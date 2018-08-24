@@ -118,7 +118,7 @@ swp : SWP ;
 
 iot_ins
     : iot
-    | ion | skon | iof | srq | gtf | rtf | sgt | caf
+    | ion | skon | iof | srq | gtf | rtf | sgt | caf | cdf | cif | cidf | rdf | rif | rib | rmf
     ;
 
 iot : IOT ;
@@ -130,6 +130,13 @@ gtf : GTF ;
 rtf : RTF ;
 sgt : SGT ;
 caf : CAF ;
+cdf : CDF ;
+cif : CIF ;
+cidf : CIDF ;
+rdf : RDF ;
+rif : RIF ;
+rib : RIB ;
+rmf : RMF ;
 
 def_const
     : dw
@@ -220,6 +227,13 @@ GTF : G T F;
 RTF : R T F;
 SGT : S G T;
 CAF : C A F;
+CDF : C D F;
+CIF : C I F;
+CIDF : C I D F;
+RDF : R D F;
+RIF : R I F;
+RIB : R I B;
+RMF : R M F;
 
 Octal : '0' [0-7]+ ;
 

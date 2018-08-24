@@ -254,6 +254,34 @@ public:
     antlrcpp::Any visitCaf(AsmParser::CafContext *ctx) override {
         return pdp8_asm::CAF;
     }
+
+    virtual antlrcpp::Any visitCdf(AsmParser::CdfContext *ctx) override {
+        return pdp8_asm::CDF;
+    }
+
+    virtual antlrcpp::Any visitCif(AsmParser::CifContext *ctx) override {
+        return pdp8_asm::CIF;
+    }
+
+    virtual antlrcpp::Any visitCidf(AsmParser::CidfContext *ctx) override {
+        return pdp8_asm::CIDF;
+    }
+
+    virtual antlrcpp::Any visitRdf(AsmParser::RdfContext *ctx) override {
+        return pdp8_asm::RDF;
+    }
+
+    virtual antlrcpp::Any visitRif(AsmParser::RifContext *ctx) override {
+        return pdp8_asm::RIF;
+    }
+
+    virtual antlrcpp::Any visitRib(AsmParser::RibContext *ctx) override {
+        return pdp8_asm::RIB;
+    }
+
+    virtual antlrcpp::Any visitRmf(AsmParser::RmfContext *ctx) override {
+        return pdp8_asm::RMF;
+    }
 };
 
 

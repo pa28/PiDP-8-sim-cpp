@@ -207,6 +207,34 @@ public:
   virtual void enterCaf(AsmParser::CafContext *ctx) = 0;
   virtual void exitCaf(AsmParser::CafContext *ctx) = 0;
 
+    virtual void enterCdf(AsmParser::CdfContext *ctx) = 0;
+
+    virtual void exitCdf(AsmParser::CdfContext *ctx) = 0;
+
+    virtual void enterCif(AsmParser::CifContext *ctx) = 0;
+
+    virtual void exitCif(AsmParser::CifContext *ctx) = 0;
+
+    virtual void enterCidf(AsmParser::CidfContext *ctx) = 0;
+
+    virtual void exitCidf(AsmParser::CidfContext *ctx) = 0;
+
+    virtual void enterRdf(AsmParser::RdfContext *ctx) = 0;
+
+    virtual void exitRdf(AsmParser::RdfContext *ctx) = 0;
+
+    virtual void enterRif(AsmParser::RifContext *ctx) = 0;
+
+    virtual void exitRif(AsmParser::RifContext *ctx) = 0;
+
+    virtual void enterRib(AsmParser::RibContext *ctx) = 0;
+
+    virtual void exitRib(AsmParser::RibContext *ctx) = 0;
+
+    virtual void enterRmf(AsmParser::RmfContext *ctx) = 0;
+
+    virtual void exitRmf(AsmParser::RmfContext *ctx) = 0;
+
     virtual void enterDef_const(AsmParser::Def_constContext *ctx) = 0;
 
     virtual void exitDef_const(AsmParser::Def_constContext *ctx) = 0;
