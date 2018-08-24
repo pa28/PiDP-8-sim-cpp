@@ -16,6 +16,7 @@
 #include "pdp8.h"
 #include "chassis.h"
 #include "cpu.h"
+#include "DK8EA.h"
 
 template<class Param>
 class cpuTestFixture : public ::testing::TestWithParam<Param> {
@@ -401,6 +402,61 @@ TEST_P(RemainderTestFixture, RemainderTests) { // NOLINT(cert-err58-cpp)
 
 INSTANTIATE_TEST_CASE_P(RemainderTests, RemainderTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(RemainderTestData{true}
+                        ),);
+
+struct ProgramTestData {
+    std::string program, results;
+    u_int16_t pc_boundary;
+};
+
+class ProgramTestFixture : public cpuTestFixture<ProgramTestData> {
+    void SetUp() override {
+        chassis->add_device<pdp8::DK8EA>(pdp8::INT_V_CLK);
+        chassis->reset();
+        chassis->initialize();
+    }
+
+    void TearDown() override {
+        chassis->stop();
+        chassis->stop_threads();
+    }
+};
+
+/**
+ * @brief Run test programs.
+ * @details A test program must terminate with a HLT instruction. If the accumulator contains zero at halt the
+ * test has failed. Optionally a memory configuration test can also be specified. The test program will be
+ * configured to start at 00200. A PC boundary value may be specified. If the PC is >= the boundary during a fetch
+ * cycle the CPU will abort with a std::logic_error exception.
+ */
+TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
+    auto param = GetParam();
+
+    std::stringstream strm;
+
+    strm << "start .0200; " << param.program << ".start;";
+
+    set_memory(assembler(strm));
+    chassis->cpu->pc_boundary = param.pc_boundary;
+
+    chassis->start_threads();
+    chassis->start();
+
+    while (not chassis->cpu->halt_flag) {
+        std::this_thread::sleep_for(20000us);
+    }
+
+    EXPECT_NE(0, chassis->cpu->acl[chassis->cpu->cpu_word]);
+
+    if (not param.results.empty()) {
+        strm.str(param.results);
+        test_memory(assembler(strm));
+    }
+}
+
+INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
+                        testing::Values(
+                                ProgramTestData{"rand; loop clsk; jmp loop; hlt;","",0204}
                         ),);
 
 int main(int argc, char **argv) {
