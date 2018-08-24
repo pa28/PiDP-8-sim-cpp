@@ -363,8 +363,8 @@ namespace pdp8 {
                         throw std::logic_error("Ill-formed IOT memory extention."); // LCOV_EXCL_LINE
                 }
                 break;
-            default: // LCOV_EXCL_LINE
-                acl << cpu_word(the_chassis->dispatch(mb[dev_sel](), mb[dev_cmd](), acl[cpu_word]())); // LCOV_EXCL_LINE
+            default:
+                acl << cpu_word(the_chassis->dispatch(mb[dev_sel](), mb[dev_cmd](), acl[cpu_word]()));
                 break;
         }
     }
