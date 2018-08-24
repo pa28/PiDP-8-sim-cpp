@@ -2,6 +2,9 @@ language: cpp
 compiler: gcc
 sudo: false
 dist: trusty
+branches:
+  only:
+  - master
 
 addons:
   apt:
