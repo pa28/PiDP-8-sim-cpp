@@ -56,7 +56,7 @@ namespace pdp8 {
         bool skip;
     };
 
-    struct null_device {
+    struct null_device { // LCOV_EXCL_START
 
         null_device() = default;
 
@@ -72,7 +72,7 @@ namespace pdp8 {
 
         std::string name() const { return std::string{"null"}; }
         std::string long_name() const { return std::string{"A example device that does nothing."};}
-    };
+    }; // LCOV_EXCL_STOP
 
     using null_device_p = std::unique_ptr<null_device>;
 
