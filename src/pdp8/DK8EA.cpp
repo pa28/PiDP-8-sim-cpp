@@ -16,6 +16,8 @@ namespace pdp8 {
         clk_flags = clk_ctr0 = clk_ctr1 = 0;
         clk_buf0 = 0U;
         clk_buf1 = 0U;
+
+        clk_flags = CLK_INT_FUNDAMENTAL;
     }
 
     void DK8EA::reset(device_bus &bus) {
@@ -43,16 +45,7 @@ namespace pdp8 {
 
         generator.seed(seed);
 
-        switch(clk_mode) {
-            case 0:
-                clk_flags = CLK_INT_FUNDAMENTAL;
-                break;
-            case 1:
-                clk_flags = CLK_INT_MULT;
-                break;
-            default:
-                break;
-        }
+        clk_flags = CLK_INT_FUNDAMENTAL;
     }
 
     void DK8EA::stop(device_bus &bus) {
