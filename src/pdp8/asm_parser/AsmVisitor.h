@@ -161,6 +161,8 @@ public:
 
     virtual antlrcpp::Any visitRmf(AsmParser::RmfContext *context) = 0;
 
+    virtual antlrcpp::Any visitDk8ea(AsmParser::Dk8eaContext *context) = 0;
+
     virtual antlrcpp::Any visitDef_const(AsmParser::Def_constContext *context) = 0;
 
     virtual antlrcpp::Any visitDw(AsmParser::DwContext *context) = 0;

@@ -79,6 +79,8 @@ public:
 
     antlrcpp::Any visitDef_const(AsmParser::Def_constContext *ctx) override;
 
+    antlrcpp::Any visitDk8ea(AsmParser::Dk8eaContext *ctx) override;
+
     antlrcpp::Any visitZero(AsmParser::ZeroContext *ctx) override {
         return pdp8_asm::ZERO;
     }

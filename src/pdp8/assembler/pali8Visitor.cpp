@@ -82,6 +82,10 @@ antlrcpp::Any pali8Visitor::visitIot_ins(AsmParser::Iot_insContext *ctx) {
 
     int ret_code = 0;
     for (auto const &op : results) {
+        if (op.type() == typeid(pdp8_asm::pdp8_instruction)) {
+            return op;
+        }
+
         if (op.type() == typeid(pdp8_asm::InputOutputTransfer)) {
             auto opt_enum = std::any_cast<pdp8_asm::InputOutputTransfer>(op);
             switch (opt_enum) {
@@ -383,4 +387,26 @@ antlrcpp::Any pali8Visitor::visitDef_const(AsmParser::Def_constContext *ctx) {
     }
 
     return returnVector(results);
+}
+
+antlrcpp::Any pali8Visitor::visitDk8ea(AsmParser::Dk8eaContext *ctx) {
+    pdp8_asm::pdp8_instruction instruction;
+
+    if (ctx->CLSF())
+        instruction.instruction = 06050;
+    else if (ctx->CLEI())
+        instruction.instruction = 06051;
+    else if (ctx->CLDI())
+        instruction.instruction = 06052;
+    else if (ctx->CLSK())
+        instruction.instruction = 06053;
+    else if (ctx->CLSI())
+        instruction.instruction = 06054;
+    else if (ctx->CLSM())
+        instruction.instruction = 06055;
+    else if (ctx->RAND())
+        instruction.instruction = 06056;
+    else if (ctx->CLRF())
+        instruction.instruction = 06057;
+    return antlrcpp::Any(instruction);
 }

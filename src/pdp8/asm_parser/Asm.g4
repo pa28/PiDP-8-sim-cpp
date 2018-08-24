@@ -119,6 +119,7 @@ swp : SWP ;
 iot_ins
     : iot
     | ion | skon | iof | srq | gtf | rtf | sgt | caf | cdf | cif | cidf | rdf | rif | rib | rmf
+    | dk8ea
     ;
 
 iot : IOT ;
@@ -137,6 +138,8 @@ rdf : RDF ;
 rif : RIF ;
 rib : RIB ;
 rmf : RMF ;
+
+dk8ea : CLSF | CLEI | CLDI | CLSK | CLSI | CLSM | RAND | CLRF ;
 
 def_const
     : dw
@@ -234,6 +237,15 @@ RDF : R D F;
 RIF : R I F;
 RIB : R I B;
 RMF : R M F;
+
+CLSF : C L S F;
+CLEI : C L E I;
+CLDI : C L D I;
+CLSK : C L S K;
+CLSI : C L S I;
+CLSM : C L S M;
+RAND : R A N D;
+CLRF : C L R F;
 
 Octal : '0' [0-7]+ ;
 
