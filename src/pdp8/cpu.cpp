@@ -180,7 +180,7 @@ namespace pdp8 {
                     case _OPR:
                         execute_opr();
                         break;
-                    default:
+                    default: // LCOV_EXCL_LINE
                         throw std::logic_error("op code out of range."); // LCOV_EXCL_LINE
                 }
                 cycle_state = Pause;
@@ -200,7 +200,7 @@ namespace pdp8 {
 
                 cycle_state = Fetch;
                 break;
-            case Pause:
+            case Pause: // LCOV_EXCL_LINE
                 break; // LCOV_EXCL_LINE
         }
     }
@@ -233,7 +233,7 @@ namespace pdp8 {
                 case 002: // BSW
                     acl = ((acl() >> 6) & 077) | ((acl() & 077) << 6);
                     break;
-                default:
+                default: // LCOV_EXCL_LINE
                     throw std::logic_error("Group 1 OPR error."); // LCOV_EXCL_LINE
             }
         } else if ((bits & 01) == 0) { // Group 2
@@ -262,8 +262,8 @@ namespace pdp8 {
                     break;
                 case 0000: // Not one of this group.
                     break;
-                default:
-                    throw std::logic_error("Group 2 OPR error.");
+                default: // LCOV_EXCL_LINE
+                    throw std::logic_error("Group 2 OPR error."); // LCOV_EXCL_LINE
             }
             if (skip)
                 pc << ++pc[cpu_word];
@@ -355,15 +355,15 @@ namespace pdp8 {
                                 field_register << interrupt_buffer[sf_df];
                                 field_buffer << interrupt_buffer[sf_if];
                                 break;
-                            default:
+                            default: // LCOV_EXCL_LINE
                                 throw std::logic_error("Time share instructions not supported."); // LCOV_EXCL_LINE
                         }
                         break;
-                    default:
+                    default: // LCOV_EXCL_LINE
                         throw std::logic_error("Ill-formed IOT memory extention."); // LCOV_EXCL_LINE
                 }
                 break;
-            default:
+            default: // LCOV_EXCL_LINE
                 acl << cpu_word(the_chassis->dispatch(mb[dev_sel](), mb[dev_cmd](), acl[cpu_word]())); // LCOV_EXCL_LINE
                 break;
         }
