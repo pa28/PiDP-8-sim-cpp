@@ -74,6 +74,17 @@ public:
         }
     }
 
+    void test_memory(std::vector<std::any> &&code_list) {
+        for (auto code : code_list) {
+            if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
+                auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
+                EXPECT_EQ(instruction.instruction(), chassis->cpu->examine());
+            } else if (code.type() == typeid(pdp8_asm::pdp8_address)) {
+                chassis->cpu->load_address(std::any_cast<pdp8_asm::pdp8_address>(code).memory_addr());
+            }
+        }
+    }
+
     std::shared_ptr<pdp8::chassis> chassis;
 };
 
@@ -203,17 +214,7 @@ TEST_P(InstructionTestFixture, SingleInstructionCpu) { // NOLINT(cert-err58-cpp)
 
     strm << "start .0200; " << param.code << ".start;";
 
-    auto code_list = assembler(strm);
-
-    for (auto code : code_list) {
-        if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
-            auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
-            chassis->cpu->deposit(instruction.instruction());
-        } else if (code.type() == typeid(pdp8_asm::pdp8_address)) {
-            chassis->cpu->load_address(std::any_cast<pdp8_asm::pdp8_address>(code).memory_addr());
-        }
-    }
-
+    set_memory(assembler(strm));
     chassis->cpu->acl = param.acl_start;
     chassis->cpu->instruction_cycle();
 
@@ -223,16 +224,7 @@ TEST_P(InstructionTestFixture, SingleInstructionCpu) { // NOLINT(cert-err58-cpp)
     if (not param.memory.empty()) {
         strm.str(param.memory);
 
-        code_list = assembler(strm);
-
-        for (auto code : code_list) {
-            if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
-                auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
-                EXPECT_EQ(instruction.instruction(), chassis->cpu->examine());
-            } else if (code.type() == typeid(pdp8_asm::pdp8_address)) {
-                chassis->cpu->load_address(std::any_cast<pdp8_asm::pdp8_address>(code).memory_addr());
-            }
-        }
+        test_memory(assembler(strm));
     }
 }
 
@@ -333,16 +325,7 @@ TEST_P(IotTestFixture, IotInstructionCpu) { // NOLINT(cert-err58-cpp)
 
     strm << "start .0200; " << param.code << ".start;";
 
-    auto code_list = assembler(strm);
-
-    for (auto code : code_list) {
-        if (code.type() == typeid(pdp8_asm::pdp8_instruction)) {
-            auto instruction = std::any_cast<pdp8_asm::pdp8_instruction>(code);
-            chassis->cpu->deposit(instruction.instruction());
-        } else if (code.type() == typeid(pdp8_asm::pdp8_address)) {
-            chassis->cpu->load_address(std::any_cast<pdp8_asm::pdp8_address>(code).memory_addr());
-        }
-    }
+    set_memory(assembler(strm));
 
     chassis->cpu->interrupt_enable = param.int_f_b;
     chassis->cpu->interrupt_request = param.int_req;
