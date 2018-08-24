@@ -61,6 +61,12 @@ public:
 
         code_list = std::any_cast<std::vector<std::any>>(visitor.visitCode(asmProcessor.parserRule.rule));
 
+        if (visitor.symbol_table.find("END") == visitor.symbol_table.end()) {
+            pc_boundary = 0;
+        } else {
+            pc_boundary = visitor.symbol_table.at("END").memory_addr();
+        }
+
         return code_list;
     }
 
@@ -87,6 +93,7 @@ public:
     }
 
     std::shared_ptr<pdp8::chassis> chassis;
+    u_int16_t pc_boundary;
 };
 
 struct instruction_test {
@@ -406,7 +413,6 @@ INSTANTIATE_TEST_CASE_P(RemainderTests, RemainderTestFixture, // NOLINT(cert-err
 
 struct ProgramTestData {
     std::string program, results;
-    u_int16_t pc_boundary;
 };
 
 class ProgramTestFixture : public cpuTestFixture<ProgramTestData> {
@@ -434,10 +440,10 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
     std::stringstream strm;
 
-    strm << "start .0200; " << param.program << ".start;";
+    strm << "start .0200; " << param.program << "END hlt; .start;";
 
     set_memory(assembler(strm));
-    chassis->cpu->pc_boundary = param.pc_boundary;
+    chassis->cpu->pc_boundary = pc_boundary;
 
     chassis->start_threads();
     chassis->start();
@@ -456,7 +462,7 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
 INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                ProgramTestData{"rand; loop clsk; jmp loop; hlt;","",0204}
+                                ProgramTestData{"rand; loop clsk; jmp loop; hlt;",""}
                         ),);
 
 int main(int argc, char **argv) {
