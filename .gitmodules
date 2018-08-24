@@ -6,3 +6,6 @@
 	path = antlr4
 	url = https://github.com/pa28/antlr4.git
 	branch = c++17-support
+[submodule "bump-version"]
+	path = bump-version
+	url = https://github.com/pa28/bump-version.git

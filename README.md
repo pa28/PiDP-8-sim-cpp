@@ -47,3 +47,14 @@ I am using a test driven design methodology on this project. This methodology su
 without a clear understanding of the code coverage those tests are achieving. For code
 coverage analysis I am using [Codecov.io](https://codecov.io) which also integrates
 nicely with GitHub and Travis CI.
+
+## Change Log
+
+See the [change log](CHANGELOG.md).
+
+## Resources
+
+* [The Digital Equipment Corporation PDP-8](https://homepage.divms.uiowa.edu/~jones/pdp8/) by [Douglas W. Jones](https://homepage.divms.uiowa.edu/~jones/)
+    * [A Programmer's Reference Manual](https://homepage.divms.uiowa.edu/~jones/pdp8/man/)
+* [Highgate's PDP-8 Page](http://highgate.comm.sfu.ca/pdp8/)
+    

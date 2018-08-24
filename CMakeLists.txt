@@ -27,6 +27,7 @@ include(assembler.cmake)
 
 find_package (Threads)
 
+add_subdirectory(bump-version)
 add_subdirectory(src/unit_tests)
 add_subdirectory(src/pdp8/asm_parser)
 
