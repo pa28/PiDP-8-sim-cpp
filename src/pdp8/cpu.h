@@ -110,6 +110,7 @@ namespace pdp8 {
         bool interrupt_deferred;        // deferred until a JMP or JSR
         int interrupt_delayed;          // delayed until after next instruction
         bool greater_than_flag;
+        bool short_jmp_flag;            // set to true if idling on a short jump
 
         std::atomic_bool interrupt_request;
         std::atomic_bool run_flag;      // CPU thread function runs while this is true
@@ -141,6 +142,7 @@ namespace pdp8 {
                   interrupt_deferred{false},
                   interrupt_delayed{0},
                   greater_than_flag{false},
+                  short_jmp_flag{false},
                   interrupt_request{false},
                   run_flag{true},
                   halt_flag{true},

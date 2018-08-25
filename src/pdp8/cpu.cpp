@@ -166,15 +166,19 @@ namespace pdp8 {
                                 if (interrupt_enable || interrupt_delayed > 0) {
                                     interrupt_enable = true;
                                     interrupt_delayed = 0;
-                                    idle_flag = true;
+                                    idle_flag = short_jmp_flag = true;
                                 } else {
                                     halt_flag = true;   // endless loop
                                 }
                             }
                         }
-                        field_register << field_buffer[sf_if];
-                        pc << ma[mem_word];
-                        interrupt_deferred = false;
+                        if (short_jmp_flag) {
+                            short_jmp_flag = false;
+                        } else {
+                            field_register << field_buffer[sf_if];
+                            pc << ma[mem_word];
+                            interrupt_deferred = false;
+                        }
                         break;
                     case _IOT:
                         execute_iot();
