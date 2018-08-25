@@ -109,9 +109,9 @@ namespace pdp8 {
         bool interrupt_enable;
         bool interrupt_deferred;        // deferred until a JMP or JSR
         int interrupt_delayed;          // delayed until after next instruction
-        bool interrupt_request;
         bool greater_than_flag;
 
+        std::atomic_bool interrupt_request;
         std::atomic_bool run_flag;      // CPU thread function runs while this is true
         std::atomic_bool halt_flag;     // CPU halted by HLT or other difficulty
         std::atomic_bool idle_flag;     // CPU has detected an idle condition
@@ -140,8 +140,8 @@ namespace pdp8 {
                   interrupt_enable{false},
                   interrupt_deferred{false},
                   interrupt_delayed{0},
-                  interrupt_request{false},
                   greater_than_flag{false},
+                  interrupt_request{false},
                   run_flag{true},
                   halt_flag{true},
                   idle_flag{false},

@@ -77,6 +77,12 @@ namespace pdp8 {
         return data;
     }
 
+    void chassis::update_interrupts() {
+        if (bus.update_interrupts()) {
+            cpu->interrupt_request = true;
+        }
+    }
+
     void chassis::start() {
         cpu->halt_flag = false;
         cpu->tick();

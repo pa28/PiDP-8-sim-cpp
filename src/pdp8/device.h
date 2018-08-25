@@ -20,8 +20,9 @@ namespace pdp8 {
             skip = false;
         }
 
-        void update_interrupts() {
+        bool update_interrupts() {
             int_req = int_enable | dev_done;
+            return int_req != 0;
         }
 
         device_bus &set_device_done() {

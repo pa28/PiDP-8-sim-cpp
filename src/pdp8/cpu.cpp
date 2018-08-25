@@ -296,7 +296,7 @@ namespace pdp8 {
                         break;
                     case 4: //GTF
                         save_field << acl[link](sf_link) << sf_int_enable(interrupt_enable)
-                                   << sf_int_req(interrupt_request) << sf_gt(greater_than_flag)
+                                   << sf_int_req(interrupt_request ? 1 : 0) << sf_gt(greater_than_flag)
                                    << field_register[sf_if] << field_register[sf_df];
                         acl << save_field[cpu_word];
                         break;

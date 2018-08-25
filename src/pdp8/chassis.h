@@ -40,7 +40,7 @@ namespace pdp8 {
 
         void tick();
 
-        void update_interrupts() { bus.update_interrupts(); }
+        void update_interrupts();
 
         base_type dispatch(base_type id, base_type command, base_type data);
 
