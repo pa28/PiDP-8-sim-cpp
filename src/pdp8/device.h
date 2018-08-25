@@ -21,7 +21,7 @@ namespace pdp8 {
         }
 
         bool update_interrupts() {
-            int_req = int_enable | dev_done;
+            int_req = int_enable & dev_done;
             return int_req != 0;
         }
 

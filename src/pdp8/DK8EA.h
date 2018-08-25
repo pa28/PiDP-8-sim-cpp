@@ -30,32 +30,6 @@ namespace pdp8 {
     public:
         using clock_register_t = register_t;
 
-        DK8EA() : hwrng{-1},
-                  seed{0},
-                  clk_mode{DK8EA_Mode_P},
-                  clk_rand{DK8EA_HWRNG},
-                  clk_buf0{0U},
-                  clk_buf1{0U},
-                  clk_flags{0},
-                  clk_ctr0{0},
-                  clk_ctr1{0},
-                  distribution{},
-                  generator{} {}
-
-        void initialize(device_bus &bus);
-
-        void reset(device_bus &bus);
-
-        void stop(device_bus &bus);
-
-        void tick(device_bus &bus);
-
-        base_type dispatch(device_bus &bus, base_type command, base_type data);
-
-        std::string name() const { return std::string{"clk"}; }
-
-        std::string long_name() const { return std::string{"DK8-EAp"}; }
-
         enum DK8EA_Flags {
             CLK_INT_FUNDAMENTAL = 0001,
             CLK_INT_BASE = 0002,
@@ -72,6 +46,36 @@ namespace pdp8 {
             DK8EA_PRNG = 0,
             DK8EA_HWRNG = 1,
         };
+
+        DK8EA() : hwrng{-1},
+                  seed{0},
+                  clk_mode{DK8EA_Mode_P},
+                  clk_rand{DK8EA_HWRNG},
+                  clk_buf0{0U},
+                  clk_buf1{0U},
+                  clk_flags{0},
+                  clk_ctr0{0},
+                  clk_ctr1{0},
+                  distribution{},
+                  generator{} {}
+
+        explicit DK8EA(DK8EA_Constants mode) : DK8EA() {
+            clk_mode = mode;
+        }
+
+        void initialize(device_bus &bus);
+
+        void reset(device_bus &bus);
+
+        void stop(device_bus &bus);
+
+        void tick(device_bus &bus);
+
+        base_type dispatch(device_bus &bus, base_type command, base_type data);
+
+        std::string name() const { return std::string{"clk"}; }
+
+        std::string long_name() const { return std::string{"DK8-EAp"}; }
 
         int hwrng;                                                /* file descriptor of the hardware random number generator */
         inline static std::string hwrngPath = "/dev/random";      /* the path name of the hardware random number generator */

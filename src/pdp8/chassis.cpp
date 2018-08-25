@@ -57,6 +57,10 @@ namespace pdp8 {
 
     void chassis::tick() {
         cpu->tick();
+        device_tick();
+    }
+
+    void chassis::device_tick() {
         for (auto &dev : devices) {
             bus.set_device_id(dev.first);
             std::visit([this](auto &&arg) { arg->tick(bus); }, dev.second);
@@ -78,9 +82,7 @@ namespace pdp8 {
     }
 
     void chassis::update_interrupts() {
-        if (bus.update_interrupts()) {
-            cpu->interrupt_request = true;
-        }
+        cpu->interrupt_request = bus.update_interrupts();
     }
 
     void chassis::start() {

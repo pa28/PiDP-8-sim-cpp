@@ -41,7 +41,7 @@ namespace pdp8 {
         }
 
         if (seed == 0)
-            seed = (uint32_t)time(nullptr);
+            seed = (uint32_t) time(nullptr);
 
         generator.seed(seed);
 
@@ -53,17 +53,37 @@ namespace pdp8 {
     }
 
     void DK8EA::tick(device_bus &bus) {
-        switch(clk_mode) {
-            case 0:                                                 /* DK8EA */
+        switch (clk_mode) {
+            case DK8EA_Mode_A:
+                /**
+                 * In mode A, each time a tick occurs the device done flag is raised and, if device interrupts
+                 * are enabled an interrupt request is raised.
+                 */
                 clk_flags |= (CLK_FLAG_FUNDAMENTAL);
                 bus.set_device_done();
                 break;
-            case 1:                                                 /* DK8EAPi */
+            case DK8EA_Mode_P:
+                /**
+                 * In mode P, if CLK_INT_FUNDAMENTAL then CLK_FLAG_FUNDAMENTAL is raised; then, the device done flag
+                 * is raised and, if device interrupts are enabled an interrupt request is raised.
+                 */
                 if (clk_flags & CLK_INT_FUNDAMENTAL) {
                     clk_flags |= (CLK_FLAG_FUNDAMENTAL);
                     bus.set_device_done();
-                }
-                if (clk_flags & CLK_OPR_SEQ) {
+                } else if (clk_flags & CLK_OPR_SEQ) {
+                    /**
+                     * If not CLK_INT_FUNDAMENTAL but CLK_OPR_SEQ, on each tick clk_ctr0 is decremented until it
+                     * is zero at which point CLK_FLAG_BASE and device done flags are raised (possibly resulting
+                     * in an interrupt).
+                     *
+                     * When clk_ctr0 is 0 and clk_ctr1 is 0, both counters are reloaded from respective buffers.
+                     *
+                     * When clk_ctr0 is 0 and clk_ctr1 is not 0, clk_ctr1 is decremented. When clk_ctr1 becomes 0
+                     * CLK_FLAG_MULT and device done flags are raised (possibly resulting in an interrupt).
+                     *
+                     * This allows the clock to produce a variable duty cycle operation between occurrences of
+                     * CLK_FLAG_BASE and CLK_FLAG_MULT.
+                     */
                     if (clk_ctr0 == 0) {
                         if (clk_ctr1 == 0) {
                             clk_ctr0 = clk_buf0;                    /* reload base counter */
@@ -83,6 +103,23 @@ namespace pdp8 {
                         }
                     }
                 } else {
+                    /**
+                     * If not CLK_INT_FUNDAMENTAL and not CLK_OPR_SEQ:
+                     *
+                     * If clk_ctr0 is 0 and CLK_INT_BASE is set CLK_FLAG_BASE and device done flags are raised
+                     * (possibly resulting in an interrupt).
+                     *
+                     * If clk_ctr0 is 0 and clk_ctr1 is 0 and CLK_INT_MULT is set CLK_FLAG_MULT and device done flags
+                     * are raised (possibly resulting in an interrupt). Regardless of CLK_INT_MULT clk_ctr0 and
+                     * clk_ctr1 are reloaded from respective buffers.
+                     *
+                     * If clk_ctr1 is not 0 it is decremented.
+                     *
+                     * If clk_ctr0 is not 0 it is decremented.
+                     *
+                     * This allows the clock to produce a repeating signal of CLK_FLAG_BASE at an interval of clk_buf0
+                     * and CLK_FLAG_MULT at an interval of clk_buf0 * clk_buf1.
+                     */
                     if (clk_ctr0 == 0) {
                         if (clk_flags & CLK_INT_BASE) {
                             clk_flags |= (CLK_FLAG_BASE);
@@ -128,7 +165,8 @@ namespace pdp8 {
 
                     case 3:                                             /* CLSC */
                         if (bus.is_device_done()) {                     /* flag set? */
-                            bus.clr_device_enable( );
+                            bus.clr_device_enable();
+                            bus.clr_device_done();
                             bus.skip = true;
                             return data;
                         }
@@ -136,66 +174,95 @@ namespace pdp8 {
 
                     case 5:                                             /* CLLE */
                         if (data & 1)                                   /* test data<11> */
-                            bus.set_device_enable( );
+                            bus.set_device_enable();
                         else
-                            bus.clr_device_enable( ).clr_device_done( );
+                            bus.clr_device_enable().clr_device_done();
                         return data;
 
                     case 6:                                             /* CLCL */
-                        bus.clr_device_enable( );
+                        bus.clr_device_enable();
                         return data;
 
                     case 7:                                             /* CLSK */
-                        bus.skip = bus.is_device_done( );
+                        bus.skip = bus.is_device_done();
                         return data;
 
                     default:
                         return data;
                 }                                               /* end switch */
             case DK8EA_Mode_P:                                      /* DK8EAPi */
-                /* IOT routine
-                   IOT's 6xx1-6xx3 are the PDP-8/E clock
-                   6xx4 CLSI    Set buffer and counter 0 from data, return data has old value
-                   6xx5 CLSM    Set buffer and counter 1 from data, return data has old value
-                   6xx6 RAND    Return a psuedo random number
-                */
 
                 switch (command) {                                      /* decode IR<9:11> */
                     base_type tmp;
 
+                    /**
+                     * CLSF 060x0
+                     *
+                     * Set clk_flags to the low order six bits of AC.
+                     */
                     case 0:                                             /* CLSF */
                         clk_flags = static_cast<uint32_t>(data & 077);  /* Set programmable flags */
                         return data;
 
-                    case 1:                                             /* CLEI */
+                        /**
+                         * CLEI 060x1
+                         *
+                         * Enable device interrupts.
+                         */
+                    case 1:
                         bus.set_device_enable();
                         return data;
 
-                    case 2:                                             /* CLDI */
+                        /**
+                         * CLDI 060x2
+                         *
+                         * Disable device interrupts.
+                         */
+                    case 2:
                         bus.clr_device_enable();
                         return data;
 
-                    case 3:                                             /* CLSC */
-                        if (bus.is_device_done()) {                     /* flag set? */
+                        /**
+                         * CLSC
+                         *
+                         * Skip if device done flag is set, clear the device done flag.
+                         */
+                    case 3:
+                        if (bus.is_device_done()) {
                             bus.clr_device_done();
                             bus.skip = true;
                             return data;
                         }
                         return data;
 
-                    case 4:                                             /* CLSI */
+                        /**
+                         * CLSI
+                         *
+                         * Set clk_buf0 value, return the old value.
+                         */
+                    case 4:
                         tmp = static_cast<base_type>(clk_buf0);
                         clk_buf0 = data;
                         clk_ctr0 = data;
                         return tmp;
 
-                    case 5:                                             /* CLSM */
+                        /**
+                         * CLSM
+                         *
+                         * Set clk_buf1 value, return the old value.
+                         */
+                    case 5:
                         tmp = static_cast<base_type>(clk_buf1);
                         clk_buf1 = data;
                         clk_ctr1 = data;
                         return tmp;
 
-                    case 6:                                             /* RAND */
+                        /**
+                         * RAND
+                         *
+                         * Return a random value in the AC
+                         */
+                    case 6:
                         if (clk_rand == 0) {
                             auto rnd = distribution(generator);
                             data = static_cast<base_type>(rnd & 07777);
@@ -204,7 +271,12 @@ namespace pdp8 {
                         }
                         return data;
 
-                    case 7:                                             /* CLRF */
+                        /**
+                         * CLRF
+                         *
+                         * Return clock flags in AC
+                         */
+                    case 7:
                         data = static_cast<base_type >(clk_flags & 07777);
                         clk_flags = static_cast<uint32_t>(data & 00077);
                         return data;

@@ -23,11 +23,11 @@ namespace pdp8 {
         static std::shared_ptr<chassis> make_chassis();
         chassis();
 
-        template<class Device>
-        void add_device(base_type id) {
+        template<class Device, typename ...Args>
+        void add_device(base_type id, Args &&...args) {
             auto did = static_cast<uint8_t>(id);
             if (devices.find(did) == devices.end())
-                devices.emplace(did, std::make_unique<Device>());
+                devices.emplace(did, std::make_unique<Device>(std::forward<Args>(args)...));
         }
 
         void initialize();
@@ -39,6 +39,8 @@ namespace pdp8 {
         void stop();
 
         void tick();
+
+        void device_tick();
 
         void update_interrupts();
 
