@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(cpu_sim LANGUAGES CXX VERSION 0.1.0.2)
+project(cpu_sim LANGUAGES CXX VERSION 0.1.0.3)
 enable_testing()
 
 # Setting default folders
