@@ -461,7 +461,7 @@ class ProgramTestFixture : public cpuTestFixture<ProgramTestData> {
  */
 TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
-
+    dk8ea_mode_a = false;
     std::stringstream strm;
 
     strm << "start .0200; " << param.program << "END hlt; .start;";
