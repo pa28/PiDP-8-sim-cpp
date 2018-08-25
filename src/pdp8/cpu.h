@@ -17,7 +17,7 @@ namespace pdp8 {
     inline constexpr size_t mem_blocks = 8;
     inline constexpr size_t mem_block_size = 4096;
 
-    class Memory {
+    class Memory { // LCOV_EXCL_LINE
     public:
         static constexpr sim::hw_slice_spec<12, 0> memory_word{};
 
@@ -45,7 +45,7 @@ namespace pdp8 {
         std::shared_ptr<memory_t[]> core;
     };
 
-    class CPU {
+    class CPU { // LCOV_EXCL_LINE
     public:
         enum InstructionCode {
             AND, TAD, ISZ, DCA, JMS, JMP, _IOT, _OPR
@@ -152,16 +152,6 @@ namespace pdp8 {
         }
 
         void start_thread();
-
-        void stop_thread() {
-            run_flag = false;
-            if (cpuThread) {
-                if (cpuThread->joinable()) {
-                    cpuThread->notify_condition();
-                    cpuThread->join();
-                }
-            }
-        }
 
         void run_thread();
 

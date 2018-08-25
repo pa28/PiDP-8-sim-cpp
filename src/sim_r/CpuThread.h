@@ -13,7 +13,7 @@
 
 namespace sim {
 
-    class CpuThread : public std::thread {
+    class CpuThread : public std::thread { // LCOV_EXCL_LINE
     public:
         CpuThread() : std::thread()
         , sim_time{0us}

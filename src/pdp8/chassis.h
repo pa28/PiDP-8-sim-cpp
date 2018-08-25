@@ -15,7 +15,7 @@
 
 namespace pdp8 {
 
-    class chassis : public std::enable_shared_from_this<chassis> {
+    class chassis : public std::enable_shared_from_this<chassis> { // LCOV_EXCL_LINE
 
     public:
         using device_variant_t = std::variant<null_device_p,DK8EA_p>;

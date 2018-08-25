@@ -39,7 +39,7 @@ namespace pdp8_asm {
 
     class pdp8_address {
     public:
-        pdp8_address() = default;
+        pdp8_address() = default; // LCOV_EXCL_LINE
 
         pdp8_address &operator++() {
             memory_addr = memory_addr() + 1;
