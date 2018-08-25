@@ -22,7 +22,7 @@ template<class Param>
 class cpuTestFixture : public ::testing::TestWithParam<Param> {
 public:
 
-    cpuTestFixture() {
+    cpuTestFixture() : pc_boundary{0}, dk8ea_mode_a{false} {
         chassis = pdp8::chassis::make_chassis();
     }
 
@@ -316,7 +316,6 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpuOpr1, InstructionTestFixture, // NOL
 INSTANTIATE_TEST_CASE_P(SingleInstructionCpuOpr2, InstructionTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
                                 instruction_state{"hlt;", 01234, 0201, 01234, ""},
-                                // ToDo: OSR
                                 instruction_state{"skp;", 01234, 0202, 01234, ""},
                                 instruction_state{"snl;", 011234, 0202, 011234, ""},
                                 instruction_state{"snl;", 01234, 0201, 01234, ""},
@@ -390,6 +389,13 @@ TEST_P(RemainderTestFixture, RemainderTests) { // NOLINT(cert-err58-cpp)
     if (param.enable) {
         std::stringstream strm;
 
+        chassis->cpu->sr = 01234;
+        strm.str("start .0200; cla osr; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(01234, chassis->cpu->acl[chassis->cpu->cpu_word]);
+        chassis->cpu->acl = 0;
+
         strm.str("start .0200; dw 06251; .start;");
         set_memory(assembler(strm));
         chassis->cpu->instruction_cycle();
@@ -461,7 +467,6 @@ class ProgramTestFixture : public cpuTestFixture<ProgramTestData> {
  */
 TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
-    dk8ea_mode_a = false;
     std::stringstream strm;
 
     strm << "start .0200; " << param.program << "END hlt; .start;";

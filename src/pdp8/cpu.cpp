@@ -268,10 +268,10 @@ namespace pdp8 {
             if (skip)
                 pc << ++pc[cpu_word];
 
-            if (bits & 0200) acl << cpu_word.clear();
-            if (bits & 0004) acl << (acl[cpu_word] | sr[cpu_word]);
+            if (bits & 0200) acl << cpu_word.clear(); // CLA
+            if (bits & 0004) acl << (acl[cpu_word] | sr[cpu_word]); // OSR
             if (bits & 0002)
-                halt_flag = true;
+                halt_flag = true; // HLT
         } else { // Group 3
 
         }
