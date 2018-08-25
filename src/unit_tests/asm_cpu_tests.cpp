@@ -531,6 +531,7 @@ TEST_P(DK8EATestFixture, DK8EATestData) { // NOLINT(cert-err58-cpp)
             ac = chassis->dispatch(pdp8::INT_V_CLK, 2, 0); // CLDI
             chassis->device_tick();
             EXPECT_FALSE(chassis->cpu->interrupt_request);
+            ac = chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
 
             ac = chassis->dispatch(pdp8::INT_V_CLK, 4, 3); // CLSI
             ac = chassis->dispatch(pdp8::INT_V_CLK, 4, 3); // CLSI
@@ -539,6 +540,14 @@ TEST_P(DK8EATestFixture, DK8EATestData) { // NOLINT(cert-err58-cpp)
             ac = chassis->dispatch(pdp8::INT_V_CLK, 5, 2); // CLSM
             ac = chassis->dispatch(pdp8::INT_V_CLK, 5, 2); // CLSM
             EXPECT_EQ(2, ac);
+            ac = chassis->dispatch(pdp8::INT_V_CLK, 0, 014); // CLSF seq multi
+            ac = chassis->dispatch(pdp8::INT_V_CLK, 1, 0); // CLEI
+
+            for (int i = 0; i < 5; ++i) {
+                EXPECT_FALSE(chassis->cpu->interrupt_request);
+                chassis->device_tick();
+            }
+            EXPECT_TRUE(chassis->cpu->interrupt_request);
 
             ac = chassis->dispatch(pdp8::INT_V_CLK, 6, 3); // RAND
             EXPECT_LE(0, ac);

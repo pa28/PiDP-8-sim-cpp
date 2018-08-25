@@ -91,15 +91,19 @@ namespace pdp8 {
                         } else {
                             clk_ctr1--;
                             if (clk_ctr1 == 0) {
-                                clk_flags |= (CLK_FLAG_MULT);
-                                bus.set_device_done();
+                                if (clk_flags & CLK_INT_MULT) {
+                                    clk_flags |= (CLK_FLAG_MULT);
+                                    bus.set_device_done();
+                                }
                             }
                         }
                     } else {
                         clk_ctr0--;
                         if (clk_ctr0 == 0) {
-                            clk_flags |= (CLK_FLAG_BASE);
-                            bus.set_device_done();
+                            if (clk_flags & CLK_INT_BASE) {
+                                clk_flags |= (CLK_FLAG_BASE);
+                                bus.set_device_done();
+                            }
                         }
                     }
                 } else {
