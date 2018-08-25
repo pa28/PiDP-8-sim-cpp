@@ -491,7 +491,8 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
 INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                ProgramTestData{"rand; loop clsc; jmp loop; hlt;", ""}
+                                ProgramTestData{"rand; loop clsc; jmp loop; hlt;", ""},
+                                ProgramTestData{".01; sta; hlt; .0200; clei; ion; loop jmp loop; hlt;", ".0; dw 0203;"}
                         ),);
 
 int main(int argc, char **argv) {
