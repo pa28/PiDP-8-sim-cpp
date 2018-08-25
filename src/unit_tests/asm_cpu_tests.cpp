@@ -373,7 +373,12 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpuIOT, IotTestFixture, // NOLINT(cert-
                                 iot_test_data{"skon;", 1, false, false, false, 0201},
                                 iot_test_data{"iof;", 1, true, false, false, 0201},
                                 iot_test_data{"srq;", 1, false, false, false, 0201},
-                                iot_test_data{"srq;", 1, false, false, true, 0202}
+                                iot_test_data{"srq;", 1, false, false, true, 0202},
+                                // ToDo: The next four will need more comprehensive tests.
+                                iot_test_data{"gtf;", 1, false, false, false, 0201},
+                                iot_test_data{"rtf;", 1, false, false, false, 0201},
+                                iot_test_data{"sgt;", 1, false, false, false, 0201},
+                                iot_test_data{"sgt;", 1, false, false, false, 0201}
                         ),);
 
 struct RemainderTestData {
