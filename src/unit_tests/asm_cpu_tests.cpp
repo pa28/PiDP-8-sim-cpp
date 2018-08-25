@@ -486,7 +486,7 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
         std::this_thread::sleep_for(20000us);
     }
 
-    EXPECT_NE(0, chassis->cpu->acl[chassis->cpu->cpu_word]);
+    EXPECT_NE(0, chassis->cpu->acl[chassis->cpu->cpu_word]());
 
     if (not param.results.empty()) {
         strm.str(param.results);
@@ -496,7 +496,7 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
 INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                ProgramTestData{"rand; loop clsc; jmp loop; hlt;", ""},
+                                ProgramTestData{"rand; loop clsc; jmp loop; sta; hlt;", ""},
                                 ProgramTestData{".01; sta; hlt; .0200; clei; ion; loop jmp loop; hlt;", ".0; dw 0203;"}
                         ),);
 
