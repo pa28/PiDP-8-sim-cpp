@@ -1,6 +1,6 @@
 #! /bin/bash
 # Bash Script that builds project
-set -x
+
 RED='\033[0;31m' # Red
 BB='\033[0;34m'  # Blue
 NC='\033[0m' # No Color
