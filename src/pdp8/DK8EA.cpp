@@ -206,7 +206,7 @@ namespace pdp8 {
                      */
                     case 0:                                             /* CLSF */
                         clk_flags = static_cast<uint32_t>(data & 077);  /* Set programmable flags */
-                        return data;
+                        break;
 
                         /**
                          * CLEI 060x1
@@ -215,7 +215,7 @@ namespace pdp8 {
                          */
                     case 1:
                         bus.set_device_enable();
-                        return data;
+                        break;
 
                         /**
                          * CLDI 060x2
@@ -224,7 +224,7 @@ namespace pdp8 {
                          */
                     case 2:
                         bus.clr_device_enable();
-                        return data;
+                        break;
 
                         /**
                          * CLSC
@@ -235,9 +235,8 @@ namespace pdp8 {
                         if (bus.is_device_done()) {
                             bus.clr_device_done();
                             bus.skip = true;
-                            return data;
                         }
-                        return data;
+                        break;
 
                         /**
                          * CLSI
@@ -248,7 +247,8 @@ namespace pdp8 {
                         tmp = static_cast<base_type>(clk_buf0);
                         clk_buf0 = data;
                         clk_ctr0 = data;
-                        return tmp;
+                        data = tmp;
+                        break;
 
                         /**
                          * CLSM
@@ -259,7 +259,8 @@ namespace pdp8 {
                         tmp = static_cast<base_type>(clk_buf1);
                         clk_buf1 = data;
                         clk_ctr1 = data;
-                        return tmp;
+                        data = tmp;
+                        break;
 
                         /**
                          * RAND
@@ -273,7 +274,7 @@ namespace pdp8 {
                         } else {
                             data = static_cast<base_type>(rand_r(&seed) & 07777);
                         }
-                        return data;
+                        break;
 
                         /**
                          * CLRF
@@ -283,13 +284,13 @@ namespace pdp8 {
                     case 7:
                         data = static_cast<base_type >(clk_flags & 07777);
                         clk_flags = static_cast<uint32_t>(data & 00077);
-                        return data;
+                        break;
 
-                    default:
-                        return data;
+                    default: // LCOV_EXCL_LINE
+                        break; // LCOV_EXCL_LINE
                 }                                               /* end switch */
-            default:
-                return data;
         }
+
+        return data;
     }
 } // namespace pdp8
