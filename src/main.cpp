@@ -60,13 +60,6 @@ int main() {
 
     cpu_chassis->stop();
 
-    if (cpu_chassis->cpu->cpuThread) {
-        auto[sim_time, real_time, sleep_time] = cpu_chassis->cpu->cpuThread->sim_time.check_total();
-        cout << dec << sim_time.count() << ", "
-             << real_time.count() << ", "
-             << sleep_time.count() << endl;
-    }
-
     cpu_chassis->stop_threads();
 
 //    cout << cpu_chassis->cpu->acl << endl;

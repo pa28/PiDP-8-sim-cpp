@@ -524,29 +524,29 @@ TEST_P(DK8EATestFixture, DK8EATestData) { // NOLINT(cert-err58-cpp)
             auto ac = chassis->dispatch(pdp8::INT_V_CLK, 7, 0); // CLRF
             EXPECT_EQ(pdp8::DK8EA::CLK_INT_FUNDAMENTAL, ac);
 
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 1, 0); // CLEI
+            chassis->dispatch(pdp8::INT_V_CLK, 1, 0); // CLEI
             chassis->device_tick();
             EXPECT_TRUE(chassis->cpu->interrupt_request);
 
             chassis->cpu->pc = 0;
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
+            chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
             EXPECT_FALSE(chassis->cpu->interrupt_request);
             EXPECT_EQ(01, chassis->cpu->pc());
 
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 2, 0); // CLDI
+            chassis->dispatch(pdp8::INT_V_CLK, 2, 0); // CLDI
             chassis->device_tick();
             EXPECT_FALSE(chassis->cpu->interrupt_request);
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
+            chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
 
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 4, 3); // CLSI
+            chassis->dispatch(pdp8::INT_V_CLK, 4, 3); // CLSI
             ac = chassis->dispatch(pdp8::INT_V_CLK, 4, 3); // CLSI
             EXPECT_EQ(3, ac);
 
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 5, 2); // CLSM
+            chassis->dispatch(pdp8::INT_V_CLK, 5, 2); // CLSM
             ac = chassis->dispatch(pdp8::INT_V_CLK, 5, 2); // CLSM
             EXPECT_EQ(2, ac);
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 0, 014); // CLSF seq multi
-            ac = chassis->dispatch(pdp8::INT_V_CLK, 1, 0); // CLEI
+            chassis->dispatch(pdp8::INT_V_CLK, 0, 014); // CLSF seq multi
+            chassis->dispatch(pdp8::INT_V_CLK, 1, 0); // CLEI
 
             for (int i = 0; i < 5; ++i) {
                 EXPECT_FALSE(chassis->cpu->interrupt_request);

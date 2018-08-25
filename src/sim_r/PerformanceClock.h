@@ -57,6 +57,7 @@ namespace sim {
             total_sleep_time = 0us;
         }
 
+/*
         std::tuple<std::chrono::microseconds, std::chrono::microseconds, std::chrono::microseconds> check_total() {
             steady_clock::time_point t = steady_clock::now();
             total_sim_period += sim_period;
@@ -66,6 +67,7 @@ namespace sim {
             total_sim_period = 0us;
             return result;
         }
+*/
 
         std::chrono::microseconds get_sim_period() const { return sim_period; }
 
