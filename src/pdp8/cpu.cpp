@@ -163,10 +163,13 @@ namespace pdp8 {
                                     idle_flag = true;   // idle loop detected
                                 }
                             } else if ((pc[cpu_word]() - 1) == ma[mem_word]()) { // JMP .
-                                if (interrupt_enable)
+                                if (interrupt_enable || interrupt_delayed > 0) {
+                                    interrupt_enable = true;
+                                    interrupt_delayed = 0;
                                     idle_flag = true;
-                                else
+                                } else {
                                     halt_flag = true;   // endless loop
+                                }
                             }
                         }
                         field_register << field_buffer[sf_if];
