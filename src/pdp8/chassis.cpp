@@ -47,6 +47,11 @@ namespace pdp8 {
         }
     }
 
+    void chassis::start() {
+        cpu->halt_flag = false;
+        cpu->tick();
+    }
+
     void chassis::stop() {
         cpu->stop();
         for (auto &dev : devices) {
@@ -85,14 +90,33 @@ namespace pdp8 {
         cpu->interrupt_request = bus.update_interrupts();
     }
 
-    void chassis::start() {
-        cpu->halt_flag = false;
-        cpu->tick();
-    }
-
     void chassis::start_threads() {
         cpu->start_thread();
         chassisThread = std::make_unique<sim::CpuThread>(10us, start_chassis_thread, this);
+    }
+
+    void chassis::status_lights_writer(sim::VirtualPanel<PanelStatusLights>::data_ptr_t &lights) {
+        lights->set_pc(PanelStatusLights::word_type_t{cpu->pc});
+        lights->set_ma(PanelStatusLights::word_type_t{cpu->ma});
+        lights->set_mb(PanelStatusLights::word_type_t{cpu->mb});
+        lights->set_acl(PanelStatusLights::word_type_t{cpu->acl});
+        lights->set_mq(PanelStatusLights::word_type_t{cpu->mq});
+        lights->set_inst_field(PanelStatusLights::word_type_t{cpu->field_register[cpu->sf_if]()});
+        lights->set_instruction(PanelStatusLights::word_type_t{cpu->ir[cpu->op_code]()});
+        lights->set_flags(cpu->cycle_state == CPU::Fetch,
+                          cpu->cycle_state == CPU::Execute,
+                          cpu->cycle_state == CPU::Defer,
+                          false,
+                          false,
+                          false,
+                          cpu->interrupt_request,
+                          false,
+                          not cpu->halt_flag,
+                          cpu->idle_flag);
+    }
+
+    void chassis::status_switches_reader(sim::VirtualPanel<PanelStatusSwitches>::data_ptr_t const &switches) {
+
     }
 
 } // namespace pdp8
