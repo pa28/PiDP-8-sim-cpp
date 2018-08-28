@@ -482,11 +482,16 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
     chassis->start_threads();
     chassis->start();
 
-    while (not chassis->cpu->halt_flag) {
-        std::this_thread::sleep_for(20000us);
-    }
+    chassis->status_lights.wait_on_data_state([](pdp8::chassis::status_lights_t::data_ptr_t const &data_ptr) -> bool {
+        return data_ptr->get_run_flag();
+    });
 
-    EXPECT_NE(0, chassis->cpu->acl[chassis->cpu->cpu_word]());
+    pdp8::register_t acl{};
+    chassis->status_lights.read_data([&](pdp8::chassis::status_lights_t::data_ptr_t const &data_ptr) -> void {
+        acl = data_ptr->get_acl();
+    });
+
+    EXPECT_NE(0, acl());
 
     if (not param.results.empty()) {
         strm.str(param.results);
