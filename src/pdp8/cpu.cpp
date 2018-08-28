@@ -20,8 +20,10 @@ namespace pdp8 {
              */
             if (error_flag) {
                 while (error_flag && run_flag) {
-                    if (cpuThread)
+                    if (cpuThread) {
+                        the_chassis->write_status_lights();
                         cpuThread->wait_on_condition();
+                    }
                 }
                 continue;
             }
@@ -31,8 +33,10 @@ namespace pdp8 {
              */
             if (halt_flag) {
                 while (halt_flag && run_flag && (not step_flag)) {
-                    if (cpuThread)
+                    if (cpuThread) {
+                        the_chassis->write_status_lights();
                         cpuThread->wait_on_condition();
+                    }
                 }
 
                 // Left the loop due to halt_flag or run_flag cleared, go back to the top
@@ -49,6 +53,7 @@ namespace pdp8 {
              */
             if (idle_flag) {
                 if (cpuThread) {
+                    the_chassis->write_status_lights();
                     cpuThread->wait_on_condition();
                 }
                 idle_flag = false;
