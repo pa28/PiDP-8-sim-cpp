@@ -474,18 +474,30 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
     std::stringstream strm;
 
+    /**
+     * Prepare the test program to load and start at 0200 and set the pc_boundary
+     */
     strm << "start .0200; " << param.program << "END hlt; .start;";
 
     set_memory(assembler(strm));
     chassis->cpu->pc_boundary = pc_boundary;
 
+    /**
+     * Start chassis threads, then issue the start command
+     */
     chassis->start_threads();
     chassis->start();
 
+    /**
+     * Wait until the next time the CPU writes the status lights with the run flag false.
+     */
     chassis->status_lights.wait_on_data_state([](pdp8::chassis::status_lights_t::data_ptr_t const &data_ptr) -> bool {
         return data_ptr->get_run_flag();
     });
 
+    /**
+     * Get the test values from the status lights.
+     */
     pdp8::register_t acl{};
     chassis->status_lights.read_data([&](pdp8::chassis::status_lights_t::data_ptr_t const &data_ptr) -> void {
         acl = data_ptr->get_acl();
@@ -493,6 +505,9 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
     EXPECT_NE(0, acl());
 
+    /**
+     * Compare the current memory state to the required state.
+     */
     if (not param.results.empty()) {
         strm.str(param.results);
         test_memory(assembler(strm));
