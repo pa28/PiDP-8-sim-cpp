@@ -92,6 +92,11 @@ namespace pdp8 {
 
     void chassis::start_threads() {
         cpu->start_thread();
+        /*
+         * Wait until the CPU reaches the first check-point and writes status lights
+         */
+        status_lights_t::time_point_t cpu_time{};
+        status_lights.wait_on_data(cpu_time);
         chassisThread = std::make_unique<sim::CpuThread>(10us, start_chassis_thread, this);
     }
 
