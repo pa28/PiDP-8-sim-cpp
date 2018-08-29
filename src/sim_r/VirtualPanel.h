@@ -91,11 +91,21 @@ namespace sim {
             while (time_point >= last_data_write) data_condition.wait(lock);
         }
 
+        /**
+         * @brief Wait for at least one update and when reader returns false.
+         * @param reader A callable object taking a unique_ptr to the data and returning a bool
+         * @details Calls wait_on_data_state with the last data write time point and reader.
+         */
         void wait_on_data_state(std::function<bool(std::unique_ptr<data_type_t> const &)> reader) const {
-            time_point_t time_point{};
-            wait_on_data_state(time_point, reader);
+            wait_on_data_state(last_data_write, reader);
         }
 
+        /**
+         * @brief Wait until an update after time_point and when reader returns false.
+         * @param time_point
+         * @param reader A callable object taking a unique_ptr to the data and returning a bool
+         * @details For each data write after time_point reader is called until it returns false.
+         */
         void wait_on_data_state(time_point_t time_point,
                                 std::function<bool(std::unique_ptr<data_type_t> const &)> reader) const {
             bool wait_state = true;
