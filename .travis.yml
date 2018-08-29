@@ -2,10 +2,10 @@ language: cpp
 compiler: gcc
 sudo: false
 dist: trusty
-branches:
-  only:
-  - master
-  - virtual-panel
+#branches:
+#  only:
+#  - master
+#  - virtual-panel
 
 addons:
   apt:
