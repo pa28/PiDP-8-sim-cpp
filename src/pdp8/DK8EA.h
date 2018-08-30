@@ -78,7 +78,7 @@ namespace pdp8 {
         std::string long_name() const { return std::string{"DK8-EAp"}; }
 
         int hwrng;                                                /* file descriptor of the hardware random number generator */
-        inline static std::string hwrngPath = "/dev/random";      /* the path name of the hardware random number generator */
+        inline static std::string hwrngPath = "/dev/random";      /* the path name of the hardware random number generator */ // NOLINT(cert-err58-cpp)
         uint32_t seed;                                            /* random seed */
 
         int32_t clk_mode;
