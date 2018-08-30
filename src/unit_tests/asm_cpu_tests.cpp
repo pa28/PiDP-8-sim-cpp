@@ -517,7 +517,8 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
                                 ProgramTestData{"rand; loop clsc; jmp loop; sta; hlt;", ""},
-                                ProgramTestData{".01; sta; hlt; .0200; clei; ion; loop jmp loop; hlt;", ".0; dw 0203;"}
+                                ProgramTestData{".01; sta; hlt; .0200; clei; ion; loop jmp loop; hlt;", ".0; dw 0203;"},
+                                ProgramTestData{"cla; dca ! 0; loop cla cma; isz !0; jmp loop; hlt;", ""}
                         ),);
 
 struct DK8EATestData {
