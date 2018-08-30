@@ -378,7 +378,7 @@ INSTANTIATE_TEST_CASE_P(SingleInstructionCpuIOT, IotTestFixture, // NOLINT(cert-
                                 iot_test_data{"gtf;", 1, false, false, false, 0201},
                                 iot_test_data{"rtf;", 1, false, false, false, 0201},
                                 iot_test_data{"sgt;", 1, false, false, false, 0201},
-                                iot_test_data{"sgt;", 1, false, false, false, 0201}
+                                iot_test_data{"caf;", 1, false, false, false, 0}
                         ),);
 
 struct RemainderTestData {
@@ -439,6 +439,12 @@ TEST_P(RemainderTestFixture, RemainderTests) { // NOLINT(cert-err58-cpp)
         chassis->cpu->instruction_cycle();
         EXPECT_EQ(0, chassis->cpu->field_register[chassis->cpu->sf_df]());
         EXPECT_EQ(0, chassis->cpu->field_buffer[chassis->cpu->sf_if]());
+
+        strm.str("start .0200; sgt; .start;");
+        set_memory(assembler(strm));
+        chassis->cpu->greater_than_flag = true;
+        chassis->cpu->instruction_cycle();
+        EXPECT_EQ(0202, chassis->cpu->pc());
     }
 }
 
