@@ -247,6 +247,7 @@ namespace pdp8 {
                         tmp = static_cast<base_type>(clk_buf0);
                         clk_buf0 = data;
                         clk_ctr0 = data;
+                        bus.clr_device_done();
                         data = tmp;
                         break;
 
@@ -259,6 +260,7 @@ namespace pdp8 {
                         tmp = static_cast<base_type>(clk_buf1);
                         clk_buf1 = data;
                         clk_ctr1 = data;
+                        bus.clr_device_done();
                         data = tmp;
                         break;
 
