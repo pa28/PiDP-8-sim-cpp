@@ -528,6 +528,14 @@ INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-c
                                                 " loop clsc; jmp loop; sta; hlt;",
                                                 ""},
                                 ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
+                                                " .0; dw 0012; .0200; cla; tad ! 0; clsf; CLA CLL CML RTL; clsi; CLA CLL CML RTL; clsm;"
+                                                " loop clsc; jmp loop; sta; hlt;",
+                                                ""},
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
+                                                " .0; dw 0002; .0200; cla; tad ! 0; clsf; CLA CLL CML RTL; clsi; CLA CLL CML RTL; clsm;"
+                                                " loop clsc; jmp loop; sta; hlt;",
+                                                ""},
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
                                                 ".01; sta; hlt; .0200; clei; ion; loop jmp loop; hlt;", ".0; dw 0203;"},
                                 ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
                                                 "cla; dca ! 0; loop cla cma; isz !0; jmp loop; hlt;", ""}
@@ -602,6 +610,11 @@ TEST_P(DK8EATestFixture, DK8EATestData) { // NOLINT(cert-err58-cpp)
             EXPECT_EQ(01, chassis->cpu->pc());
 
             chassis->dispatch(pdp8::INT_V_CLK, 2, 0); // CLDI
+            chassis->device_tick();
+            EXPECT_FALSE(chassis->cpu->interrupt_request);
+            chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
+
+            chassis->dispatch(pdp8::INT_V_CLK, 6, 0); // CLCL
             chassis->device_tick();
             EXPECT_FALSE(chassis->cpu->interrupt_request);
             chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
