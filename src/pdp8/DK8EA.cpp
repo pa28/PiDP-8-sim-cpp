@@ -290,7 +290,9 @@ namespace pdp8 {
 
                     default: // LCOV_EXCL_LINE
                         break; // LCOV_EXCL_LINE
-                }                                               /* end switch */
+                }
+            default: // LCOV_EXCL_LINE
+                break; // LCOV_EXCL_LINE
         }
 
         return data;
