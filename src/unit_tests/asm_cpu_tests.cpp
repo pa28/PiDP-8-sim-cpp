@@ -447,12 +447,14 @@ INSTANTIATE_TEST_CASE_P(RemainderTests, RemainderTestFixture, // NOLINT(cert-err
                         ),);
 
 struct ProgramTestData {
+    pdp8::DK8EA::DK8EA_Constants clk_mode;
     std::string program, results;
 };
 
 class ProgramTestFixture : public cpuTestFixture<ProgramTestData> {
     void SetUp() override {
-        chassis->add_device<pdp8::DK8EA>(pdp8::INT_V_CLK);
+        auto param = GetParam();
+        chassis->add_device<pdp8::DK8EA>(pdp8::INT_V_CLK, param.clk_mode);
         chassis->reset();
         chassis->initialize();
     }
@@ -474,20 +476,40 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
     auto param = GetParam();
     std::stringstream strm;
 
+    /**
+     * Prepare the test program to load and start at 0200 and set the pc_boundary
+     */
     strm << "start .0200; " << param.program << "END hlt; .start;";
 
     set_memory(assembler(strm));
     chassis->cpu->pc_boundary = pc_boundary;
 
+    /**
+     * Start chassis threads, then issue the start command
+     */
     chassis->start_threads();
     chassis->start();
 
-    while (not chassis->cpu->halt_flag) {
-        std::this_thread::sleep_for(20000us);
-    }
+    /**
+     * Wait until the next time the CPU writes the status lights with the run flag false.
+     */
+    chassis->status_lights.wait_on_data_state([](pdp8::chassis::status_lights_t::data_ptr_t const &data_ptr) -> bool {
+        return data_ptr->get_run_flag();
+    });
 
-    EXPECT_NE(0, chassis->cpu->acl[chassis->cpu->cpu_word]());
+    /**
+     * Get the test values from the status lights.
+     */
+    pdp8::register_t acl{};
+    chassis->status_lights.read_data([&](pdp8::chassis::status_lights_t::data_ptr_t const &data_ptr) -> void {
+        acl = data_ptr->get_acl();
+    });
 
+    EXPECT_NE(0, acl());
+
+    /**
+     * Compare the current memory state to the required state.
+     */
     if (not param.results.empty()) {
         strm.str(param.results);
         test_memory(assembler(strm));
@@ -496,8 +518,19 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
 INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                ProgramTestData{"rand; loop clsc; jmp loop; sta; hlt;", ""},
-                                ProgramTestData{".01; sta; hlt; .0200; clei; ion; loop jmp loop; hlt;", ".0; dw 0203;"}
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P, "rand; loop clsc; jmp loop; sta; hlt;", ""},
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
+                                                " .0; dw 0014; .0200; cla; tad ! 0; clsf; CLA CLL CML RTL; clsi; CLA CLL CML RTL; clsm;"
+                                                " loop clsc; jmp loop; sta; hlt;",
+                                        ""},
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
+                                                " .0; dw 0004; .0200; cla; tad ! 0; clsf; CLA CLL CML RTL; clsi; CLA CLL CML RTL; clsm;"
+                                                " loop clsc; jmp loop; sta; hlt;",
+                                                ""},
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
+                                                ".01; sta; hlt; .0200; clei; ion; loop jmp loop; hlt;", ".0; dw 0203;"},
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
+                                                "cla; dca ! 0; loop cla cma; isz !0; jmp loop; hlt;", ""}
                         ),);
 
 struct DK8EATestData {
@@ -558,14 +591,42 @@ TEST_P(DK8EATestFixture, DK8EATestData) { // NOLINT(cert-err58-cpp)
             EXPECT_LE(0, ac);
         }
             break;
-        case pdp8::DK8EA::DK8EA_Mode_A:
+        case pdp8::DK8EA::DK8EA_Mode_A: {
+            chassis->dispatch(pdp8::INT_V_CLK, 1, 0); // CLEI
+            chassis->device_tick();
+            EXPECT_TRUE(chassis->cpu->interrupt_request);
+
+            chassis->cpu->pc = 0;
+            chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
+            EXPECT_FALSE(chassis->cpu->interrupt_request);
+            EXPECT_EQ(01, chassis->cpu->pc());
+
+            chassis->dispatch(pdp8::INT_V_CLK, 2, 0); // CLDI
+            chassis->device_tick();
+            EXPECT_FALSE(chassis->cpu->interrupt_request);
+            chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
+
+            chassis->dispatch(pdp8::INT_V_CLK, 5, 1); // CLLE 1
+            chassis->device_tick();
+            EXPECT_TRUE(chassis->cpu->interrupt_request);
+
+            chassis->cpu->pc = 0;
+            chassis->dispatch(pdp8::INT_V_CLK, 7, 0); // CLSK
+            EXPECT_TRUE(chassis->cpu->interrupt_request);
+            EXPECT_EQ(01, chassis->cpu->pc());
+
+            chassis->dispatch(pdp8::INT_V_CLK, 5, 0); // CLLE 0
+            chassis->device_tick();
+            EXPECT_FALSE(chassis->cpu->interrupt_request);
+        }
             break;
     }
 }
 
 INSTANTIATE_TEST_CASE_P(DK8EATests, DK8EATestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                DK8EATestData{pdp8::DK8EA::DK8EA_Mode_P}
+                                DK8EATestData{pdp8::DK8EA::DK8EA_Mode_P},
+                                DK8EATestData{pdp8::DK8EA::DK8EA_Mode_A}
                         ),);
 
 int main(int argc, char **argv) {
