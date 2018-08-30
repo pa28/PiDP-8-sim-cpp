@@ -591,14 +591,42 @@ TEST_P(DK8EATestFixture, DK8EATestData) { // NOLINT(cert-err58-cpp)
             EXPECT_LE(0, ac);
         }
             break;
-        case pdp8::DK8EA::DK8EA_Mode_A:
+        case pdp8::DK8EA::DK8EA_Mode_A: {
+            chassis->dispatch(pdp8::INT_V_CLK, 1, 0); // CLEI
+            chassis->device_tick();
+            EXPECT_TRUE(chassis->cpu->interrupt_request);
+
+            chassis->cpu->pc = 0;
+            chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
+            EXPECT_FALSE(chassis->cpu->interrupt_request);
+            EXPECT_EQ(01, chassis->cpu->pc());
+
+            chassis->dispatch(pdp8::INT_V_CLK, 2, 0); // CLDI
+            chassis->device_tick();
+            EXPECT_FALSE(chassis->cpu->interrupt_request);
+            chassis->dispatch(pdp8::INT_V_CLK, 3, 0); // CLSC
+
+            chassis->dispatch(pdp8::INT_V_CLK, 5, 1); // CLLE 1
+            chassis->device_tick();
+            EXPECT_TRUE(chassis->cpu->interrupt_request);
+
+            chassis->cpu->pc = 0;
+            chassis->dispatch(pdp8::INT_V_CLK, 7, 0); // CLSK
+            EXPECT_TRUE(chassis->cpu->interrupt_request);
+            EXPECT_EQ(01, chassis->cpu->pc());
+
+            chassis->dispatch(pdp8::INT_V_CLK, 5, 0); // CLLE 0
+            chassis->device_tick();
+            EXPECT_FALSE(chassis->cpu->interrupt_request);
+        }
             break;
     }
 }
 
 INSTANTIATE_TEST_CASE_P(DK8EATests, DK8EATestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
-                                DK8EATestData{pdp8::DK8EA::DK8EA_Mode_P}
+                                DK8EATestData{pdp8::DK8EA::DK8EA_Mode_P},
+                                DK8EATestData{pdp8::DK8EA::DK8EA_Mode_A}
                         ),);
 
 int main(int argc, char **argv) {
