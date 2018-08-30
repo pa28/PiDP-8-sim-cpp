@@ -191,8 +191,8 @@ namespace pdp8 {
                         bus.skip = bus.is_device_done();
                         return data;
 
-                    default:
-                        return data;
+                    default: // LCOV_EXCL_LINE
+                        return data; // LCOV_EXCL_LINE
                 }                                               /* end switch */
             case DK8EA_Mode_P:                                      /* DK8EAPi */
 
