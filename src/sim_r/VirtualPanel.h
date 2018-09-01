@@ -92,6 +92,26 @@ namespace sim {
         }
 
         /**
+         * @brief Wait until new data is available or timeout time is reached
+         * @tparam Clock The type of clock used
+         * @tparam Duration The type of duration used
+         * @param time_point The last timepoint returned from a call to @get_last_data_write() or @read_data(),
+         * or a default initialized time_point_t.
+         * @param timeout_time The time when the function should return for periodic processing.
+         * @return std::cv_status::timeout when the timeout time was reached, std::cv_status::no_timeout otherwise.
+         */
+        template<class Clock, class Duration>
+        std::cv_status
+        wait_on_data_until(time_point_t time_point, std::chrono::time_point<Clock, Duration> &timeout_time) const {
+            std::cv_status status = std::cv_status::no_timeout;
+            std::unique_lock<std::mutex> lock(data_condition_lck);
+            while (status == std::cv_status::no_timeout && time_point >= last_data_write) {
+                status = data_condition.wait_until(lock, timeout_time);
+            }
+            return status;
+        }
+
+        /**
          * @brief Wait for at least one update and when reader returns false.
          * @param reader A callable object taking a unique_ptr to the data and returning a bool
          * @details Calls wait_on_data_state with the last data write time point and reader.
