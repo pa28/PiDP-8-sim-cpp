@@ -2,6 +2,7 @@
 // Created by richard on 06/08/18.
 //
 
+#include <chrono>
 #include "chassis.h"
 
 
@@ -18,8 +19,15 @@ namespace pdp8 {
 
     void chassis::run_thread() {
         while (run_flag) {
-            std::this_thread::sleep_for(20000us);
-            tick();
+            auto now = std::chrono::system_clock::now();
+            auto timeout = now + 20000us;
+            std::cv_status status = std::cv_status::no_timeout;
+            auto time_point = status_switches.get_last_data_write();
+            while (run_flag && status == std::cv_status::no_timeout) {
+                status = status_switches.wait_on_data_until(time_point, timeout);
+                if (status == std::cv_status::timeout)
+                    tick();
+            }
         }
     }
 
