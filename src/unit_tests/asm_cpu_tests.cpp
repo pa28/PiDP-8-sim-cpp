@@ -524,6 +524,7 @@ TEST_P(ProgramTestFixture, ProgramTests) { // NOLINT(cert-err58-cpp)
 
 INSTANTIATE_TEST_CASE_P(ProgramTests, ProgramTestFixture, // NOLINT(cert-err58-cpp)
                         testing::Values(
+                                ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P, "sta; loop jmp loop; sta; hlt;", ""},
                                 ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P, "rand; loop clsc; jmp loop; sta; hlt;", ""},
                                 ProgramTestData{pdp8::DK8EA::DK8EA_Mode_P,
                                                 " .0; dw 0014; .0200; cla; tad ! 0; clsf; CLA CLL CML RTL; clsi; CLA CLL CML RTL; clsm;"
