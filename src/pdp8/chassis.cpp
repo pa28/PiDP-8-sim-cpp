@@ -27,6 +27,8 @@ namespace pdp8 {
                 status = status_switches.wait_on_data_until(time_point, timeout);
                 if (status == std::cv_status::timeout)
                     tick();
+                else
+                    read_status_switches();
             }
         }
     }
@@ -56,8 +58,12 @@ namespace pdp8 {
     }
 
     void chassis::start() {
+        reset();
+        cont();
+    }
+
+    void chassis::cont() {
         cpu->halt_flag = false;
-        cpu->tick();
     }
 
     void chassis::stop() {
@@ -129,7 +135,38 @@ namespace pdp8 {
     }
 
     void chassis::status_switches_reader(sim::VirtualPanel<PanelStatusSwitches>::data_ptr_t const &switches) {
+        cpu->sr = switches->get_sr();
 
+        switch (switches->get_command()) {
+            case pdp8::PanelStart:
+                if (cpu->halt_flag)
+                    start();
+                break;
+            case pdp8::PanelLoadAddress:
+                if (cpu->halt_flag) {
+                    cpu->pc = cpu->sr;
+                    cpu->field_register << cpu->sf_if(switches->get_if()) << cpu->sf_df(switches->get_df());
+                }
+                break;
+            case pdp8::PanelDeposit:
+                if (cpu->halt_flag)
+                    cpu->deposit(cpu->sr());
+                break;
+            case pdp8::PanelExamine:
+                if (cpu->halt_flag)
+                    cpu->examine();
+                break;
+            case pdp8::PanelContinue:
+                break;
+            case pdp8::PanelStop:
+                if (not cpu->halt_flag)
+                    stop();
+                break;
+            case pdp8::PanelUser0:
+                break;
+            case pdp8::PanelUser1:
+                break;
+        }
     }
 
 } // namespace pdp8

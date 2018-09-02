@@ -48,9 +48,15 @@ namespace pdp8 {
 
         /**
          * @brief Start the CPU
-         * @details Set halt_flag to false, call the CPU tick() method.
+         * @details Call reset() then cont();
          */
         void start();
+
+        /**
+         * @brief Continue the CPU
+         * @details Set halt_flag to false.
+         */
+        void cont();
 
         /**
          * @brief Stop the CPU
