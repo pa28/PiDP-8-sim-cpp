@@ -327,7 +327,7 @@ namespace pdp8 {
                     case 7: // CAF
                         initialize();
                         break;
-                    default:
+                    default: // LCOV_EXCL_LINE
                         throw std::logic_error("IOT 00 error."); // LCOV_EXCL_LINE
                 }
                 break;

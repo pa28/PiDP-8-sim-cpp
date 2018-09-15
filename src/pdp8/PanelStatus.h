@@ -49,6 +49,10 @@ namespace pdp8 {
         static constexpr sim::hw_slice_spec<1, 6> fl_idle{};
         static constexpr sim::hw_slice_spec<6, 0> step_counter{};
 
+        static constexpr sim::hw_slice_spec<3, 9> sx_df{};
+        static constexpr sim::hw_slice_spec<3, 6> sx_if{};
+        static constexpr sim::hw_slice_spec<2, 4> sx_stepping{};
+        static constexpr sim::hw_slice_spec<4, 0> sx_cmd{};
 
         std::array<word_type_t, word_count> data;
 
@@ -142,6 +146,16 @@ namespace pdp8 {
          * Stepping State       1:4,5
          * Command              1:0-3
          */
+
+        auto get_sr() const { return data[0][cpu_word](); }
+
+        auto get_df() const { return data[1][sx_df](); }
+
+        auto get_if() const { return data[1][sx_if](); }
+
+        auto get_stepping() const { return data[1][sx_stepping](); }
+
+        auto get_command() const { return static_cast<PannelCommand>(data[1][sx_cmd]()); }
     };
 
 } // namespace pdp8
