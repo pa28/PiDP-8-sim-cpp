@@ -39,11 +39,11 @@ include_directories(
 add_executable(pali8 src/pali8.cpp ${pali8_SOURCE})
 target_link_libraries(pali8 assembler antlr4_static)
 
-set(sim_r_SOURCE src/sim_r/hardware.h src/sim_r/PerformanceClock.h
-        src/sim_r/CpuThread.cpp src/sim_r/CpuThread.h)
+set(sim_r_SOURCE src/sim_r/PerformanceClock.h
+        src/sim_r/CpuThread.cpp src/sim_r/CpuThread.h src/sim_r/register.h)
 
 set(pdp8_SOURCE src/pdp8/cpu.cpp src/pdp8/cpu.h src/pdp8/device.h src/pdp8/DK8EA.cpp src/pdp8/DK8EA.h
-        src/pdp8/chassis.cpp src/pdp8/chassis.h src/pdp8/pdp8.h src/pdp8/device.cpp src/sim_r/VirtualPanel.h)
+        src/pdp8/chassis.cpp src/pdp8/chassis.h src/pdp8/pdp8.h src/pdp8/device.cpp src/sim_r/VirtualPanel.h src/sim_r/register_slice.h src/sim_r/register_support.h)
 
 add_executable(cpu_sim src/main.cpp ${pdp8_SOURCE} ${sim_r_SOURCE})
 target_link_libraries (cpu_sim ${CMAKE_THREAD_LIBS_INIT})

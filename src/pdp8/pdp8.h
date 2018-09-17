@@ -5,7 +5,7 @@
 #ifndef CPU_SIM_PDP8_H
 #define CPU_SIM_PDP8_H
 
-#include "hardware.h"
+#include "register.h"
 
 namespace pdp8 {
 
