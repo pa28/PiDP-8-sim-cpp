@@ -5,6 +5,12 @@ and may change or stop working without notice. Not much is working at the
 moment anyway, but you are welcome to poke around and try things out if
 you are brave and have lots of time.
 
+After a four year hiatus I am starting work on this again. I'm no longer sure
+what my original goals are, but I recently got my PiDP 8I running again and
+now I'm looking for a system that lets me re-live my youth working with a simple
+PDP 8e teleprinter and paper tape. The ```simd``` software available is great,
+but overkill for me.
+
 ## Prerequisites.
 
 ### Antlr4 and Antlr4 C++ Runtime for C++17 Google Test
